@@ -1,0 +1,66 @@
+{
+    "Hero": {
+        "title": "ابنِ مستقبل أفضل مع <span class=\"text-primary\">خبراء محترفين</span>",
+        "subtitle": "تواصل مع أفضل الفنيين المعتمدين واستخدم الذكاء الاصطناعي لتشخيص مشاكل البناء فوراً.",
+        "cta": "ابحث عن فني",
+        "download": "حمل التطبيق",
+        "certified": "خبراء معتمدون",
+        "trusted": "يوصي به المحترفون",
+        "inspectionStatus": "اكتمل فحص الموقع",
+        "inspectionTime": "تم إنشاء تقرير الذكاء الاصطناعي • منذ دقيقتين"
+    },
+    "Stats": {
+        "techniciansCount": "15k+",
+        "techniciansLabel": "فني نشط",
+        "satisfactionCount": "98%",
+        "satisfactionLabel": "رضا العملاء",
+        "projectsCount": "2.5m",
+        "projectsLabel": "مشروع مكتمل",
+        "supportCount": "24/7",
+        "supportLabel": "دعم متاح"
+    },
+    "AiDiagnosis": {
+        "badge": "حل مدعوم بالذكاء الاصطناعي",
+        "title": "فحص ذكي في <br /> <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400\">جيبك</span>",
+        "subtitle": "ببساطة وجه كاميرتك نحو مشكلة هيكلية أو عطل في المعدات. يقوم ذكاؤنا الاصطناعي بتحديد المشكلة فوراً، وتقدير التكاليف، واقتراح المتخصص المناسب.",
+        "feature1Title": "تحليل فوري",
+        "feature1Desc": "احصل على النتائج في ثوانٍ بدقة 99% في عيوب البناء الشائعة.",
+        "feature2Title": "تقدير التكلفة",
+        "feature2Desc": "احصل على تقديرات فورية لتكلفة الإصلاح بناءً على أسعار السوق الحالية.",
+        "feature3Title": "مطابقة الخبراء",
+        "feature3Desc": "تواصل تلقائياً مع أقرب 3 متخصصين ذوي تقييم عالٍ للمهمة.",
+        "cta": "جرب الفحص الذكي",
+        "scanResult": "نتيجة الفحص",
+        "scanning": "جاري الفحص...",
+        "issueTitle": "صدع هيكلي",
+        "severity": "الخطورة: عالية",
+        "findSpecialist": "ابحث عن متخصص"
+    },
+    "Technicians": {
+        "title": "فنيون موثوقون",
+        "subtitle": "متخصصون معتمدون جاهزون لمشروعك القادم.",
+        "viewAll": "عرض جميع الخبراء",
+        "reviews": "تقييم",
+        "viewProfile": "عرض الملف الشخصي"
+    },
+    "AppDownload": {
+        "title": "أنجز مهامك،<br /><span class=\"text-primary\">في أي مكان.</span>",
+        "subtitle": "حمل تطبيق هرفة لإدارة مشاريعك، والبحث عن فنيين، وتشخيص المشاكل أثناء التنقل.",
+        "getItOn": "احصل عليه من",
+        "googlePlay": "جوجل بلاي",
+        "downloadOn": "حمل من",
+        "appStore": "آب ستور",
+        "scanToDownload": "امسح الرمز للتحميل"
+    },
+    "Navbar": {
+        "services": "الخدمات",
+        "aiDiagnosis": "الفحص الذكي",
+        "technicians": "الفنيين",
+        "about": "عن هرفة",
+        "login": "دخول / تسجيل"
+    },
+    "Common": {
+        "loading": "جاري التحميل...",
+        "error": "حدث خطأ ما"
+    }
+}

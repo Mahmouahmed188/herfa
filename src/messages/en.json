@@ -1,0 +1,66 @@
+{
+    "Hero": {
+        "title": "Build Better with <span class=\"text-primary\">Expert Technicians</span>",
+        "subtitle": "Connect with top-rated professionals and use AI to diagnose construction issues instantly.",
+        "cta": "Find a Technician",
+        "download": "Download App",
+        "certified": "Certified Professionals",
+        "trusted": "Trusted by professionals",
+        "inspectionStatus": "Site Inspection Complete",
+        "inspectionTime": "AI Report Generated • 2 mins ago"
+    },
+    "Stats": {
+        "techniciansCount": "15k+",
+        "techniciansLabel": "Active Technicians",
+        "satisfactionCount": "98%",
+        "satisfactionLabel": "Client Satisfaction",
+        "projectsCount": "2.5m",
+        "projectsLabel": "Projects Completed",
+        "supportCount": "24/7",
+        "supportLabel": "Support Available"
+    },
+    "AiDiagnosis": {
+        "badge": "AI-Powered Solution",
+        "title": "Smart Diagnosis in <br /> <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400\">Your Pocket</span>",
+        "subtitle": "Simply point your camera at a structural issue or equipment malfunction. Our AI instantly identifies the problem, estimates costs, and suggests the right specialist.",
+        "feature1Title": "Instant Analysis",
+        "feature1Desc": "Get results in seconds with 99% accuracy on common structural defects.",
+        "feature2Title": "Cost Estimation",
+        "feature2Desc": "Receive immediate repair cost estimates based on current market rates.",
+        "feature3Title": "Expert Matching",
+        "feature3Desc": "Automatically connect with the 3 nearest top-rated professionals for the job.",
+        "cta": "Try AI Diagnosis",
+        "scanResult": "Scan Result",
+        "scanning": "Scanning...",
+        "issueTitle": "Structural Crack",
+        "severity": "Severity: High",
+        "findSpecialist": "Find Specialist"
+    },
+    "Technicians": {
+        "title": "Trusted Technicians",
+        "subtitle": "Verified professionals ready for your next project.",
+        "viewAll": "View All Experts",
+        "reviews": "reviews",
+        "viewProfile": "View Profile"
+    },
+    "AppDownload": {
+        "title": "Get the job done,<br /><span class=\"text-primary\">Anywhere.</span>",
+        "subtitle": "Download the Herfa app to manage projects, find technicians, and diagnose issues on the go.",
+        "getItOn": "Get it on",
+        "googlePlay": "Google Play",
+        "downloadOn": "Download on the",
+        "appStore": "App Store",
+        "scanToDownload": "Scan to Download"
+    },
+    "Navbar": {
+        "services": "Services",
+        "aiDiagnosis": "AI Diagnosis",
+        "technicians": "Technicians",
+        "about": "About",
+        "login": "Login / Join"
+    },
+    "Common": {
+        "loading": "Loading...",
+        "error": "Something went wrong"
+    }
+}
