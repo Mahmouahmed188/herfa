@@ -1,6 +1,6 @@
 {
     "Hero": {
-        "title": "ابنِ مستقبل أفضل مع <span class=\"text-primary\">خبراء محترفين</span>",
+        "title": "ابنِ مستقبل أفضل مع <highlight>خبراء محترفين</highlight>",
         "subtitle": "تواصل مع أفضل الفنيين المعتمدين واستخدم الذكاء الاصطناعي لتشخيص مشاكل البناء فوراً.",
         "cta": "ابحث عن فني",
         "download": "حمل التطبيق",
@@ -21,7 +21,7 @@
     },
     "AiDiagnosis": {
         "badge": "حل مدعوم بالذكاء الاصطناعي",
-        "title": "فحص ذكي في <br /> <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400\">جيبك</span>",
+        "title": "فحص ذكي في <br></br><highlight>جيبك</highlight>",
         "subtitle": "ببساطة وجه كاميرتك نحو مشكلة هيكلية أو عطل في المعدات. يقوم ذكاؤنا الاصطناعي بتحديد المشكلة فوراً، وتقدير التكاليف، واقتراح المتخصص المناسب.",
         "feature1Title": "تحليل فوري",
         "feature1Desc": "احصل على النتائج في ثوانٍ بدقة 99% في عيوب البناء الشائعة.",
@@ -44,7 +44,7 @@
         "viewProfile": "عرض الملف الشخصي"
     },
     "AppDownload": {
-        "title": "أنجز مهامك،<br /><span class=\"text-primary\">في أي مكان.</span>",
+        "title": "أنجز مهامك،<br></br><highlight>في أي مكان.</highlight>",
         "subtitle": "حمل تطبيق هرفة لإدارة مشاريعك، والبحث عن فنيين، وتشخيص المشاكل أثناء التنقل.",
         "getItOn": "احصل عليه من",
         "googlePlay": "جوجل بلاي",

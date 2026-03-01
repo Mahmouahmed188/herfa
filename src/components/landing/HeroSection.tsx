@@ -33,7 +33,9 @@ export default function HeroSection() {
                     </span>
                   </div>
                   <h1 className="text-slate-900 dark:text-white text-4xl font-extrabold leading-tight tracking-[-0.033em] @[480px]:text-6xl">
-                    {t('title')}
+                    {t.rich('title', {
+                      highlight: (chunks) => <span className="text-primary">{chunks}</span>
+                    })}
                   </h1>
                   <h2 className="text-slate-600 dark:text-gray-300 text-lg font-medium leading-relaxed max-w-[600px]">
                     {t('subtitle')}

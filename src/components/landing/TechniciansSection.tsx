@@ -3,6 +3,7 @@
 import { ArrowRight, Star } from 'lucide-react';
 import Button from "@/components/ui/button";
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 const technicians = [
     {
@@ -51,9 +52,9 @@ export default function TechniciansSection() {
                             <h2 className="text-slate-900 dark:text-white text-3xl md:text-4xl font-bold leading-tight">{t('title')}</h2>
                             <p className="text-slate-500 dark:text-gray-400">{t('subtitle')}</p>
                         </div>
-                        <a className="text-primary font-bold hover:underline flex items-center gap-1" href="#">
+                        <Link className="text-primary font-bold hover:underline flex items-center gap-1" href="/technicians">
                             {t('viewAll')} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
-                        </a>
+                        </Link>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
                         {technicians.map((tech, i) => (
@@ -75,7 +76,7 @@ export default function TechniciansSection() {
                                         <span key={tag} className="px-3 py-1 rounded-full bg-gray-100 dark:bg-background-dark text-xs font-medium text-slate-600 dark:text-gray-400">{tag}</span>
                                     ))}
                                 </div>
-                                <button className="w-full mt-auto py-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-slate-900 dark:text-white font-bold text-sm hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors">{t('viewProfile')}</button>
+                                <Link href={`/technicians/${i + 1}`} className="w-full mt-auto py-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-slate-900 dark:text-white font-bold text-sm hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors text-center block">{t('viewProfile')}</Link>
                             </div>
                         ))}
                     </div>

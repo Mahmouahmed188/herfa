@@ -34,7 +34,10 @@ export default function AiDiagnosisSection() {
                   {t('badge')}
                 </span>
                 <h2 className="text-slate-900 dark:text-white text-4xl md:text-5xl font-black leading-tight">
-                  {t('title')}
+                  {t.rich('title', {
+                    br: () => <br />,
+                    highlight: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">{chunks}</span>
+                  })}
                 </h2>
                 <p className="text-slate-600 dark:text-gray-300 text-lg font-normal leading-relaxed max-w-[600px]">
                   {t('subtitle')}

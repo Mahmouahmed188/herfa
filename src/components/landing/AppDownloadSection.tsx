@@ -33,7 +33,10 @@ export default function AppDownloadSection() {
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-10 md:p-16 gap-10">
             <div className="flex flex-col gap-6 max-w-[500px] text-center md:text-start">
               <h2 className="text-white text-3xl md:text-5xl font-black leading-tight">
-                {t('title')}
+                {t.rich('title', {
+                  br: () => <br />,
+                  highlight: (chunks) => <span className="text-primary">{chunks}</span>
+                })}
               </h2>
               <p className="text-gray-300 text-lg">{t('subtitle')}</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">

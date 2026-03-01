@@ -1,8 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Manrope } from 'next/font/google';
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
 import "../globals.css";
 
 const manrope = Manrope({
@@ -27,9 +26,9 @@ export default async function RootLayout({
       </head>
       <body className={`${manrope.variable} font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-x-hidden`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Navbar />
-          {children}
-          <Footer />
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
         </NextIntlClientProvider>
       </body>
     </html>
