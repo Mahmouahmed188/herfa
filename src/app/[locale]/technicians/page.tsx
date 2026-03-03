@@ -92,36 +92,7 @@ export default function FindWorkPage() {
 
     return (
         <main className="min-h-screen bg-[#0E1512] text-white font-sans selection:bg-primary/30">
-            {/* 1. Top Navigation Bar (Mocked as Page Header for Demo) */}
-            {/* Note: In a real app, this might be the global layout navbar, but implemented here to match the specific 'User avatar' and 'Notification' request */}
-            <header className="border-b border-[#1F3326] bg-[#0E1512]/80 backdrop-blur-md sticky top-0 z-40">
-                <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-8">
-                        {/* We use the Global Navbar usually, but here is the specific sub-nav if needed. 
-                             For this demo, we assume this sits below the global nav or replaces it in a dashboard layout.
-                             We'll render a simple view here tailored for the 'Find Work' context. */}
-                        <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-400">
-                            <a href="#" className="text-white">Find Work</a>
-                            <a href="#" className="hover:text-primary transition-colors">My Jobs</a>
-                            <a href="#" className="hover:text-primary transition-colors">Messages</a>
-                        </div>
-                    </div>
 
-                    <div className="flex items-center gap-4">
-                        <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
-                            <Bell className="w-5 h-5" />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-[#0E1512]"></span>
-                        </button>
-                        <div className="flex items-center gap-3 pl-4 border-l border-[#1F3326]">
-                            <div className="text-right hidden md:block">
-                                <p className="text-sm font-bold text-white leading-none">Mahmoud A.</p>
-                                <p className="text-xs text-primary mt-1">Project Manager</p>
-                            </div>
-                            <div className="w-9 h-9 rounded-full bg-surface-border border border-primary/20 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80)' }}></div>
-                        </div>
-                    </div>
-                </div>
-            </header>
 
             {/* 2. Hero / Search Section */}
             <section className="relative pt-16 pb-20 px-6 overflow-hidden">
