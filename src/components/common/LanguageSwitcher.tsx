@@ -9,6 +9,9 @@ export default function LanguageSwitcher() {
     const pathname = usePathname();
 
     const switchLocale = (newLocale: 'en' | 'ar') => {
+        localStorage.setItem('NEXT_LOCALE', newLocale);
+        // Also set cookie to help middleware (next-intl does this partly, but let's be explicit if needed)
+        document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
         router.push(pathname, { locale: newLocale });
     };
 
