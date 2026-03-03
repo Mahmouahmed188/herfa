@@ -91,7 +91,7 @@ export default function FindWorkPage() {
     const [searchTerm, setSearchTerm] = useState('');
 
     return (
-        <main className="min-h-screen bg-[#0E1512] text-white font-sans selection:bg-primary/30">
+        <div className="bg-[#0E1512] text-white font-sans selection:bg-primary/30">
 
 
             {/* 2. Hero / Search Section */}
@@ -180,6 +180,6 @@ export default function FindWorkPage() {
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

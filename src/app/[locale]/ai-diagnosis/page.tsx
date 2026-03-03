@@ -40,7 +40,7 @@ export default function AiDiagnosisPage() {
     };
 
     return (
-        <main className="min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-gray-100 pb-20">
+        <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-gray-100 pb-20">
 
             {/* 1. Hero Section */}
             <section className="relative py-20 px-6 overflow-hidden bg-surface-dark/5 dark:bg-surface-dark/30">
@@ -203,6 +203,6 @@ export default function AiDiagnosisPage() {
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

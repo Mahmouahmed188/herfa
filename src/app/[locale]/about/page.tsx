@@ -16,7 +16,7 @@ import {
 
 export default function AboutPage() {
     return (
-        <main className="min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-gray-100">
+        <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-gray-100 pb-20">
             {/* 1. Hero Section */}
             <section className="relative py-24 px-6 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
@@ -221,6 +221,6 @@ export default function AboutPage() {
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

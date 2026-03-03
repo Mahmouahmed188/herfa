@@ -4,5 +4,5 @@ export const metadata = {
 };
 
 export default function AIDiagnosisLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen">{children}</div>;
+  return <div>{children}</div>;
 }
