@@ -62,5 +62,27 @@
     "Common": {
         "loading": "جاري التحميل...",
         "error": "حدث خطأ ما"
+    },
+    "ServicesPage": {
+        "title": "صفحة الخدمات والفئات",
+        "searchPlaceholder": "ما الخدمة التي تحتاجها؟",
+        "allCategories": "جميع الفئات",
+        "search": "بحث",
+        "resultsFound": "تم العثور على حوالي {count} نتيجة",
+        "filters": "تصفية",
+        "clearAll": "مسح الكل",
+        "category": "الفئة",
+        "priceRange": "نطاق السعر",
+        "rating": "التقييم",
+        "andUp": "فما فوق",
+        "distance": "المسافة",
+        "availableNow": "متاح الآن",
+        "professionalTechnicians": "الفنيين المحترفين",
+        "categories": "الفئات",
+        "bookingNow": "احجز الآن",
+        "previous": "السابق",
+        "next": "التالي",
+        "experience": "{years} سنوات خبرة",
+        "reviews": "تقييم"
     }
 }

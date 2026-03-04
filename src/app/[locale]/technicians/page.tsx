@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, MapPin, Filter, Bell, ChevronDown } from 'lucide-react';
-import TechnicianCard, { TechnicianProps } from '@/components/find-work/TechnicianCard';
+import { Search, MapPin, Filter, Bell, ChevronDown, Grid, List, SlidersHorizontal, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import TechnicianResultCard, { TechnicianProps } from '@/components/technicians/TechnicianResultCard';
+import FilterSidebar from '@/components/technicians/FilterSidebar';
 import Button from '@/components/ui/button';
 
-// Mock Data
+// Enhanced Mock Data
 const MOCK_TECHNICIANS: TechnicianProps[] = [
     {
         id: '1',
@@ -19,6 +22,9 @@ const MOCK_TECHNICIANS: TechnicianProps[] = [
         skills: ['Residential', 'Smart Home', 'Wiring'],
         verified: true,
         available: true,
+        experience: '12 Years XP',
+        location: 'Nasr City, Cairo',
+        description: 'Specialized in smart home installations and complex residential wiring. Certified master electrician with a focus on safety and efficiency.'
     },
     {
         id: '2',
@@ -32,6 +38,9 @@ const MOCK_TECHNICIANS: TechnicianProps[] = [
         skills: ['Modern', 'Renovation', '3D Modeling'],
         verified: true,
         available: false,
+        experience: '8 Years XP',
+        location: 'Maadi, Cairo',
+        description: 'Creating modern, functional spaces tailored to your lifestyle. Specialist in residential renovations and advanced 3D spatial modeling.'
     },
     {
         id: '3',
@@ -45,6 +54,9 @@ const MOCK_TECHNICIANS: TechnicianProps[] = [
         skills: ['AC Repair', 'Heating', 'Installation'],
         verified: true,
         available: true,
+        experience: '15 Years XP',
+        location: 'New Cairo, Egypt',
+        description: 'Expert in all types of heating and cooling systems. From emergency repairs to complete unit installations for residential and commercial buildings.'
     },
     {
         id: '4',
@@ -58,6 +70,9 @@ const MOCK_TECHNICIANS: TechnicianProps[] = [
         skills: ['Pipe Repair', 'Installation', 'Emergency'],
         verified: false,
         available: true,
+        experience: '6 Years XP',
+        location: 'Zamalek, Cairo',
+        description: 'Dependable plumbing services for leak detection, pipe replacement, and efficient fixture installation. Available for 24/7 emergency calls.'
     },
     {
         id: '5',
@@ -71,115 +86,143 @@ const MOCK_TECHNICIANS: TechnicianProps[] = [
         skills: ['Custom Furniture', 'Flooring', 'Repair'],
         verified: true,
         available: false,
-    },
-    {
-        id: '6',
-        name: 'Robert Taylor',
-        title: 'Smart Home Tech',
-        rating: 4.6,
-        reviews: 42,
-        hourlyRate: 35,
-        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-        matchPercentage: 82,
-        skills: ['IoT', 'Security Systems', 'Network'],
-        verified: true,
-        available: true,
-    },
+        experience: '10 Years XP',
+        location: 'Heliopolis, Cairo',
+        description: 'Master craftsman specializing in custom hardwood furniture, flooring installation, and detailed architectural woodwork.'
+    }
 ];
 
-export default function FindWorkPage() {
+export default function ServicesAndCategoriesPage() {
+    const locale = useLocale();
+    const t = useTranslations('ServicesPage');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    const isRtl = locale === 'ar';
 
     return (
-        <div className="bg-[#0E1512] text-white font-sans selection:bg-primary/30">
-
-
-            {/* 2. Hero / Search Section */}
-            <section className="relative pt-16 pb-20 px-6 overflow-hidden">
-                {/* Background Effects */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/5 rounded-full blur-[100px] -z-10"></div>
-
-                <div className="container mx-auto max-w-5xl text-center">
-                    <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-                        Find the perfect pro for <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">your project</span>
-                    </h1>
-                    <p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
-                        Our AI-powered matching system analyzes your project needs to connect you with top-rated technicians in your area instantly.
-                    </p>
-
-                    {/* Search Bar */}
-                    <div className="bg-[#1A2C22] p-2 rounded-2xl border border-[#2D4A3A] shadow-2xl flex flex-col md:flex-row gap-2 max-w-4xl mx-auto">
-                        <div className="flex-1 flex items-center px-4 h-14 bg-[#111A13] rounded-xl border border-[#1F3326] focus-within:border-primary/50 transition-colors">
-                            <Search className="w-5 h-5 text-gray-500 mr-3" />
-                            <input
-                                type="text"
-                                placeholder="What service do you need?"
-                                className="bg-transparent w-full outline-none text-white placeholder-gray-500"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+        <div className="bg-[#0E1512] min-h-screen text-white font-sans selection:bg-primary/30 pb-20">
+            {/* Top Search Header - Sticky on Desktop */}
+            <div className="sticky top-0 z-30 bg-[#0E1512]/90 backdrop-blur-xl border-b border-[#2D4A3A] py-6 px-6">
+                <div className="container mx-auto max-w-7xl">
+                    <div className="flex flex-col lg:flex-row items-center gap-6">
+                        {/* Search Bar Group */}
+                        <div className="w-full lg:max-w-2xl flex items-center bg-[#1A2C22] rounded-full border border-[#2D4A3A] p-1 shadow-lg focus-within:border-primary/50 transition-all">
+                            <div className="flex-1 flex items-center px-4">
+                                <Search className="w-5 h-5 text-gray-500 mr-3 rtl:ml-3" />
+                                <input
+                                    type="text"
+                                    placeholder={t('searchPlaceholder')}
+                                    className="bg-transparent w-full outline-none text-white placeholder-gray-500 h-10 text-sm md:text-base"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <div className="hidden md:flex h-8 w-px bg-[#2D4A3A]"></div>
+                            <button className="hidden md:flex items-center px-4 gap-2 text-gray-400 hover:text-white transition-colors text-sm font-medium">
+                                <span className="truncate max-w-[120px]">{t('allCategories')}</span>
+                                <ChevronDown className="w-4 h-4" />
+                            </button>
+                            <Button className="rounded-full px-6 py-2.5 h-auto text-sm font-bold">
+                                {t('search')}
+                            </Button>
                         </div>
-                        <div className="flex-1 flex items-center px-4 h-14 bg-[#111A13] rounded-xl border border-[#1F3326] relative cursor-pointer hover:border-gray-600 transition-colors">
-                            <Filter className="w-5 h-5 text-gray-500 mr-3" />
-                            <span className="text-gray-400">All Categories</span>
-                            <ChevronDown className="w-4 h-4 text-gray-600 ml-auto" />
-                        </div>
-                        <div className="flex-1 flex items-center px-4 h-14 bg-[#111A13] rounded-xl border border-[#1F3326] relative cursor-pointer hover:border-gray-600 transition-colors">
-                            <MapPin className="w-5 h-5 text-gray-500 mr-3" />
-                            <span className="text-gray-400">Cairo, Egypt</span>
-                            <ChevronDown className="w-4 h-4 text-gray-600 ml-auto" />
-                        </div>
-                        <Button className="h-14 px-8 rounded-xl text-lg font-bold">
-                            Search
-                        </Button>
-                    </div>
 
-                    {/* Filter Chips */}
-                    <div className="flex flex-wrap justify-center gap-3 mt-8">
-                        <button className="px-4 py-2 rounded-full bg-[#1A2C22] border border-[#2D4A3A] text-sm font-medium text-primary hover:bg-[#22382B] transition-colors">
-                            Verified Pro
-                        </button>
-                        <button className="px-4 py-2 rounded-full bg-[#1A2C22] border border-[#2D4A3A] text-sm font-medium text-gray-400 hover:text-white hover:bg-[#22382B] transition-colors">
-                            Available Now
-                        </button>
-                        <button className="px-4 py-2 rounded-full bg-[#1A2C22] border border-[#2D4A3A] text-sm font-medium text-gray-400 hover:text-white hover:bg-[#22382B] transition-colors">
-                            Top Rated
-                        </button>
-                        <button className="px-4 py-2 rounded-full bg-[#1A2C22] border border-[#2D4A3A] text-sm font-medium text-gray-400 hover:text-white hover:bg-[#22382B] transition-colors">
-                            &lt; $50/hr
-                        </button>
+                        {/* Result Count (Google Style) */}
+                        <div className="hidden lg:block text-gray-500 text-sm">
+                            {t('resultsFound', { count: MOCK_TECHNICIANS.length })}
+                        </div>
+
+                        {/* Mobile Filter Toggle */}
+                        <div className="flex lg:hidden w-full items-center justify-between">
+                            <div className="text-gray-500 text-sm">
+                                {MOCK_TECHNICIANS.length} {t('resultsFound', { count: '' }).replace(/.*\{count\}.*/, '')}
+                            </div>
+                            <button
+                                onClick={() => setIsFilterOpen(true)}
+                                className="flex items-center gap-2 bg-[#1A2C22] border border-[#2D4A3A] px-4 py-2 rounded-xl text-sm font-bold text-primary"
+                            >
+                                <SlidersHorizontal className="w-4 h-4" />
+                                {t('filters')}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* 3. Recommended Technicians Section */}
-            <section className="px-6 pb-24">
-                <div className="container mx-auto max-w-6xl">
-                    <div className="flex items-end justify-between mb-8">
-                        <div>
-                            <h2 className="text-2xl font-bold text-white mb-2">Recommended for you</h2>
-                            <p className="text-gray-400 text-sm">Based on your recent search for "Electrical repairs"</p>
+            {/* Main Content Layout */}
+            <div className="container mx-auto max-w-7xl px-6 mt-8">
+                <div className={`flex flex-col lg:flex-row gap-8 ${isRtl ? 'lg:flex-row-reverse' : ''}`}>
+
+                    {/* LEFT SIDEBAR - Desktop Sticky Filters */}
+                    <aside className="hidden lg:block w-72 flex-shrink-0">
+                        <div className="sticky top-32">
+                            <FilterSidebar />
                         </div>
-                        <span className="text-gray-500 text-sm font-medium">Showing {MOCK_TECHNICIANS.length} results</span>
-                    </div>
+                    </aside>
 
-                    {/* Grid Layout */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {MOCK_TECHNICIANS.map((tech) => (
-                            <TechnicianCard key={tech.id} tech={tech} />
-                        ))}
-                    </div>
+                    {/* RIGHT CONTENT AREA - Results List */}
+                    <main className="flex-1">
+                        {/* Page Title & Breadcrumb Style */}
+                        <div className="mb-8">
+                            <h1 className="text-3xl font-extrabold mb-2">
+                                {t('title')}
+                            </h1>
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                                <span>{t('categories')}</span>
+                                <span>/</span>
+                                <span className="text-primary font-medium">{t('professionalTechnicians')}</span>
+                            </div>
+                        </div>
 
-                    {/* 5. Load More */}
-                    <div className="mt-16 text-center">
-                        <Button variant="outline" className="h-12 border-[#2D4A3A] text-gray-300 hover:text-white hover:border-primary hover:bg-[#1A2C22] rounded-full px-8">
-                            Show more technicians
-                            <ChevronDown className="w-4 h-4 ml-2" />
-                        </Button>
+                        {/* Results List */}
+                        <div className="flex flex-col gap-6">
+                            {MOCK_TECHNICIANS.map((tech) => (
+                                <TechnicianResultCard key={tech.id} tech={tech} />
+                            ))}
+                        </div>
+
+                        {/* Load More (Google Style) */}
+                        <div className="mt-12 py-8 border-t border-[#2D4A3A] flex justify-center">
+                            <div className="flex items-center gap-4">
+                                <button className="text-primary font-bold hover:underline">{t('previous')}</button>
+                                <div className="flex items-center gap-2">
+                                    {[1, 2, 3].map(n => (
+                                        <button key={n} className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${n === 1 ? 'bg-primary text-background-dark' : 'hover:bg-[#1A2C22] text-gray-400'}`}>
+                                            {n}
+                                        </button>
+                                    ))}
+                                </div>
+                                <button className="text-primary font-bold hover:underline">{t('next')}</button>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+            {/* MOBILE FILTER DRAWER */}
+            {isFilterOpen && (
+                <div className="fixed inset-0 z-50 lg:hidden">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsFilterOpen(false)}></div>
+                    <div className={`absolute bottom-0 left-0 right-0 max-h-[90vh] overflow-y-auto bg-[#0E1512] border-t border-[#2D4A3A] rounded-t-[40px] p-6 transition-transform transform ${isFilterOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-xl font-bold">{t('filters')}</h3>
+                            <button onClick={() => setIsFilterOpen(false)} className="p-2 rounded-full bg-[#1A2C22]">
+                                <X className="w-5 h-5 text-gray-400" />
+                            </button>
+                        </div>
+                        <FilterSidebar className="!border-none !p-0 !bg-transparent" />
+                        <div className="mt-8 grid grid-cols-2 gap-4">
+                            <Button variant="outline" className="rounded-xl" onClick={() => setIsFilterOpen(false)}>
+                                {isRtl ? "إلغاء : " : "Cancel"}
+                            </Button>
+                            <Button className="rounded-xl" onClick={() => setIsFilterOpen(false)}>
+                                {isRtl ? "تطبيق" : "Apply"}
+                            </Button>
+                        </div>
                     </div>
                 </div>
-            </section>
+            )}
         </div>
     );
 }

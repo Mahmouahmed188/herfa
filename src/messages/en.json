@@ -62,5 +62,27 @@
     "Common": {
         "loading": "Loading...",
         "error": "Something went wrong"
+    },
+    "ServicesPage": {
+        "title": "Services and Categories Page",
+        "searchPlaceholder": "What service do you need?",
+        "allCategories": "All Categories",
+        "search": "Search",
+        "resultsFound": "About {count} results found",
+        "filters": "Filters",
+        "clearAll": "Clear all",
+        "category": "Category",
+        "priceRange": "Price Range",
+        "rating": "Rating",
+        "andUp": "& Up",
+        "distance": "Distance",
+        "availableNow": "Available now",
+        "professionalTechnicians": "Professional Technicians",
+        "categories": "Categories",
+        "bookingNow": "Booking Now",
+        "previous": "Previous",
+        "next": "Next",
+        "experience": "{years} Years XP",
+        "reviews": "reviews"
     }
 }
