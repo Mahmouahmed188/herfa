@@ -99,7 +99,7 @@ const CATEGORY_ICONS = [
 
 export default function ServicesAndCategoriesPage() {
     const locale = useLocale();
-    const t = useTranslations('Services');
+    const t = useTranslations('services_page');
     const [searchTerm, setSearchTerm] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [isFilterOpen, setIsFilterOpen] = useState(false);
