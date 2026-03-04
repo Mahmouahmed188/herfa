@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, Star, X } from 'lucide-react';
+import { ChevronDown, Star } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface FilterSectionProps {
@@ -14,15 +14,15 @@ const FilterSection = ({ title, children, defaultOpen = true }: FilterSectionPro
     const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <div className="border-b border-gray-100 dark:border-gray-800 py-4">
+        <div className="border-b border-white/10 py-5 last:border-0">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-between w-full text-left mb-2 group"
+                className="flex items-center justify-between w-full text-left mb-4 group"
             >
-                <span className="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">{title}</span>
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <span className="text-[10px] tracking-widest font-black text-gray-500 group-hover:text-primary transition-colors">{title}</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
-            {isOpen && <div className="space-y-2 pt-2">{children}</div>}
+            {isOpen && <div className="space-y-3">{children}</div>}
         </div>
     );
 };
@@ -33,37 +33,53 @@ export default function FilterSidebar({ className = "" }: { className?: string }
     const [distance, setDistance] = useState(25);
 
     return (
-        <aside className={`w-full bg-white dark:bg-[#1A2C22] p-6 rounded-3xl border border-gray-100 dark:border-[#2D4A3A] shadow-sm ${className}`}>
-            <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">{t('filters')}</h3>
-                <button className="text-sm font-bold text-primary hover:underline">{t('clearAll')}</button>
+        <aside className={`w-full bg-[#1A2C22]/60 backdrop-blur-xl p-8 rounded-[32px] border border-white/10 shadow-xl ${className}`}>
+            <div className="flex items-center justify-between mb-8">
+                <h3 className="text-xl font-extrabold text-white">{t('filters')}</h3>
+                <button className="text-sm font-bold text-primary hover:underline transition-all">
+                    {t('resetAll')}
+                </button>
             </div>
 
             <div className="space-y-2">
                 {/* Category Filter */}
                 <FilterSection title={t('category')}>
-                    {['Electrician', 'Plumber', 'Carpenter', 'Painter', 'HVAC'].map((cat) => (
+                    {['All Categories', 'Plumbing', 'Carpentry', 'Electrical', 'Painting'].map((cat, idx) => (
                         <label key={cat} className="flex items-center gap-3 cursor-pointer group">
-                            <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary bg-transparent" />
-                            <span className="text-sm text-slate-600 dark:text-gray-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{cat}</span>
+                            <div className="relative flex items-center">
+                                <input
+                                    type="checkbox"
+                                    defaultChecked={idx === 1}
+                                    className="peer appearance-none w-5 h-5 rounded-md border-2 border-white/10 checked:bg-primary checked:border-primary transition-all cursor-pointer"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
+                                    <svg className="w-3 h-3 text-background-dark stroke-[4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <span className="text-sm font-medium text-gray-400 group-hover:text-white transition-colors">
+                                {cat}
+                            </span>
                         </label>
                     ))}
                 </FilterSection>
 
                 {/* Price Range */}
-                <FilterSection title={t('priceRange')}>
-                    <div className="px-2">
+                <FilterSection title={t('hourlyRate')}>
+                    <div className="px-1">
                         <input
                             type="range"
-                            min="0"
+                            min="10"
                             max="500"
                             value={priceRange}
                             onChange={(e) => setPriceRange(parseInt(e.target.value))}
-                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
+                            className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary"
                         />
-                        <div className="flex justify-between mt-2">
-                            <span className="text-xs text-gray-500">$0</span>
-                            <span className="text-sm font-bold text-primary">${priceRange}</span>
+                        <div className="flex justify-between mt-3 text-[10px] font-bold text-gray-500 uppercase">
+                            <span>$10</span>
+                            <span className="text-primary">${priceRange}+</span>
+                            <span>$500+</span>
                         </div>
                     </div>
                 </FilterSection>
@@ -72,15 +88,12 @@ export default function FilterSidebar({ className = "" }: { className?: string }
                 <FilterSection title={t('rating')}>
                     {[5, 4, 3, 2].map((stars) => (
                         <label key={stars} className="flex items-center gap-3 cursor-pointer group">
-                            <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary bg-transparent" />
+                            <input type="radio" name="rating" className="w-5 h-5 appearance-none border-2 border-white/10 rounded-full checked:border-primary checked:border-[6px] transition-all cursor-pointer" />
                             <div className="flex items-center gap-1">
-                                {[...Array(stars)].map((_, i) => (
-                                    <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                                <span className="text-sm font-bold text-gray-200 mr-1">{stars}.0</span>
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className={`w-3 h-3 ${i < stars ? 'fill-primary text-primary' : 'text-white/10'}`} />
                                 ))}
-                                {[...Array(5 - stars)].map((_, i) => (
-                                    <Star key={i} className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600" />
-                                ))}
-                                <span className="text-xs text-gray-500 ml-1">{t('andUp')}</span>
                             </div>
                         </label>
                     ))}
@@ -88,32 +101,22 @@ export default function FilterSidebar({ className = "" }: { className?: string }
 
                 {/* Distance Filter */}
                 <FilterSection title={t('distance')}>
-                    <div className="px-2">
+                    <div className="px-1">
                         <input
                             type="range"
-                            min="1"
+                            min="5"
                             max="50"
                             value={distance}
                             onChange={(e) => setDistance(parseInt(e.target.value))}
-                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
+                            className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary"
                         />
-                        <div className="flex justify-between mt-2">
-                            <span className="text-xs text-gray-500">1km</span>
-                            <span className="text-sm font-bold text-primary">{distance}km</span>
+                        <div className="flex justify-between mt-3 text-[10px] font-bold text-gray-500 uppercase">
+                            <span>5mi</span>
+                            <span className="text-primary">{distance}mi+</span>
+                            <span>50mi+</span>
                         </div>
                     </div>
                 </FilterSection>
-
-                {/* Availability Toggle */}
-                <div className="py-4">
-                    <label className="flex items-center justify-between cursor-pointer group">
-                        <span className="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">{t('availableNow')}</span>
-                        <div className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                        </div>
-                    </label>
-                </div>
             </div>
         </aside>
     );

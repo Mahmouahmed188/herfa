@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Star, MapPin, ShieldCheck, Clock, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
+import { Star, MapPin, ShieldCheck, Heart } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/button';
@@ -34,74 +33,60 @@ export default function TechnicianResultCard({ tech }: { tech: TechnicianProps }
     };
 
     return (
-        <div className="bg-white dark:bg-[#1A2C22] border border-gray-100 dark:border-[#2D4A3A] rounded-2xl p-5 hover:shadow-lg transition-all group">
-            <div className="flex flex-col sm:flex-row gap-5">
-                {/* Image Section */}
-                <div className="relative w-full sm:w-32 h-32 flex-shrink-0">
-                    <div className="w-full h-full rounded-xl bg-gray-100 dark:bg-gray-800 relative overflow-hidden">
-                        <img
-                            src={tech.image}
-                            alt={tech.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                    </div>
-                    {tech.available && (
-                        <div className="absolute -top-2 -right-2 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-[#1A2C22] z-10">
-                            <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></span>
-                        </div>
-                    )}
+        <div className="bg-[#1A2C22] border border-white/5 rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/10 transition-all group flex flex-col h-full active:scale-[0.98]">
+            {/* Image Container */}
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <img
+                    src={tech.image}
+                    alt={tech.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A2C22] via-transparent to-transparent opacity-60"></div>
+
+                {/* Category Badge */}
+                <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4">
+                    <span className="bg-white/10 backdrop-blur-md border border-white/10 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                        {tech.title}
+                    </span>
                 </div>
 
-                {/* Info Section */}
-                <div className="flex-1 min-w-0">
-                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-                        <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-white hover:text-primary transition-colors cursor-pointer line-clamp-1">
-                                    {tech.name}
-                                </h3>
-                                {tech.verified && <ShieldCheck className="w-5 h-5 text-primary" />}
-                                {tech.experience && (
-                                    <span className="text-[10px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-2 py-0.5 rounded">
-                                        {tech.experience}
-                                    </span>
-                                )}
-                            </div>
-                            <p className="text-primary font-medium text-sm mb-2">{tech.title}</p>
-                        </div>
-                        <div className="text-left sm:text-right">
-                            <p className="text-xl font-extrabold text-slate-900 dark:text-white">${tech.hourlyRate}<span className="text-xs text-gray-400 font-normal">/hr</span></p>
-                            <div className="flex items-center gap-1 sm:justify-end text-yellow-400 mt-1">
-                                <Star className="w-4 h-4 fill-current" />
-                                <span className="font-bold text-sm text-slate-700 dark:text-gray-200">{tech.rating}</span>
-                                <span className="text-gray-400 text-xs text-nowrap">({tech.reviews} {t('reviews')})</span>
-                            </div>
-                        </div>
+                {/* Favorite Button */}
+                <button className="absolute top-4 right-4 rtl:right-auto rtl:left-4 p-2 rounded-full bg-black/20 backdrop-blur-md border border-white/5 text-white hover:bg-primary hover:text-background-dark transition-all">
+                    <Heart className="w-4 h-4" />
+                </button>
+            </div>
+
+            {/* Content Area */}
+            <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-extrabold text-white group-hover:text-primary transition-colors cursor-pointer line-clamp-1">
+                            {tech.name}
+                        </h3>
+                        {tech.verified && <ShieldCheck className="w-4 h-4 text-primary fill-primary/10" />}
                     </div>
-
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 line-clamp-2 leading-relaxed">
-                        {tech.description || (locale === 'ar' ? "فني خبير يقدم خدمات عالية الجودة مع أكثر من عدة سنوات من الخبرة المهنية في هذا المجال." : "Expert technician providing high-quality services with over several years of professional experience in the field.")}
-                    </p>
-
-                    <div className="flex flex-wrap items-center gap-4 mt-4">
-                        <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
-                            <MapPin className="w-3.5 h-3.5" />
-                            <span>{tech.location || (locale === 'ar' ? "القاهرة، مصر" : "Cairo, Egypt")}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>{locale === 'ar' ? "متاح اليوم" : "Available Today"}</span>
-                        </div>
+                    <div className="flex items-center gap-1 bg-white/5 rounded-full px-2 py-0.5">
+                        <Star className="w-3.5 h-3.5 fill-primary text-primary" />
+                        <span className="text-sm font-black text-white">{tech.rating}</span>
                     </div>
                 </div>
 
-                {/* Action Section */}
-                <div className="flex flex-col justify-end">
+                <p className="text-gray-400 text-sm mb-6 line-clamp-2 leading-relaxed">
+                    {tech.description || (locale === 'ar' ? "فني خبير يقدم خدمات عالية الجودة مع أكثر من عدة سنوات من الخبرة المهنية." : "Expert technician providing high-quality services with over several years of professional experience.")}
+                </p>
+
+                <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
+                    <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">{t('startingAt')}</p>
+                        <p className="text-xl font-black text-white">
+                            ${tech.hourlyRate}<span className="text-xs text-gray-400 font-medium ml-1">/hr</span>
+                        </p>
+                    </div>
                     <Button
                         onClick={handleBooking}
-                        className="w-full sm:w-auto px-8 bg-primary hover:bg-primary/90 text-white dark:text-background-dark font-bold rounded-xl h-12"
+                        className="rounded-2xl px-6 py-3 h-auto text-sm font-extrabold bg-white text-background-dark hover:bg-primary transition-all shadow-lg shadow-white/5"
                     >
-                        {t('bookingNow')} <ArrowRight className="w-4 h-4 ml-2 rtl:rotate-180" />
+                        {t('bookingNow')}
                     </Button>
                 </div>
             </div>
