@@ -99,7 +99,7 @@ const CATEGORY_ICONS = [
 
 export default function ServicesAndCategoriesPage() {
     const locale = useLocale();
-    const t = useTranslations('ServicesPage');
+    const t = useTranslations('Services');
     const [searchTerm, setSearchTerm] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -123,9 +123,9 @@ export default function ServicesAndCategoriesPage() {
 
     return (
         <div className="bg-[#0A0F0D] min-h-screen text-white font-sans selection:bg-primary/30">
-            {/* HERO SECTION - Header */}
-            <div className="relative pt-24 pb-20 px-6 overflow-hidden">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.08)_0%,transparent_70%)] pointer-events-none"></div>
+            {/* HERO SECTION - Header with More Spacing */}
+            <div className="relative pt-32 pb-24 px-6 overflow-hidden border-b border-white/5">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-full bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.12)_0%,transparent_70%)] pointer-events-none"></div>
 
                 <div className="container mx-auto max-w-4xl text-center relative z-10">
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
@@ -165,9 +165,9 @@ export default function ServicesAndCategoriesPage() {
                 </div>
             </div>
 
-            {/* MAIN LAYOUT */}
-            <div className="container mx-auto max-w-7xl px-6 pb-24">
-                <div className={`flex flex-col lg:flex-row gap-8 ${isRtl ? 'lg:flex-row-reverse' : ''}`}>
+            {/* MAIN CONTENT AREA - Increased Spacing from Hero */}
+            <div className="container mx-auto max-w-7xl px-6 pt-24 pb-32">
+                <div className={`flex flex-col lg:flex-row gap-16 ${isRtl ? 'lg:flex-row-reverse' : ''}`}>
 
                     {/* SIDEBAR */}
                     <aside className="hidden lg:block w-72 flex-shrink-0">
@@ -209,8 +209,8 @@ export default function ServicesAndCategoriesPage() {
                             </div>
                         </div>
 
-                        {/* TECHNICIAN GRID */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {/* TECHNICIAN GRID - Better Spacing */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                             {MOCK_TECHNICIANS.map((tech) => (
                                 <TechnicianResultCard key={tech.id} tech={tech} />
                             ))}

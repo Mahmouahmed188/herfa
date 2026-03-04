@@ -63,7 +63,7 @@
         "loading": "Loading...",
         "error": "Something went wrong"
     },
-    "ServicesPage": {
+    "Services": {
         "title": "Find the perfect <highlight>craftsman</highlight> for your project",
         "subtitle": "Connect with thousands of skilled professionals for plumbing, carpentry, electrical work, and more.",
         "searchPlaceholder": "What service do you need today?",

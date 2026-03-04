@@ -25,7 +25,7 @@ export interface TechnicianProps {
 
 export default function TechnicianResultCard({ tech }: { tech: TechnicianProps }) {
     const locale = useLocale();
-    const t = useTranslations('ServicesPage');
+    const t = useTranslations('Services');
     const router = useRouter();
 
     const handleBooking = () => {
