@@ -28,7 +28,7 @@ const FilterSection = ({ title, children, defaultOpen = true }: FilterSectionPro
 };
 
 export default function FilterSidebar({ className = "" }: { className?: string }) {
-    const t = useTranslations('services_page');
+    const t = useTranslations('Services');
     const [priceRange, setPriceRange] = useState(100);
     const [distance, setDistance] = useState(25);
 

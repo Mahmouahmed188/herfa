@@ -1,4 +1,23 @@
 {
+    "Services": {
+        "title": "Find the perfect <highlight>craftsman</highlight> for your project",
+        "subtitle": "Connect with thousands of skilled professionals for plumbing, carpentry, electrical work, and more.",
+        "searchPlaceholder": "What service do you need today?",
+        "zipCodePlaceholder": "Zip Code",
+        "search": "Search",
+        "resultsFound": "Showing {count} Results",
+        "sortBy": "Sort by",
+        "recommended": "Recommended",
+        "filters": "Filters",
+        "resetAll": "Reset All",
+        "category": "CATEGORY",
+        "hourlyRate": "HOURLY RATE",
+        "rating": "RATING",
+        "distance": "DISTANCE",
+        "bookingNow": "Book Now",
+        "startingAt": "Starting at",
+        "reviews": "reviews"
+    },
     "Hero": {
         "title": "Build Better with <highlight>Expert Technicians</highlight>",
         "subtitle": "Connect with top-rated professionals and use AI to diagnose construction issues instantly.",
@@ -62,24 +81,5 @@
     "Common": {
         "loading": "Loading...",
         "error": "Something went wrong"
-    },
-    "services_page": {
-        "title": "Find the perfect <highlight>craftsman</highlight> for your project",
-        "subtitle": "Connect with thousands of skilled professionals for plumbing, carpentry, electrical work, and more.",
-        "searchPlaceholder": "What service do you need today?",
-        "zipCodePlaceholder": "Zip Code",
-        "search": "Search",
-        "resultsFound": "Showing {count} Results",
-        "sortBy": "Sort by",
-        "recommended": "Recommended",
-        "filters": "Filters",
-        "resetAll": "Reset All",
-        "category": "CATEGORY",
-        "hourlyRate": "HOURLY RATE",
-        "rating": "RATING",
-        "distance": "DISTANCE",
-        "bookingNow": "Book Now",
-        "startingAt": "Starting at",
-        "reviews": "reviews"
     }
 }

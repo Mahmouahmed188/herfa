@@ -99,27 +99,14 @@ const CATEGORY_ICONS = [
 
 export default function ServicesAndCategoriesPage() {
     const locale = useLocale();
-    const t = useTranslations('services_page');
+    const t = useTranslations('Services');
     const [searchTerm, setSearchTerm] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     const isRtl = locale === 'ar';
 
-    const renderTitle = (title: string) => {
-        const parts = title.split('<highlight>');
-        if (parts.length > 1) {
-            const secondPart = parts[1].split('</highlight>');
-            return (
-                <>
-                    {parts[0]}
-                    <span className="text-primary">{secondPart[0]}</span>
-                    {secondPart[1]}
-                </>
-            );
-        }
-        return title;
-    };
+
 
     return (
         <div className="bg-[#0A0F0D] min-h-screen text-white font-sans selection:bg-primary/30">
@@ -129,7 +116,9 @@ export default function ServicesAndCategoriesPage() {
 
                 <div className="container mx-auto max-w-4xl text-center relative z-10">
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-                        {renderTitle(t('title'))}
+                        {t.rich('title', {
+                            highlight: (chunks) => <span className="text-primary">{chunks}</span>
+                        })}
                     </h1>
                     <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
                         {t('subtitle')}
