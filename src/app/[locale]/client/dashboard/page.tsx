@@ -4,7 +4,7 @@ import {
     Wallet, TrendingUp, ClipboardList, CheckCircle2,
     Clock, Bell, Star, Gift, ArrowRight, Plus, MapPin
 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from "@/lib/navigation";
 
 const activeOrders = [
     {

@@ -7,7 +7,7 @@ import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import * as api from '@/services/api';
-import Link from 'next/link';
+import { Link } from "@/lib/navigation";
 import { Loader2, Eye, EyeOff, Mail, Lock, Zap } from 'lucide-react';
 
 const loginSchema = z.object({

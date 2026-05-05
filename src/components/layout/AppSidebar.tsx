@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
+import { Link } from "@/lib/navigation";
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, List, User, Settings, LogOut, Users, Briefcase, Wallet, MessageCircle, Heart, ChevronRight } from 'lucide-react';

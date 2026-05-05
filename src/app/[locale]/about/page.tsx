@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import { Link } from "@/lib/navigation";
 import Button from '@/components/ui/button';
 import {
     Target,
@@ -208,12 +208,12 @@ export default function AboutPage() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/register?role=client">
+                        <Link href={{ pathname: '/register', query: { role: 'client' } }}>
                             <Button className="w-full sm:w-auto h-14 px-8 text-lg">
                                 Join as a Client
                             </Button>
                         </Link>
-                        <Link href="/register?role=technician">
+                        <Link href={{ pathname: '/register', query: { role: 'technician' } }}>
                             <Button variant="outline" className="w-full sm:w-auto h-14 px-8 text-lg bg-transparent border-slate-300 dark:border-surface-border text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-surface-dark">
                                 Join as a Technician
                             </Button>

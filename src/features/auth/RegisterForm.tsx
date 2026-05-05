@@ -4,8 +4,8 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+// import { useRouter } from 'next/navigation';
+import { Link, useRouter } from "@/lib/navigation";
 import * as api from '@/services/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Loader2, Eye, EyeOff, Mail, Lock, User, Wrench, HardHat } from 'lucide-react';
@@ -46,7 +46,7 @@ export function RegisterForm() {
                 password: data.password,
                 role: data.role // Send role to backend if needed
             });
-            
+
             if (result.token) {
                 router.push('/login');
             } else {

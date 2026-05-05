@@ -1,6 +1,5 @@
 import { RegisterForm } from '@/features/auth/RegisterForm';
-import Link from 'next/link';
-
+import { Link } from "@/lib/navigation";
 export default function RegisterPage() {
     return (
         <div className="min-h-screen flex bg-background-light dark:bg-background-dark">

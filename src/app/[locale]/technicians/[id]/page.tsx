@@ -1,5 +1,5 @@
 import { Star, MapPin, ShieldCheck, BadgeCheck, Award, ArrowLeft, Clock, ThumbsUp } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from "@/lib/navigation";
 
 // Mock technician data - in production would be fetched from API
 const technician = {

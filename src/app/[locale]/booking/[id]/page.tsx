@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { Calendar, Clock, MapPin, User, ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from "@/lib/navigation";
 
 export default function BookingPage() {
     const { id } = useParams();

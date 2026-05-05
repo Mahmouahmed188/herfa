@@ -1,6 +1,5 @@
 import { LoginForm } from '@/features/auth/LoginForm';
-import Link from 'next/link';
-
+import { Link } from "@/lib/navigation";
 export default function LoginPage() {
     return (
         <div className="min-h-screen flex bg-background-light dark:bg-background-dark">

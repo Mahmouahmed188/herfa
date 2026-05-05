@@ -3,7 +3,7 @@
 import { ArrowRight, Star } from 'lucide-react';
 import Button from "@/components/ui/button";
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+import { Link } from "@/lib/navigation";
 
 const technicians = [
     {
