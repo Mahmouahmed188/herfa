@@ -42,7 +42,7 @@ export function LoginForm() {
                     role: 'client' as const // Default to client for now
                 };
                 login(storeUser, result.token);
-                router.push(`/${storeUser.role}/dashboard`);
+                router.push(`/${storeUser.role}/`);
             } else {
                 setError(result.message || 'Invalid email or password. Please try again.');
             }

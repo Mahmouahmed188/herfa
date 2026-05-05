@@ -14,21 +14,18 @@ export default function LocalePersistence() {
     const pathname = usePathname();
 
     useEffect(() => {
-        // 1. Get saved language from localStorage
-        const storedLocale = localStorage.getItem('NEXT_LOCALE');
+        const authRoutes = ['/login', '/register'];
+        const isAuthRoute = authRoutes.some(route => pathname === route || pathname.startsWith(route + '/'));
+        if (isAuthRoute) return;
 
-        // 2. Determine target locale
-        // If nothing in localStorage, default to 'ar' (requirement 5)
+        const storedLocale = localStorage.getItem('NEXT_LOCALE');
         const targetLocale = storedLocale || 'ar';
 
-        // 3. Save if it was empty (requirement 5)
         if (!storedLocale) {
             localStorage.setItem('NEXT_LOCALE', 'ar');
         }
 
-        // 4. Redirect if current route locale doesn't match stored preference (requirement 4)
         if (targetLocale !== locale) {
-            // Use router.replace to avoid cluttering history with redirects
             router.replace(pathname, { locale: targetLocale as 'en' | 'ar' });
         }
     }, [locale, pathname, router]);
