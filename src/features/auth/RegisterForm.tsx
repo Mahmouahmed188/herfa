@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import * as api from '@/services/api';
+import { useAuthStore } from '@/store/useAuthStore';
 import { Loader2, Eye, EyeOff, Mail, Lock, User, Wrench, HardHat } from 'lucide-react';
 
 const registerSchema = z.object({
@@ -24,6 +26,7 @@ type RegisterValues = z.infer<typeof registerSchema>;
 export function RegisterForm() {
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState('');
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirm, setShowConfirm] = React.useState(false);
 
@@ -36,10 +39,24 @@ export function RegisterForm() {
 
     const onSubmit = async (data: RegisterValues) => {
         setLoading(true);
-        setTimeout(() => {
+        setError('');
+        try {
+            const result = await api.register({
+                email: data.email,
+                password: data.password,
+                role: data.role // Send role to backend if needed
+            });
+            
+            if (result.token) {
+                router.push('/login');
+            } else {
+                setError(result.message || 'Registration failed. Please try again.');
+            }
+        } catch (err) {
+            setError('Connection error. Please check if the backend is running.');
+        } finally {
             setLoading(false);
-            router.push('/login');
-        }, 1200);
+        }
     };
 
     return (
@@ -143,6 +160,14 @@ export function RegisterForm() {
                     </div>
                     {errors.confirmPassword && <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>}
                 </div>
+
+                {/* Error */}
+                {error && (
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/30">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+                        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                    </div>
+                )}
 
                 {/* Submit */}
                 <button

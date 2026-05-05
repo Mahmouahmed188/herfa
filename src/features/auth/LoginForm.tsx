@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-import { mockApi } from '@/services/mock/api';
+import * as api from '@/services/api';
 import Link from 'next/link';
 import { Loader2, Eye, EyeOff, Mail, Lock, Zap } from 'lucide-react';
 
@@ -32,11 +32,22 @@ export function LoginForm() {
         setLoading(true);
         setError('');
         try {
-            const user = await mockApi.login(data.email);
-            login({ id: user.id, name: user.name, email: user.email, role: user.role }, user.token);
-            router.push(`/${user.role}/dashboard`);
-        } catch {
-            setError('Invalid email or password. Please try again.');
+            const result = await api.login(data);
+            if (result.token) {
+                // Map backend user to store user
+                const storeUser = {
+                    id: result.user.id,
+                    email: result.user.email,
+                    name: result.user.email.split('@')[0], // Use email prefix as name for now
+                    role: 'client' as const // Default to client for now
+                };
+                login(storeUser, result.token);
+                router.push(`/${storeUser.role}/dashboard`);
+            } else {
+                setError(result.message || 'Invalid email or password. Please try again.');
+            }
+        } catch (err) {
+            setError('Connection error. Please check if the backend is running.');
         } finally {
             setLoading(false);
         }
