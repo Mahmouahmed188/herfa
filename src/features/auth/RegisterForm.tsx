@@ -52,7 +52,7 @@ export function RegisterForm() {
                 lastName: data.lastName,
             });
 
-            if (result.token) {
+            if (result.data?.accessToken) {
                 router.push('/login');
             } else {
                 setError(result.message || 'Registration failed. Please try again.');
