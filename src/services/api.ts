@@ -377,3 +377,20 @@ export async function getAllJobs(params?: Record<string, string>) {
   const query = params ? '?' + new URLSearchParams(params).toString() : '';
   return fetchWithAuth(`/admin/jobs${query}`, { method: 'GET' });
 }
+
+// --- NOTIFICATIONS ---
+
+export async function getNotifications(page = 1, limit = 10) {
+  return fetchWithAuth(`/notifications?page=${page}&limit=${limit}`, { method: 'GET' });
+}
+
+export async function getUnreadNotificationsCount() {
+  return fetchWithAuth('/notifications/unread-count', { method: 'GET' });
+}
+
+export async function markNotificationsAsRead(notificationIds: string[]) {
+  return fetchWithAuth('/notifications/mark-read', {
+    method: 'POST',
+    body: JSON.stringify({ notificationIds }),
+  });
+}
