@@ -76,7 +76,7 @@ export default function TechniciansSection() {
                                         <span key={tag} className="px-3 py-1 rounded-full bg-gray-100 dark:bg-background-dark text-xs font-medium text-slate-600 dark:text-gray-400">{tag}</span>
                                     ))}
                                 </div>
-                                <Link href={`/technicians/${i + 1}`} className="w-full mt-auto py-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-slate-900 dark:text-white font-bold text-sm hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors text-center block">{t('viewProfile')}</Link>
+                                <Link href={{ pathname: '/technicians/[id]', params: { id: String(i + 1) } }} className="w-full mt-auto py-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-slate-900 dark:text-white font-bold text-sm hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors text-center block">{t('viewProfile')}</Link>
                             </div>
                         ))}
                     </div>

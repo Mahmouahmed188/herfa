@@ -2,39 +2,13 @@
 
 import {
     Wallet, TrendingUp, ClipboardList, CheckCircle2,
-    Clock, Bell, Star, Gift, ArrowRight, Plus, MapPin
+    Clock, Bell, Star, Gift, ArrowRight, Plus, MapPin, Loader2
 } from 'lucide-react';
 import { Link } from "@/lib/navigation";
-
-const activeOrders = [
-    {
-        id: 'ORD-2490',
-        title: 'Kitchen Sink Repair',
-        technician: 'Ahmed H.',
-        status: 'arriving',
-        statusLabel: 'Arriving Today, 2:00 PM',
-        icon: '🔧',
-        color: 'text-amber-500 bg-amber-500/10',
-    },
-    {
-        id: 'ORD-2489',
-        title: 'Living Room Wiring',
-        technician: 'Sarah J.',
-        status: 'scheduled',
-        statusLabel: 'Scheduled: Oct 24, 10:00 AM',
-        icon: '⚡',
-        color: 'text-blue-500 bg-blue-500/10',
-    },
-    {
-        id: 'ORD-2488',
-        title: 'AC Maintenance',
-        technician: 'Mike C.',
-        status: 'in-progress',
-        statusLabel: 'In Progress',
-        icon: '❄️',
-        color: 'text-primary bg-primary/10',
-    },
-];
+import { useQuery } from '@tanstack/react-query';
+import * as api from '@/services/api';
+import { useAuthStore } from '@/store/useAuthStore';
+import { format } from 'date-fns';
 
 const savedTechnicians = [
     { name: 'John Doe', specialty: 'Carpenter', rating: 4.9, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZjQonIH3a-D03DzTjyLxRVdj8h_mOC9uQuZ_2eyw9lYHZH3ybvCl_w06OmfPT-vhAJd_BZAqrukCuqjRPjvB4CwSovBgVXdqGcErZu7uxBdYr1EMtVDAceg1LmDLC5BdRo6mird4hE7agG2pne_LwHcyuZ1zgTWbUFb9Wr5mtEOLCBqQr9xrQSVQSeKNVBdxObo8iSMXWbT2CpfJC_3J8VcPU_B7GPFEK__fDr-_2t0DFQSnrE99d7CLM3gaitRN1R72bi2mNZq8' },
@@ -43,19 +17,32 @@ const savedTechnicians = [
 ];
 
 const notifications = [
-    { title: 'Order #2490 Completed', body: 'Please rate your technician Ahmed.', time: '2 mins ago', type: 'success' },
-    { title: 'New Message', body: '"I\'m arriving in 5 mins..."', time: '15 mins ago', type: 'message' },
     { title: 'Promo Alert', body: 'Get 20% off on your next cleaning.', time: '1 hour ago', type: 'promo' },
 ];
 
 export default function ClientDashboard() {
+    const { user } = useAuthStore();
+
+    const { data: response, isLoading } = useQuery({
+        queryKey: ['clientJobs'],
+        queryFn: () => api.getMyJobs(),
+    });
+
+    const activeOrders = Array.isArray(response?.data) 
+        ? response.data.filter((job: any) => job.status !== 'COMPLETED' && job.status !== 'CANCELLED')
+        : [];
+        
+    const completedCount = Array.isArray(response?.data) 
+        ? response.data.filter((job: any) => job.status === 'COMPLETED').length
+        : 0;
+
     return (
         <div className="space-y-6 max-w-5xl">
             {/* Page header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
-                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Welcome back, Alex 👋</p>
+                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Welcome back, {user?.name || 'User'} 👋</p>
                 </div>
                 <Link
                     href="/client/create-job"
@@ -75,10 +62,10 @@ export default function ClientDashboard() {
                         <p className="text-white/70 text-sm font-medium">Total Balance</p>
                         <Wallet className="w-5 h-5 text-white/60" />
                     </div>
-                    <p className="text-3xl font-bold mb-1">$1,240.50</p>
+                    <p className="text-3xl font-bold mb-1">$0.00</p>
                     <div className="flex items-center gap-1 text-white/80 text-xs">
                         <TrendingUp className="w-3 h-3" />
-                        <span>+12% this month</span>
+                        <span>Add funds to wallet</span>
                     </div>
                 </div>
 
@@ -88,7 +75,9 @@ export default function ClientDashboard() {
                         <p className="text-slate-500 dark:text-gray-400 text-sm font-medium">Active Orders</p>
                         <Clock className="w-5 h-5 text-amber-500" />
                     </div>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-white mb-1">3</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-white mb-1">
+                        {isLoading ? <Loader2 className="w-6 h-6 animate-spin text-primary" /> : activeOrders.length}
+                    </p>
                     <p className="text-xs text-slate-400 dark:text-gray-500">Currently in progress</p>
                 </div>
 
@@ -98,7 +87,9 @@ export default function ClientDashboard() {
                         <p className="text-slate-500 dark:text-gray-400 text-sm font-medium">Completed Jobs</p>
                         <CheckCircle2 className="w-5 h-5 text-primary" />
                     </div>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-white mb-1">12</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-white mb-1">
+                        {isLoading ? <Loader2 className="w-6 h-6 animate-spin text-primary" /> : completedCount}
+                    </p>
                     <p className="text-xs text-slate-400 dark:text-gray-500">Lifetime total</p>
                 </div>
             </div>
@@ -114,23 +105,46 @@ export default function ClientDashboard() {
                         </Link>
                     </div>
                     <div className="space-y-3">
-                        {activeOrders.map((order) => (
-                            <div key={order.id} className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-background-dark hover:bg-slate-100 dark:hover:bg-surface-dark/60 transition-colors cursor-pointer">
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${order.color.split(' ')[1]}`}>
-                                    {order.icon}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="font-semibold text-slate-900 dark:text-white text-sm truncate">{order.title}</p>
-                                    <p className="text-xs text-slate-400 dark:text-gray-500 mt-0.5 flex items-center gap-1">
-                                        <MapPin className="w-3 h-3 shrink-0" />
-                                        {order.statusLabel}
-                                    </p>
-                                </div>
-                                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${order.color}`}>
-                                    {order.status === 'arriving' ? 'Arriving' : order.status === 'scheduled' ? 'Scheduled' : 'Active'}
-                                </span>
+                        {isLoading ? (
+                            <div className="flex justify-center p-8">
+                                <Loader2 className="w-8 h-8 animate-spin text-primary" />
                             </div>
-                        ))}
+                        ) : activeOrders.length > 0 ? (
+                            activeOrders.map((order: any) => (
+                                <div key={order.id} className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-background-dark hover:bg-slate-100 dark:hover:bg-surface-dark/60 transition-colors cursor-pointer">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${
+                                        order.status === 'PENDING' ? 'text-amber-500 bg-amber-500/10' :
+                                        order.status === 'ACCEPTED' ? 'text-blue-500 bg-blue-500/10' :
+                                        'text-primary bg-primary/10'
+                                    }`}>
+                                        {order.status === 'PENDING' ? '⏳' : order.status === 'ACCEPTED' ? '🗓️' : '🔧'}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-semibold text-slate-900 dark:text-white text-sm truncate">
+                                            {order.service?.name || order.title || 'Service Request'}
+                                        </p>
+                                        <p className="text-xs text-slate-400 dark:text-gray-500 mt-0.5 flex items-center gap-1">
+                                            <MapPin className="w-3 h-3 shrink-0" />
+                                            {order.address || 'Address pending'}
+                                        </p>
+                                    </div>
+                                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                                        order.status === 'PENDING' ? 'text-amber-500 bg-amber-500/10' :
+                                        order.status === 'ACCEPTED' ? 'text-blue-500 bg-blue-500/10' :
+                                        'text-primary bg-primary/10'
+                                    }`}>
+                                        {order.status}
+                                    </span>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center p-8 border border-dashed border-slate-200 dark:border-surface-border rounded-xl">
+                                <p className="text-sm text-slate-500 dark:text-gray-400">No active orders found.</p>
+                                <Link href="/client/create-job" className="text-primary text-sm font-semibold hover:underline mt-2 inline-block">
+                                    Create a new job
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
 

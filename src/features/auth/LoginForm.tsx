@@ -4,10 +4,9 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import * as api from '@/services/api';
-import { Link } from "@/lib/navigation";
+import { Link, useRouter } from "@/lib/navigation";
 import { Loader2, Eye, EyeOff, Mail, Lock, Zap } from 'lucide-react';
 
 const loginSchema = z.object({
@@ -38,16 +37,21 @@ export function LoginForm() {
             const resData = result.data;
 
             if (resData?.accessToken) {
+                const rawRole = resData.user.role;
+                let role: 'client' | 'technician' | 'admin' = 'client';
+                if (rawRole === 'provider') role = 'technician';
+                if (rawRole === 'admin') role = 'admin';
+
                 const storeUser = {
                     id: resData.user.id,
                     email: resData.user.email,
                     name: resData.user.email.split('@')[0],
-                    role: resData.user.role || 'client'
+                    role: role
                 };
 
                 login(storeUser, resData.accessToken);
 
-                router.push(`/${storeUser.role}/`);
+                router.push(`/${role}/dashboard` as any);
             } else {
                 setError('Invalid email or password. Please try again.');
             }
@@ -96,7 +100,7 @@ export function LoginForm() {
                         <label htmlFor="password" className="block text-sm font-semibold text-slate-700 dark:text-gray-300">
                             Password
                         </label>
-                        <Link href="#" className="text-xs font-medium text-primary hover:underline">
+                        <Link href="/" className="text-xs font-medium text-primary hover:underline">
                             Forgot password?
                         </Link>
                     </div>
@@ -168,9 +172,9 @@ export function LoginForm() {
             {/* Footer */}
             <p className="text-center text-xs text-slate-400 dark:text-gray-600 mt-6">
                 © 2024 Herfa Inc. &nbsp;·&nbsp;{' '}
-                <Link href="#" className="hover:underline">Privacy</Link>
+                <Link href="/" className="hover:underline">Privacy</Link>
                 &nbsp;·&nbsp;
-                <Link href="#" className="hover:underline">Terms</Link>
+                <Link href="/" className="hover:underline">Terms</Link>
             </p>
         </div>
     );

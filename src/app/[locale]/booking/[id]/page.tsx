@@ -15,7 +15,7 @@ export default function BookingPage() {
         <div className="bg-[#0E1512] min-h-screen text-white p-6">
             <div className="container mx-auto max-w-3xl">
                 <Link
-                    href={`/${locale}/technicians`}
+                    href={`/technicians`}
                     className="flex items-center gap-2 text-primary hover:underline mb-8"
                 >
                     <ChevronLeft className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />

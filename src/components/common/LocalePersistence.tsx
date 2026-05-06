@@ -26,7 +26,7 @@ export default function LocalePersistence() {
         }
 
         if (targetLocale !== locale) {
-            router.replace(pathname, { locale: targetLocale as 'en' | 'ar' });
+            router.replace(pathname as any, { locale: targetLocale as 'en' | 'ar' });
         }
     }, [locale, pathname, router]);
 

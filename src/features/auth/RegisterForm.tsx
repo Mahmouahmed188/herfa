@@ -55,7 +55,7 @@ export function RegisterForm() {
             if (result.data?.accessToken) {
                 router.push('/login');
             } else {
-                setError(result.message || 'Registration failed. Please try again.');
+                setError(result.data?.message || 'Registration failed. Please try again.');
             }
         } catch (err) {
             setError('Connection error. Please check if the backend is running.');
@@ -236,9 +236,9 @@ export function RegisterForm() {
 
             <p className="text-center text-xs text-slate-400 dark:text-gray-600 mt-6">
                 © 2024 Herfa Inc. &nbsp;·&nbsp;{' '}
-                <Link href="#" className="hover:underline">Privacy</Link>
+                <Link href="/" className="hover:underline">Privacy</Link>
                 &nbsp;·&nbsp;
-                <Link href="#" className="hover:underline">Terms</Link>
+                <Link href="/" className="hover:underline">Terms</Link>
             </p>
         </div>
     );

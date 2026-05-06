@@ -20,7 +20,7 @@ const clientItems: SidebarItem[] = [
     { name: 'Wallet', href: '/client/wallet', icon: Wallet },
     { name: 'Saved', href: '/client/saved', icon: Heart },
     { name: 'Messages', href: '/support', icon: MessageCircle, badge: '2' },
-    { name: 'Settings', href: '/client/settings', icon: Settings },
+    { name: 'Profile', href: '/client/profile', icon: User },
 ];
 
 const technicianItems: SidebarItem[] = [
@@ -77,7 +77,7 @@ export function AppSidebar({ role }: { role: 'client' | 'technician' | 'admin' }
                 {items.map((item) => {
                     const isActive = pathname.endsWith(item.href) || pathname.includes(item.href + '/');
                     return (
-                        <Link key={item.href} href={item.href}>
+                        <Link key={item.href} href={item.href as any}>
                             <div
                                 className={cn(
                                     'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group',
