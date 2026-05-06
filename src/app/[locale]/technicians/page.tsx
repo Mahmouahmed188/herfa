@@ -107,6 +107,41 @@ export default function ServicesAndCategoriesPage() {
     const isRtl = locale === 'ar';
 
 
+    const [technicians, setTechnicians] = useState<TechnicianProps[]>(MOCK_TECHNICIANS); // Keep mock as fallback while loading or if api fails
+    const [isLoading, setIsLoading] = useState(true);
+
+    React.useEffect(() => {
+        async function fetchTechnicians() {
+            try {
+                const api = await import('@/services/api');
+                const res = await api.getProviders();
+                if (res && res.data) {
+                    const mapped = res.data.map((p: any) => ({
+                        id: p.id,
+                        name: p.user?.firstName ? `${p.user.firstName} ${p.user.lastName}` : p.user?.email || 'Unknown',
+                        title: p.services?.[0] || 'Technician',
+                        rating: p.rating || 4.5,
+                        reviews: p.totalReviews || 0,
+                        hourlyRate: p.hourlyRate || 50,
+                        image: p.user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+                        matchPercentage: 90,
+                        skills: p.services || ['General'],
+                        verified: p.isVerified || false,
+                        available: p.isOnline || false,
+                        experience: p.yearsOfExperience ? `${p.yearsOfExperience} Years XP` : '5 Years XP',
+                        location: p.address || 'Unknown Location',
+                        description: p.bio || 'Professional technician ready to help.'
+                    }));
+                    if (mapped.length > 0) setTechnicians(mapped);
+                }
+            } catch (err) {
+                console.error("Failed to load technicians", err);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchTechnicians();
+    }, []);
 
     return (
         <div className="bg-[#0A0F0D] min-h-screen text-white font-sans selection:bg-primary/30">
@@ -200,7 +235,11 @@ export default function ServicesAndCategoriesPage() {
 
                         {/* TECHNICIAN GRID - Better Spacing */}
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                            {MOCK_TECHNICIANS.map((tech) => (
+                            {isLoading ? (
+                                <div className="col-span-full flex justify-center py-12">
+                                    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                                </div>
+                            ) : technicians.map((tech) => (
                                 <TechnicianResultCard key={tech.id} tech={tech} />
                             ))}
                         </div>

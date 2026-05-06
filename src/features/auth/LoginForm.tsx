@@ -31,21 +31,27 @@ export function LoginForm() {
     const onSubmit = async (data: LoginValues) => {
         setLoading(true);
         setError('');
+
         try {
             const result = await api.login(data);
-            if (result.token) {
-                // Map backend user to store user
+
+            const resData = result.data;
+
+            if (resData?.accessToken) {
                 const storeUser = {
-                    id: result.user.id,
-                    email: result.user.email,
-                    name: result.user.email.split('@')[0], // Use email prefix as name for now
-                    role: 'client' as const // Default to client for now
+                    id: resData.user.id,
+                    email: resData.user.email,
+                    name: resData.user.email.split('@')[0],
+                    role: resData.user.role || 'client'
                 };
-                login(storeUser, result.token);
+
+                login(storeUser, resData.accessToken);
+
                 router.push(`/${storeUser.role}/`);
             } else {
-                setError(result.message || 'Invalid email or password. Please try again.');
+                setError('Invalid email or password. Please try again.');
             }
+
         } catch (err) {
             setError('Connection error. Please check if the backend is running.');
         } finally {
