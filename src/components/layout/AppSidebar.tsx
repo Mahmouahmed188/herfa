@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Link } from "@/lib/navigation";
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { LayoutDashboard, List, User, Settings, LogOut, Users, Briefcase, Wallet, MessageCircle, Heart, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, List, User, Settings, LogOut, Users, Briefcase, Wallet, MessageCircle, Heart, ChevronRight, CheckCircle, ShieldCheck } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 
 interface SidebarItem {
@@ -24,11 +24,13 @@ const clientItems: SidebarItem[] = [
 ];
 
 const technicianItems: SidebarItem[] = [
+    { name: 'Onboarding', href: '/technician/onboarding-home', icon: ShieldCheck },
     { name: 'Dashboard', href: '/technician/dashboard', icon: LayoutDashboard },
     { name: 'Requests', href: '/technician/requests', icon: List },
-    { name: 'Earnings', href: '/technician/earnings', icon: Wallet },
+    { name: 'My Offers', href: '/technician/offers', icon: Briefcase }, // Reusing Briefcase for offers
+    { name: 'Active Jobs', href: '/technician/jobs', icon: CheckCircle }, // Reusing CheckCircle for active jobs
+    { name: 'Messages', href: '/technician/messages', icon: MessageCircle },
     { name: 'Profile', href: '/technician/profile', icon: User },
-    { name: 'Messages', href: '/support', icon: MessageCircle },
 ];
 
 const adminItems: SidebarItem[] = [
@@ -74,7 +76,17 @@ export function AppSidebar({ role }: { role: 'client' | 'technician' | 'admin' }
 
             {/* Nav items */}
             <nav className="flex-1 px-3 py-4 space-y-1">
-                {items.map((item) => {
+                {items
+                    .filter(item => {
+                        if (role === 'technician' && user?.status !== 'approved') {
+                            return item.href === '/technician/onboarding-home';
+                        }
+                        if (role === 'technician' && user?.status === 'approved') {
+                            return item.href !== '/technician/onboarding-home';
+                        }
+                        return true;
+                    })
+                    .map((item) => {
                     const isActive = pathname.endsWith(item.href) || pathname.includes(item.href + '/');
                     return (
                         <Link key={item.href} href={item.href as any}>

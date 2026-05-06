@@ -17,16 +17,16 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     // For now, let's follow the requirement "across ALL pages" but allow hiding on auth if it feels better.
     // Actually, to truly "persist and not re-mount", they should be always in the tree.
 
-    const AUTH_ROUTES = ['/login', '/register'];
-    const isAuthRoute = AUTH_ROUTES.some(route => strippedPath.startsWith(route));
+    const NO_CHROME_PREFIXES = ['/login', '/register', '/client', '/technician', '/admin'];
+    const isNoChromeRoute = NO_CHROME_PREFIXES.some(prefix => strippedPath.startsWith(prefix));
 
     return (
         <div className="flex flex-col min-h-screen">
-            {!isAuthRoute && <Navbar />}
+            {!isNoChromeRoute && <Navbar />}
             <main className="flex-1 flex flex-col">
                 {children}
             </main>
-            {!isAuthRoute && <Footer />}
+            {!isNoChromeRoute && <Footer />}
         </div>
     );
 }

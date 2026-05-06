@@ -304,6 +304,65 @@ export async function rejectOffer(offerId: string) {
   return fetchWithAuth(`/tenders/offers/${offerId}/reject`, { method: 'PATCH' });
 }
 
+export async function getMyOffersTechnician() {
+  return fetchWithAuth('/tenders/technician/my-offers', { method: 'GET' });
+}
+
+// --- MESSAGES ---
+
+export async function getMyMessages() {
+  return fetchWithAuth('/messages', { method: 'GET' });
+}
+
+export async function getConversation(otherUserId: string) {
+  return fetchWithAuth(`/messages/${otherUserId}`, { method: 'GET' });
+}
+
+export async function sendMessage(receiverId: string, content: string, relatedType?: string, relatedId?: string) {
+  return fetchWithAuth('/messages', {
+    method: 'POST',
+    body: JSON.stringify({ receiverId, content, relatedType, relatedId }),
+  });
+}
+
+export async function markMessageRead(messageId: string) {
+  return fetchWithAuth(`/messages/${messageId}/read`, { method: 'PATCH' });
+}
+
+// --- VERIFICATION ---
+
+export async function submitVerification(data: any) {
+  return fetchWithAuth('/verification/submit', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getVerificationStatus() {
+  return fetchWithAuth('/verification/status', { method: 'GET' });
+}
+
+export async function uploadFile(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/uploads`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Upload failed');
+  }
+
+  return response.json();
+}
+
 // --- USERS / ADMIN ---
 
 export async function getUsers() {

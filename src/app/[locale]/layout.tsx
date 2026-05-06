@@ -4,6 +4,7 @@ import { Manrope } from 'next/font/google';
 import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
 import LocalePersistence from '@/components/common/LocalePersistence';
 import { Providers } from '@/components/providers';
+import { Toaster } from 'sonner';
 import "../globals.css";
 
 const manrope = Manrope({
@@ -28,6 +29,7 @@ export default async function RootLayout({
       </head>
       <body className={`${manrope.variable} font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-x-hidden flex flex-col min-h-screen`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <Toaster position="top-center" richColors />
           <LocalePersistence />
           <Providers>
             <ConditionalLayout>

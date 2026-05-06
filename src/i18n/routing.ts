@@ -31,6 +31,7 @@ export const routing = defineRouting({
         '/client/profile': '/client/profile',
         '/client/settings': '/client/settings',
         '/technician/dashboard': '/technician/dashboard',
+        '/technician/onboarding-home': '/technician/onboarding-home',
         '/technician/requests': '/technician/requests',
         '/technician/earnings': '/technician/earnings',
         '/technician/profile': '/technician/profile',

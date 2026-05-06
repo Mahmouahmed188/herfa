@@ -46,12 +46,17 @@ export function LoginForm() {
                     id: resData.user.id,
                     email: resData.user.email,
                     name: resData.user.email.split('@')[0],
-                    role: role
+                    role: role,
+                    status: resData.user.status
                 };
 
                 login(storeUser, resData.accessToken);
 
-                router.push(`/${role}/dashboard` as any);
+                if (role === 'technician' && resData.user.status !== 'approved') {
+                    router.push('/technician/onboarding-home' as any);
+                } else {
+                    router.push(`/${role}/dashboard` as any);
+                }
             } else {
                 setError('Invalid email or password. Please try again.');
             }

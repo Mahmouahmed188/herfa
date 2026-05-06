@@ -37,15 +37,19 @@ export function Navbar() {
 
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center gap-8">
-                    <Link href="/services" className="text-sm font-medium text-gray-300 hover:text-primary transition-colors">
-                        {t('services')}
-                    </Link>
-                    <Link href="/ai-diagnosis" className="text-sm font-medium text-gray-300 hover:text-primary transition-colors">
-                        {t('aiDiagnosis')}
-                    </Link>
-                    <Link href="/technicians" className="text-sm font-medium text-gray-300 hover:text-primary transition-colors">
-                        {t('technicians')}
-                    </Link>
+                    {user?.role !== 'technician' && (
+                        <>
+                            <Link href="/services" className="text-sm font-medium text-gray-300 hover:text-primary transition-colors">
+                                {t('services')}
+                            </Link>
+                            <Link href="/ai-diagnosis" className="text-sm font-medium text-gray-300 hover:text-primary transition-colors">
+                                {t('aiDiagnosis')}
+                            </Link>
+                            <Link href="/technicians" className="text-sm font-medium text-gray-300 hover:text-primary transition-colors">
+                                {t('technicians')}
+                            </Link>
+                        </>
+                    )}
                     <Link href="/about" className="text-sm font-medium text-gray-300 hover:text-primary transition-colors">
                         {t('about')}
                     </Link>
@@ -87,9 +91,13 @@ export function Navbar() {
             {mobileMenuOpen && (
                 <div className="md:hidden border-t border-surfaceBorder bg-backgroundDark p-6 space-y-4 absolute w-full shadow-2xl">
                     <div className="flex flex-col gap-4">
-                        <Link href="/services" className="text-lg font-medium text-gray-300">{t('services')}</Link>
-                        <Link href="/ai-diagnosis" className="text-lg font-medium text-gray-300">{t('aiDiagnosis')}</Link>
-                        <Link href="/technicians" className="text-lg font-medium text-gray-300">{t('technicians')}</Link>
+                        {user?.role !== 'technician' && (
+                            <>
+                                <Link href="/services" className="text-lg font-medium text-gray-300">{t('services')}</Link>
+                                <Link href="/ai-diagnosis" className="text-lg font-medium text-gray-300">{t('aiDiagnosis')}</Link>
+                                <Link href="/technicians" className="text-lg font-medium text-gray-300">{t('technicians')}</Link>
+                            </>
+                        )}
                         <Link href="/about" className="text-lg font-medium text-gray-300">{t('about')}</Link>
                         {mounted && (
                             isAuthenticated ? (
