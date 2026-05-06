@@ -1,13 +1,27 @@
+'use client';
+
 import { AppSidebar } from '@/components/layout/AppSidebar';
-import { Footer } from '@/components/layout/Footer';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { useSidebar } from '@/context/SidebarContext';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { isCollapsed } = useSidebar();
+
   return (
-    <div className="flex flex-1">
-      <AppSidebar role="admin" />
-      <div className="flex-1 md:pl-64 p-8 bg-muted/10">
-        {children}
+    <ProtectedRoute>
+      <div className="flex flex-1 min-h-screen">
+        <AppSidebar role="admin" />
+        <main
+          className="flex-1 p-8 transition-all duration-300 ease-in-out"
+          style={{
+            paddingLeft: typeof window !== 'undefined' && window.innerWidth >= 768
+              ? (isCollapsed ? '150px' : '360px')
+              : '0px'
+          }}
+        >
+          {children}
+        </main>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }
