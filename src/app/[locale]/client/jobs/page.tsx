@@ -14,7 +14,7 @@ export default function ClientJobsPage() {
         queryFn: () => api.getMyJobs(),
     });
 
-    const jobs = Array.isArray(response?.data) ? response.data : [];
+    const jobs = Array.isArray(response) ? response : [];
 
     return (
         <div className="space-y-6 max-w-5xl">

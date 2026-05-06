@@ -28,12 +28,12 @@ export default function ClientDashboard() {
         queryFn: () => api.getMyJobs(),
     });
 
-    const activeOrders = Array.isArray(response?.data) 
-        ? response.data.filter((job: any) => job.status !== 'COMPLETED' && job.status !== 'CANCELLED')
+    const activeOrders = Array.isArray(response) 
+        ? response.filter((job: any) => job.status !== 'COMPLETED' && job.status !== 'CANCELLED')
         : [];
         
-    const completedCount = Array.isArray(response?.data) 
-        ? response.data.filter((job: any) => job.status === 'COMPLETED').length
+    const completedCount = Array.isArray(response) 
+        ? response.filter((job: any) => job.status === 'COMPLETED').length
         : 0;
 
     return (

@@ -34,7 +34,7 @@ export function LoginForm() {
         try {
             const result = await api.login(data);
 
-            const resData = result.data;
+            const resData = result;
 
             if (resData?.accessToken) {
                 const rawRole = resData.user.role;
