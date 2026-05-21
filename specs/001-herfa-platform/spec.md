@@ -73,7 +73,11 @@
 #### Booking & Tracking
 - **FR-BOOK-01**: System MUST support a full booking lifecycle: Draft -> Pending -> Assigned -> In Progress -> Completed -> Cancelled.
 - **FR-BOOK-02**: System MUST provide real-time location tracking of the provider once the booking is "In Progress".
-- **FR-BOOK-03**: System MUST support booking rescheduling and cancellation with defined penalty rules.
+- **FR-BOOK-03**: System MUST support booking rescheduling and cancellation with defined penalty rules:
+  - Rescheduling > 24h: Free.
+  - Rescheduling < 24h: 10% service fee.
+  - Cancellation > 24h: Full refund.
+  - Cancellation < 24h: 20% penalty fee to the customer, 10% payout to the provider.
 
 #### Payments & Wallet
 - **FR-PAY-01**: System MUST integrate with Stripe and local payment gateways for secure transactions.
@@ -89,7 +93,12 @@
 - **FR-NOT-02**: System MUST support fallback notifications via Email and SMS.
 
 #### Admin Dashboard
-- **FR-ADM-01**: Admins MUST have a comprehensive dashboard for user moderation, financial reporting, and system analytics.
+- **FR-ADM-01**: Admins MUST have a comprehensive dashboard including:
+  - Real-time "Pulse" map of active bookings.
+  - Financial summary (Gross Volume, Platform Fees, Payouts).
+  - User growth and verification queue status.
+  - Dispute resolution throughput and pending flags.
+  - System health (API latency, Socket connection count).
 
 ### Non-Functional Requirements
 - **NFR-SCAL**: System MUST be architected to support millions of concurrent users (Horizontal scaling).

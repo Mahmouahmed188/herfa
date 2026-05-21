@@ -32,6 +32,8 @@
 - [ ] T011 [P] Configure Cloudinary client for file uploads in `apps/api/src/storage`
 - [ ] T012 Configure Socket.IO gateway for real-time features in `apps/api/src/gateways`
 - [ ] T013 Setup Firebase Admin SDK for FCM notifications in `apps/api/src/notifications`
+- [ ] T013.1 [P] Integrate Twilio for SMS fallback notifications in `apps/api/src/notifications/sms`
+- [ ] T013.2 [P] Integrate SendGrid for Email fallback notifications in `apps/api/src/notifications/email`
 
 ---
 
@@ -83,7 +85,8 @@
 
 - [ ] T026 [P] [US3] Implement Admin Dashboard layout and User management in `apps/admin`
 - [ ] T027 [US3] Implement Dispute model and status transitions in `apps/api/src/models/dispute.ts`
-- [ ] T028 [US3] Create Dispute Moderation UI in `apps/admin/src/app/[locale]/disputes`
+- [ ] T028 Create Dispute Moderation UI in `apps/admin/src/app/[locale]/disputes`
+- [ ] T028.1 [US3] Implement Provider Document Approval/Rejection workflow in `apps/admin`
 - [ ] T029 [US3] Implement Chat log viewer for disputed bookings in `apps/admin`
 - [ ] T030 [US3] Implement refund logic via Stripe in `apps/api/src/payments/refund`
 
@@ -100,6 +103,7 @@
 - [ ] T033 [P] Add SEO metadata and OpenGraph tags to `apps/web`
 - [ ] T034 [P] Implement Skeleton loaders and optimistic UI updates for Chat and Booking
 - [ ] T035 [P] Conduct security audit: JWT rotation, RBAC check, and Zod sanitization
+- [ ] T035.1 [P] Conduct Socket Load Test (10k concurrent) using Artillery in `tests/load`
 - [ ] T036 Run Playwright and Detox E2E tests for the "Happy Path" booking flow
 
 ---
