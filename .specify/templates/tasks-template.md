@@ -151,6 +151,8 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
+- [ ] TXXX [P] [I18N] Implement Arabic (RTL) and English translations
+- [ ] TXXX [P] [OBS] Add structured logging and error tracking context
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Performance optimization across all stories

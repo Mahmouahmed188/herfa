@@ -40,7 +40,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] **I. Scalability & Clean Architecture**: Does the design follow Clean Architecture and DDD?
+- [ ] **II. Security-First & Zero Trust**: Are all inputs validated with Zod? Is auth enforced?
+- [ ] **III. Mobile-First & Cross-Platform Parity**: Does this feature work on both Web and Mobile?
+- [ ] **IV. Multilingual & Internationalization**: Is RTL/Arabic support handled at the component level?
+- [ ] **V. Type-Safe Development & Validation**: Are all interfaces strictly typed? No `any` used?
+- [ ] **VI. Observability & Monitoring**: Are logs and error handling context-aware?
+- [ ] **VII. SOLID Principles Enforcement**: Does the implementation follow SOLID and prioritize composition?
 
 ## Project Structure
 

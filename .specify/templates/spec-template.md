@@ -75,7 +75,11 @@
   Fill them out with the right edge cases.
 -->
 
-- What happens when [boundary condition]?
+- How does the layout handle RTL (Arabic) text expansion/contraction?
+- What happens when authentication tokens expire during a multi-step flow?
+- How does the system handle concurrent updates to the same booking?
+- What happens when a user switches language mid-session?
+- How does the system handle [boundary condition]?
 - How does system handle [error scenario]?
 
 ## Requirements *(mandatory)*
@@ -87,6 +91,9 @@
 
 ### Functional Requirements
 
+- **FR-SEC**: All data access MUST be authorized via JWT and role-based access control.
+- **FR-I18N**: UI MUST support both Arabic (RTL) and English (LTR) with full parity.
+- **FR-VAL**: All user inputs MUST be validated via Zod schemas before processing.
 - **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
 - **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
