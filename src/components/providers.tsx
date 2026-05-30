@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 import { queryClient } from '@/lib/react-query';
 import { SidebarProvider } from '@/context/SidebarContext';
 import '@/i18n/i18n';
@@ -13,6 +14,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem>
         <SidebarProvider>
           {children}
+          <Toaster position="top-right" richColors closeButton />
         </SidebarProvider>
       </NextThemesProvider>
     </QueryClientProvider>

@@ -7,53 +7,36 @@ import { cn } from '@/lib/utils';
 import { 
     LayoutDashboard, List, User, Settings, LogOut, 
     Users, Briefcase, Wallet, MessageCircle, Heart, 
-    ChevronRight, CheckCircle, ShieldCheck, ChevronLeft, PanelLeftClose, PanelLeftOpen
+    ChevronRight, CheckCircle, ShieldCheck, ChevronLeft, PanelLeftClose, PanelLeftOpen,
+    FileText, Bell, BarChart3, Activity, Shield
 } from 'lucide-react';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useSidebar } from '@/context/SidebarContext';
-import { motion, AnimatePresence } from 'framer-motion';
-
-interface SidebarItem {
-    name: string;
-    href: string;
-    icon: React.ElementType;
-    badge?: string;
-}
-
-const clientItems: SidebarItem[] = [
-    { name: 'Overview', href: '/client/dashboard', icon: LayoutDashboard },
-    { name: 'My Orders', href: '/client/jobs', icon: List },
-    { name: 'Wallet', href: '/client/wallet', icon: Wallet },
-    { name: 'Saved', href: '/client/saved', icon: Heart },
-    { name: 'Messages', href: '/support', icon: MessageCircle, badge: '2' },
-    { name: 'Profile', href: '/client/profile', icon: User },
-];
-
-const technicianItems: SidebarItem[] = [
-    { name: 'Onboarding', href: '/technician/onboarding-home', icon: ShieldCheck },
-    { name: 'Dashboard', href: '/technician/dashboard', icon: LayoutDashboard },
-    { name: 'Requests', href: '/technician/requests', icon: List },
-    { name: 'My Offers', href: '/technician/offers', icon: Briefcase },
-    { name: 'Active Jobs', href: '/technician/jobs', icon: CheckCircle },
-    { name: 'Messages', href: '/technician/messages', icon: MessageCircle },
-    { name: 'Profile', href: '/technician/profile', icon: User },
-];
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { UserRole } from '@/types/api';
+// ... rest of imports unchanged
 
 const adminItems: SidebarItem[] = [
-    { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Users', href: '/admin/users', icon: Users },
-    { name: 'Jobs', href: '/admin/jobs', icon: Briefcase },
+    { name: 'Providers', href: '/admin/providers', icon: ShieldCheck },
+    { name: 'Bookings', href: '/admin/bookings', icon: Briefcase },
+    { name: 'Finance', href: '/admin/finance', icon: Wallet },
+    { name: 'Support', href: '/support', icon: MessageCircle },
+    { name: 'CMS', href: '/admin/cms', icon: FileText },
+    { name: 'Notifications', href: '/admin/notifications', icon: Bell },
+    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+    { name: 'Audit Logs', href: '/admin/audit', icon: Activity },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
-export function AppSidebar({ role }: { role: 'client' | 'technician' | 'admin' }) {
+export function AppSidebar({ role }: { role: UserRole | 'client' | 'technician' }) {
     const pathname = usePathname();
     const { logout, user } = useAuthStore();
     const { isCollapsed, toggleSidebar } = useSidebar();
 
+    const isAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN' || role === 'admin';
     const items = role === 'client' ? clientItems : role === 'technician' ? technicianItems : adminItems;
     const roleLabel = role === 'client' ? 'Customer Portal' : role === 'technician' ? 'Technician Portal' : 'Admin Panel';
-    const userName = user?.name ?? 'User';
+    const userName = user?.firstName ?? 'User';
 
     return (
         <motion.div 
