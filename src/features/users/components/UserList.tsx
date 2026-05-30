@@ -10,6 +10,9 @@ import { User } from '@/types/api';
 import { format } from 'date-fns';
 import { SearchFilter } from '@/components/ui/filters/SearchFilter';
 import { useSearchParams } from 'next/navigation';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog } from '@/components/ui/feedback/Dialog';
+import { Download, ShieldAlert, ShieldCheck, CheckSquare } from 'lucide-react';
 
 export function UserList() {
   const searchParams = useSearchParams();
@@ -19,7 +22,53 @@ export function UserList() {
 
   const { data, isLoading } = useUsers({ page, query, role });
 
+  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
+  const [isBulkDialogOpen, setIsBulkDialogOpen] = React.useState(false);
+  const [bulkStatus, setBulkStatus] = React.useState<'ACTIVE' | 'SUSPENDED'>('SUSPENDED');
+  const updateStatus = useUpdateUserStatus();
+
+  const handleSelectAll = () => {
+    if (selectedIds.length === (data?.data?.length || 0)) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(data?.data?.map(u => u.id) || []);
+    }
+  };
+
+  const handleSelect = (id: string) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkAction = () => {
+    selectedIds.forEach(id => {
+      updateStatus.mutate({ id, status: bulkStatus, reason: 'Bulk action from admin panel' });
+    });
+    setIsBulkDialogOpen(false);
+    setSelectedIds([]);
+  };
+
   const columns = [
+    {
+      header: (
+        <input
+          type="checkbox"
+          checked={selectedIds.length === data?.data?.length && data?.data?.length > 0}
+          onChange={handleSelectAll}
+          className="h-4 w-4 rounded border-input accent-primary"
+        />
+      ),
+      accessorKey: 'id',
+      cell: (row: User) => (
+        <input
+          type="checkbox"
+          checked={selectedIds.includes(row.id)}
+          onChange={() => handleSelect(row.id)}
+          className="h-4 w-4 rounded border-input accent-primary"
+        />
+      ),
+    },
     {
       header: 'User',
       accessorKey: 'email',
@@ -100,6 +149,43 @@ export function UserList() {
         </div>
       </div>
 
+      {selectedIds.length > 0 && (
+        <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/50">
+          <CheckSquare className="w-4 h-4 text-muted-foreground" />
+          <span className="text-sm font-medium">{selectedIds.length} selected</span>
+          <div className="flex gap-2 ml-auto">
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-2"
+              onClick={() => {
+                setBulkStatus('SUSPENDED');
+                setIsBulkDialogOpen(true);
+              }}
+            >
+              <ShieldAlert className="w-4 h-4" />
+              Suspend Selected
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-2"
+              onClick={() => {
+                setBulkStatus('ACTIVE');
+                setIsBulkDialogOpen(true);
+              }}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Activate Selected
+            </Button>
+            <Button size="sm" variant="ghost" className="gap-2">
+              <Download className="w-4 h-4" />
+              Export CSV
+            </Button>
+          </div>
+        </div>
+      )}
+
       <DataTable
         data={data?.data || []}
         columns={columns}
@@ -115,6 +201,26 @@ export function UserList() {
             : undefined
         }
       />
+
+      <Dialog
+        isOpen={isBulkDialogOpen}
+        onClose={() => setIsBulkDialogOpen(false)}
+        title={bulkStatus === 'SUSPENDED' ? 'Bulk Suspend Users' : 'Bulk Activate Users'}
+        description={`This will ${bulkStatus === 'SUSPENDED' ? 'suspend' : 'activate'} ${selectedIds.length} user(s).`}
+      >
+        <div className="flex justify-end gap-2 pt-4">
+          <Button variant="ghost" onClick={() => setIsBulkDialogOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant={bulkStatus === 'SUSPENDED' ? 'destructive' : 'default'}
+            onClick={handleBulkAction}
+            disabled={updateStatus.isPending}
+          >
+            Confirm {bulkStatus === 'SUSPENDED' ? 'Suspension' : 'Activation'}
+          </Button>
+        </div>
+      </Dialog>
     </div>
   );
 }

@@ -11,9 +11,9 @@ import {
   Bell
 } from 'lucide-react';
 import { KPICards } from '@/features/dashboard/components/KPICards';
+import { DashboardCharts } from '@/features/dashboard/components/DashboardCharts';
 import { RecentActivity } from '@/features/dashboard/components/RecentActivity';
 import { VerificationQueue } from '@/features/providers/components/VerificationQueue';
-import { DashboardChart } from '@/features/dashboard/components/DashboardCharts';
 
 export default function AdminDashboardPage() {
   const stats = [
@@ -98,13 +98,17 @@ export default function AdminDashboardPage() {
 
       <KPICards stats={stats} />
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <DashboardChart title="Monthly Revenue (SAR)" data={revenueData} />
-        <DashboardChart 
-          title="Booking Growth" 
-          data={revenueData.map(d => ({ ...d, value: d.value / 2 }))} 
-        />
-      </div>
+      <DashboardCharts
+        revenueData={revenueData}
+        bookingData={revenueData.map(d => ({ ...d, value: Math.floor(d.value / 2) }))}
+        distributionData={[
+          { label: 'Plumbing', value: 35 },
+          { label: 'Electrical', value: 25 },
+          { label: 'Cleaning', value: 20 },
+          { label: 'AC', value: 15 },
+          { label: 'Other', value: 5 },
+        ]}
+      />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <RecentActivity activities={recentActivities} />

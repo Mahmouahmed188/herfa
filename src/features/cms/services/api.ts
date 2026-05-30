@@ -9,6 +9,16 @@ export interface Category extends BaseEntity {
   serviceCount: number;
 }
 
+export interface Banner extends BaseEntity {
+  titleAr: string;
+  titleEn: string;
+  linkUrl?: string;
+  imageUrl?: string;
+  priority: number;
+  status: 'ACTIVE' | 'SCHEDULED' | 'EXPIRED';
+  scheduledAt?: string;
+}
+
 export const cmsApi = {
   getCategories: async (params?: { page?: number; limit?: number }) => {
     const response = await api.get<PaginatedResponse<Category>>('/cms/categories', { params });
@@ -26,7 +36,17 @@ export const cmsApi = {
   },
 
   getBanners: async () => {
-    const response = await api.get<ApiResponse<any[]>>('/cms/banners');
+    const response = await api.get<ApiResponse<Banner[]>>('/cms/banners');
+    return response.data;
+  },
+
+  createBanner: async (data: Omit<Banner, keyof BaseEntity>) => {
+    const response = await api.post<ApiResponse<Banner>>('/cms/banners', data);
+    return response.data;
+  },
+
+  updateBanner: async (id: string, data: Partial<Banner>) => {
+    const response = await api.patch<ApiResponse<Banner>>(`/cms/banners/${id}`, data);
     return response.data;
   },
 };
