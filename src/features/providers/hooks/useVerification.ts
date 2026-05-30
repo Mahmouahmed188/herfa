@@ -51,3 +51,28 @@ export function useRejectProvider() {
     },
   });
 }
+
+export function useProviders(params?: {
+  page?: number;
+  limit?: number;
+  query?: string;
+  status?: string;
+}) {
+  return useQuery({
+    queryKey: ['providers', 'list', params],
+    queryFn: () => providerApi.getProviders(params),
+  });
+}
+
+export function useUpdateProviderStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { id: string; status: string; reason: string }) =>
+      providerApi.updateProviderStatus(data.id, data.status, data.reason),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['providers'] });
+      toast.success(`Provider status updated to ${variables.status.toLowerCase()}`);
+    },
+  });
+}

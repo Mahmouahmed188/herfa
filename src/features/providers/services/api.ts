@@ -45,4 +45,25 @@ export const providerApi = {
     );
     return response.data;
   },
+
+  getProviders: async (params?: {
+    page?: number;
+    limit?: number;
+    query?: string;
+    status?: string;
+  }) => {
+    const response = await api.get<PaginatedResponse<any>>(
+      '/providers',
+      { params }
+    );
+    return response.data;
+  },
+
+  updateProviderStatus: async (id: string, status: string, reason: string) => {
+    const response = await api.post<ApiResponse<any>>(`/providers/${id}/status`, {
+      status,
+      reason,
+    });
+    return response.data;
+  },
 };

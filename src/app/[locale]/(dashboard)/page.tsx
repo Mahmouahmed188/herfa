@@ -8,10 +8,12 @@ import {
   Briefcase, 
   TrendingUp, 
   AlertTriangle,
-  ArrowUpRight,
-  ArrowDownRight
+  Bell
 } from 'lucide-react';
+import { KPICards } from '@/features/dashboard/components/KPICards';
+import { RecentActivity } from '@/features/dashboard/components/RecentActivity';
 import { VerificationQueue } from '@/features/providers/components/VerificationQueue';
+import { DashboardChart } from '@/features/dashboard/components/DashboardCharts';
 
 export default function AdminDashboardPage() {
   const stats = [
@@ -19,30 +21,72 @@ export default function AdminDashboardPage() {
       label: 'Total Users', 
       value: '12,482', 
       trend: '+2.5%', 
-      trendType: 'up', 
+      trendType: 'up' as const, 
       icon: Users 
     },
     { 
       label: 'Verified Providers', 
       value: '1,842', 
       trend: '+12%', 
-      trendType: 'up', 
+      trendType: 'up' as const, 
       icon: ShieldCheck 
     },
     { 
       label: 'Active Bookings', 
       value: '428', 
       trend: '-1.2%', 
-      trendType: 'down', 
+      trendType: 'down' as const, 
       icon: Briefcase 
     },
     { 
       label: 'Total Revenue', 
       value: '142,500 SAR', 
       trend: '+8.4%', 
-      trendType: 'up', 
+      trendType: 'up' as const, 
       icon: TrendingUp 
     },
+  ];
+
+  const recentActivities = [
+    {
+      id: '1',
+      type: 'USER_REGISTRATION' as const,
+      title: 'New User Registered',
+      description: 'Ahmed Al-Saud joined as a Client.',
+      timestamp: new Date(Date.now() - 1000 * 60 * 45), // 45 mins ago
+    },
+    {
+      id: '2',
+      type: 'PROVIDER_VERIFIED' as const,
+      title: 'Provider Verified',
+      description: 'QuickFix AC Services documents were approved.',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+      user: 'Super Admin',
+    },
+    {
+      id: '3',
+      type: 'BOOKING_DISPUTE' as const,
+      title: 'New Dispute Opened',
+      description: 'Booking #HF-9042 has been disputed by the client.',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 hours ago
+    },
+    {
+      id: '4',
+      type: 'PAYOUT_PROCESSED' as const,
+      title: 'Payout Completed',
+      description: 'Processed SAR 4,200 for 12 technicians.',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // Yesterday
+      user: 'Finance Manager',
+    },
+  ];
+
+  const revenueData = [
+    { label: 'Jan', value: 400 },
+    { label: 'Feb', value: 300 },
+    { label: 'Mar', value: 600 },
+    { label: 'Apr', value: 800 },
+    { label: 'May', value: 500 },
+    { label: 'Jun', value: 900 },
   ];
 
   return (
@@ -52,42 +96,19 @@ export default function AdminDashboardPage() {
         <p className="text-muted-foreground">Welcome back, Admin. Here is what is happening on the platform today.</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.label}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.label}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="flex items-center text-xs mt-1">
-                {stat.trendType === 'up' ? (
-                  <ArrowUpRight className="h-3 w-3 text-green-500 mr-1" />
-                ) : (
-                  <ArrowDownRight className="h-3 w-3 text-red-500 mr-1" />
-                )}
-                <span className={stat.trendType === 'up' ? 'text-green-500' : 'text-red-500'}>
-                  {stat.trend}
-                </span>
-                <span className="text-muted-foreground ml-1 text-[10px]">from last month</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <KPICards stats={stats} />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <DashboardChart title="Monthly Revenue (SAR)" data={revenueData} />
+        <DashboardChart 
+          title="Booking Growth" 
+          data={revenueData.map(d => ({ ...d, value: d.value / 2 }))} 
+        />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px] flex items-center justify-center text-muted-foreground italic border-2 border-dashed rounded-lg">
-              Chart/Timeline placeholder
-            </div>
-          </CardContent>
-        </Card>
+        <RecentActivity activities={recentActivities} />
+        
         <Card className="col-span-3">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Urgent Tasks</CardTitle>
@@ -96,7 +117,7 @@ export default function AdminDashboardPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4 p-3 rounded-lg border bg-destructive/5 border-destructive/10">
               <div className="p-2 bg-destructive/10 rounded-full">
-                <AlertTriangle className="h-4 w-4 text-destructive" />
+                <ShieldCheck className="h-4 w-4 text-destructive" />
               </div>
               <div>
                 <p className="text-sm font-medium">8 Pending Verifications</p>
@@ -110,6 +131,15 @@ export default function AdminDashboardPage() {
               <div>
                 <p className="text-sm font-medium">2 Active Disputes</p>
                 <p className="text-xs text-muted-foreground">Awaiting resolution</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-3 rounded-lg border bg-blue-500/5 border-blue-500/10">
+              <div className="p-2 bg-blue-500/10 rounded-full">
+                <Bell className="h-4 w-4 text-blue-500" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Broadcast Notification</p>
+                <p className="text-xs text-muted-foreground">Scheduled for 8:00 PM</p>
               </div>
             </div>
           </CardContent>

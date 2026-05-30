@@ -2,14 +2,14 @@
   "version": "0.8.11",
   "integration_state_schema": 1,
   "installed_integrations": [
-    "gemini"
+    "codex"
   ],
   "integration_settings": {
-    "gemini": {
+    "codex": {
       "script": "ps",
-      "invoke_separator": "."
+      "invoke_separator": "-"
     }
   },
-  "integration": "gemini",
-  "default_integration": "gemini"
+  "integration": "codex",
+  "default_integration": "codex"
 }
