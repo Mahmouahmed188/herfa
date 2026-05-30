@@ -21,10 +21,12 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Features**: `src/features/[feature-name]/`
+  - `components/`, `hooks/`, `services/`, `types/`, `schemas/`
+- **Routes**: `src/app/[locale]/`
+- **Shared UI**: `src/components/ui/`
+- **State/Hooks**: `src/stores/`, `src/hooks/`
+- **Lib/Utils**: `src/lib/`, `src/utils/`
 
 <!--
   ============================================================================
@@ -47,30 +49,24 @@ description: "Task list template for feature implementation"
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Project initialization and basic structure
+**Purpose**: Feature initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 Create feature directory structure in `src/features/[feature-name]`
+- [ ] T002 Define Zod validation schemas in `src/features/[feature-name]/schemas/`
+- [ ] T003 [P] Define TypeScript types in `src/features/[feature-name]/types/`
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
+**Purpose**: Core logic and API integration that MUST be complete before ANY UI work
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+- [ ] T004 Implement API service calls in `src/features/[feature-name]/services/`
+- [ ] T005 [P] Implement TanStack Query hooks in `src/features/[feature-name]/hooks/`
+- [ ] T006 [P] Implement permission guards and RBAC checks
+- [ ] T007 Configure localized messages in `src/messages/` (ar.json, en.json)
 
-Examples of foundational tasks (adjust based on your project):
-
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
-
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+**Checkpoint**: Foundation ready - UI implementation can now begin in parallel
 
 ---
 
@@ -80,21 +76,14 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
-
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
-
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
-
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T008 [P] [US1] Create core feature components in `src/features/[feature-name]/components/`
+- [ ] T009 [P] [US1] Implement feature page layout in `src/app/[locale]/(dashboard)/...`
+- [ ] T010 [US1] Integrate TanStack Query hooks for data fetching
+- [ ] T011 [US1] Implement form handling with React Hook Form
+- [ ] T012 [US1] Add localized text and RTL layout verification
+- [ ] T013 [US1] Add action logging for administrative audit trails
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 

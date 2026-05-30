@@ -1,80 +1,84 @@
 <!--
-Version change: 0.1.0 -> 1.0.0
+Version change: 1.0.0 -> 2.0.0
 List of modified principles:
-  - [PRINCIPLE_1_NAME] -> I. Scalability & Clean Architecture
-  - [PRINCIPLE_2_NAME] -> II. Security-First & Zero Trust
-  - [PRINCIPLE_3_NAME] -> III. Mobile-First & Cross-Platform Parity
-  - [PRINCIPLE_4_NAME] -> IV. Multilingual & Internationalization
-  - [PRINCIPLE_5_NAME] -> V. Type-Safe Development & Validation
+  - I. Scalability & Clean Architecture -> I. Feature-Based Architecture
+  - II. Security-First & Zero Trust -> II. Zero-Trust & Permission-Based UI
+  - III. Mobile-First & Cross-Platform Parity -> III. Type-Safe Enterprise Excellence
+  - IV. Multilingual & Internationalization -> IV. Server-State Dominance (TanStack Query)
+  - V. Type-Safe Development & Validation -> V. Consistent Design Language
+  - VI. Observability & Monitoring -> VI. Observable Admin Operations
+  - VII. SOLID Principles Enforcement -> VII. Universal Accessibility & I18n
 Added sections:
-  - VI. Observability & Monitoring
-  - VII. SOLID Principles Enforcement
-  - Technical Standards (Frontend, Backend, Mobile, API, Database, Security)
-  - Development Lifecycle (Git, Testing, CI/CD, Documentation)
+  - Admin Dashboard Architecture Standards
+  - Data Tables & Search Standards
+  - Security & RBAC Architecture
+Removed sections:
+  - Mobile-First specifics (scope narrowed to Admin Dashboard)
+  - Backend implementation details (moved out of scope)
 Templates requiring updates:
   - .specify/templates/plan-template.md (✅ updated)
   - .specify/templates/spec-template.md (✅ updated)
   - .specify/templates/tasks-template.md (✅ updated)
 Follow-up TODOs: None
 -->
-# Herfa Constitution
-The foundational governance document for the Herfa multi-platform service marketplace.
+# Herfa Admin Dashboard Constitution
+
+This constitution defines the foundational engineering standards and architectural principles for the Herfa Admin Dashboard. It is the supreme authority for all frontend engineering decisions within this project.
 
 ## Core Principles
 
-### I. Scalability & Clean Architecture
-The system MUST be designed for horizontal scalability and maintainability. We enforce Clean Architecture patterns to decouple business logic from external frameworks. Every feature MUST follow the Domain-Driven Design (DDD) recommendations, ensuring that core business rules are isolated in the domain layer. Monorepo structures SHOULD be utilized to share types and logic between Web, Mobile, and Backend.
+### I. Feature-Based Architecture
+We enforce a strict feature-based modularity. Every domain (Users, Providers, Bookings, etc.) MUST live within its own directory in `src/features/`. Cross-feature dependencies MUST be minimized; shared logic belongs in `src/lib/` or `src/components/ui/`. This ensures the system remains maintainable as the enterprise dashboard scales.
 
-### II. Security-First & Zero Trust
-Security is non-negotiable. Every request MUST be authenticated via JWT with Refresh Token rotation. We follow Zero Trust principles: never trust, always verify. All PII (Personally Identifiable Information) MUST be encrypted at rest. Strict Zod-based validation is mandatory for all inputs (API, Form, State) to prevent injection and data corruption.
+### II. Zero-Trust & Permission-Based UI
+Security is integrated into the UI. We follow Zero-Trust principles: every route, component, and action MUST be guarded by a permission check. The UI MUST reflect the user's role and permissions dynamically, ensuring that unauthorized actions are not only blocked at the API level but also hidden from the user interface.
 
-### III. Mobile-First & Cross-Platform Parity
-Herfa is a mobile-centric application. UX/UI design MUST prioritize mobile interactions while maintaining parity on the Web. The React Native application and Next.js web app MUST share a consistent design language and business logic where possible. Responsive design is mandatory for all web components.
+### III. Type-Safe Enterprise Excellence
+Strict TypeScript (v5+) is non-negotiable. `any` is strictly forbidden. We leverage Zod for runtime validation of all external data (API responses, form inputs). Component APIs MUST be documented through explicit prop types using `class-variance-authority` (CVA) for complex UI states.
 
-### IV. Multilingual & Internationalization
-Herfa MUST provide full parity between Arabic (RTL) and English (LTR) languages. Internationalization (i18n) MUST be baked into the component level. RTL support is a first-class citizen, not an afterthought. Layouts MUST be fluid to handle varying text lengths across languages.
+### IV. Server-State Dominance (TanStack Query)
+Server state MUST be managed exclusively via TanStack Query. Global client state (Zustand) is reserved for transient UI state (e.g., sidebar toggles, theme preferences). We prioritize optimistic updates and robust cache management to ensure the dashboard feels instantaneous and reliable.
 
-### V. Type-Safe Development & Validation
-Strict TypeScript (v5+) is mandatory across the entire stack. `any` is forbidden. Every API response, database model, and component prop MUST be explicitly typed. We use Zod for runtime validation to ensure that types reflect reality.
+### V. Consistent Design Language
+The dashboard MUST adhere to the Herfa Design System. We use Radix UI primitives with Tailwind CSS for styling. Layouts MUST be consistent across all modules, utilizing shared components for tables, forms, and charts. Design consistency is a first-class citizen to reduce cognitive load for administrators.
 
-### VI. Observability & Monitoring
-Every production service MUST be observable. Structured logging (Pino/Winston) is required. Real-time monitoring of system health, API latency, and error rates MUST be implemented. Every error MUST be caught, logged with context, and reported to a centralized error tracking system (e.g., Sentry).
+### VI. Observable Admin Operations
+Every administrative action MUST be traceable. We implement frontend logging for critical events and integrate with Sentry for error monitoring. Performance tracking (Core Web Vitals) for heavy data tables and charts is mandatory to ensure the dashboard remains responsive under heavy load.
 
-### VII. SOLID Principles Enforcement
-All code MUST adhere to SOLID principles. We prioritize composition over inheritance. Small, single-responsibility modules are the building blocks of our system. Interface segregation ensures that components and services only depend on the abstractions they actually use.
+### VII. Universal Accessibility & I18n
+The dashboard MUST be accessible to all users, adhering to WCAG 2.2 AA standards. Full parity between Arabic (RTL) and English (LTR) is mandatory. Layouts MUST be fluid to handle varying text lengths, and RTL support MUST be tested at the component level using `next-intl` and `i18next`.
 
 ## Technical Standards
 
-### Frontend & Mobile
-- **Frameworks**: Next.js 14+ (Web), React Native (Mobile).
-- **State Management**: Zustand for global state, React Query for server state.
-- **Styling**: Vanilla CSS or Tailwind CSS (only if requested), prioritizing CSS variables for theming.
-- **Components**: Reusable, atomic component strategy. Documentation via Storybook is RECOMMENDED.
+### Admin Dashboard Architecture
+- **Framework**: Next.js 14+ (App Router).
+- **Styling**: Tailwind CSS + CVA + tailwind-merge.
+- **State**: TanStack Query (Server), Zustand (Client).
+- **Forms**: React Hook Form + Zod.
 
-### Backend & API
-- **Framework**: NestJS with modular architecture.
-- **API Design**: RESTful standards, versioned endpoints (`/v1/...`).
-- **Response Structure**: Unified response format: `{ success: boolean, data: any, error?: { code: string, message: string } }`.
-- **Real-time**: Socket.IO for live chat and tracking.
+### Data Tables & Search Standards
+- **Implementation**: All large data sets MUST use server-side pagination, sorting, and filtering.
+- **Features**: Tables MUST support column visibility, bulk actions, and CSV/Excel export.
+- **UX**: Search and filters MUST be synced with the URL state to allow deep-linking.
 
-### Database & Storage
-- **Database**: MongoDB (Mongoose).
-- **Modeling**: Schema-first approach with strict validation.
-- **File Storage**: Cloudinary for optimized image/video delivery.
+### Security & RBAC Architecture
+- **Auth**: Next.js Middleware for route protection.
+- **Permissions**: `PermissionGuard` components for fine-grained action control.
+- **Audit**: Track and log all "destructive" or "sensitive" admin actions on the frontend before dispatching.
 
 ## Development Workflow
 
 ### Git & Commit Conventions
-- **Workflow**: Trunk-based development with short-lived feature branches.
-- **Commits**: Conventional Commits standard (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`).
-- **Quality**: PRs MUST pass linting, type-checking, and unit tests before merging.
+- **Workflow**: Feature branches named `###-description`.
+- **Commits**: Conventional Commits standard.
+- **PRs**: MUST pass linting, type-checking, and build tests.
 
 ### Testing Strategy
-- **Unit**: Mandatory for business logic and utilities.
-- **Integration**: Mandatory for API endpoints and database interactions.
-- **E2E**: Critical paths (Booking, Payment, Auth) MUST be covered by E2E tests.
+- **Unit**: Mandatory for business logic, utils, and shared UI components.
+- **Integration**: Mandatory for complex feature flows and form submissions.
+- **E2E**: Critical paths (Auth, Financials, User Management) covered by Playwright/Cypress.
 
 ## Governance
-This Constitution is the supreme authority for engineering decisions at Herfa. Amendments require a formal proposal, review by the core team, and a version bump. Compliance is verified during code reviews and automated CI gates.
+This Constitution is the supreme authority for engineering decisions. Amendments require a formal proposal and version bump. Compliance is verified during code reviews.
 
-**Version**: 1.0.0 | **Ratified**: 2026-05-21 | **Last Amended**: 2026-05-21
+**Version**: 2.0.0 | **Ratified**: 2026-05-30 | **Last Amended**: 2026-05-30

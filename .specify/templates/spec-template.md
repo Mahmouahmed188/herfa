@@ -91,14 +91,15 @@
 
 ### Functional Requirements
 
-- **FR-SEC**: All data access MUST be authorized via JWT and role-based access control.
-- **FR-I18N**: UI MUST support both Arabic (RTL) and English (LTR) with full parity.
-- **FR-VAL**: All user inputs MUST be validated via Zod schemas before processing.
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-SEC**: Access MUST be guarded by role-based access control (RBAC) at route and component levels.
+- **FR-I18N**: UI MUST support full RTL/Arabic parity using `next-intl` or `i18next`.
+- **FR-VAL**: All form inputs and API responses MUST be validated via Zod schemas.
+- **FR-DATA**: Server state MUST be managed via TanStack Query with appropriate cache invalidation.
+- **FR-001**: System MUST [specific capability, e.g., "allow admins to verify provider documents"]
+- **FR-002**: System MUST [specific capability, e.g., "log all sensitive data exports"]
+- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password via admin panel"]
+- **FR-004**: System MUST [data requirement, e.g., "persist table filters in the URL state"]
+- **FR-005**: System MUST [behavior, e.g., "show optimistic updates for status changes"]
 
 *Example of marking unclear requirements:*
 
