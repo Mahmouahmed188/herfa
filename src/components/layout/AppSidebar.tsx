@@ -7,53 +7,64 @@ import { cn } from '@/lib/utils';
 import { 
     LayoutDashboard, List, User, Settings, LogOut, 
     Users, Briefcase, Wallet, MessageCircle, Heart, 
-    ChevronRight, CheckCircle, ShieldCheck, ChevronLeft, PanelLeftClose, PanelLeftOpen
+    ChevronRight, CheckCircle, ShieldCheck, ChevronLeft, PanelLeftClose, PanelLeftOpen,
+    FileText, Bell, BarChart3, Activity, Shield
 } from 'lucide-react';
-import { useAuthStore } from '@/store/useAuthStore';
+import { motion } from 'framer-motion';
 import { useSidebar } from '@/context/SidebarContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { UserRole } from '@/types/api';
 
 interface SidebarItem {
-    name: string;
-    href: string;
-    icon: React.ElementType;
-    badge?: string;
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: number;
 }
 
 const clientItems: SidebarItem[] = [
-    { name: 'Overview', href: '/client/dashboard', icon: LayoutDashboard },
-    { name: 'My Orders', href: '/client/jobs', icon: List },
-    { name: 'Wallet', href: '/client/wallet', icon: Wallet },
+    { name: 'Dashboard', href: '/client/dashboard', icon: LayoutDashboard },
+    { name: 'Create Job', href: '/client/create-job', icon: Briefcase },
+    { name: 'My Jobs', href: '/client/jobs', icon: List },
     { name: 'Saved', href: '/client/saved', icon: Heart },
-    { name: 'Messages', href: '/support', icon: MessageCircle, badge: '2' },
+    { name: 'Wallet', href: '/client/wallet', icon: Wallet },
     { name: 'Profile', href: '/client/profile', icon: User },
 ];
 
 const technicianItems: SidebarItem[] = [
-    { name: 'Onboarding', href: '/technician/onboarding-home', icon: ShieldCheck },
     { name: 'Dashboard', href: '/technician/dashboard', icon: LayoutDashboard },
-    { name: 'Requests', href: '/technician/requests', icon: List },
-    { name: 'My Offers', href: '/technician/offers', icon: Briefcase },
-    { name: 'Active Jobs', href: '/technician/jobs', icon: CheckCircle },
+    { name: 'Onboarding', href: '/technician/onboarding-home', icon: CheckCircle },
+    { name: 'Requests', href: '/technician/requests', icon: Activity },
+    { name: 'My Jobs', href: '/technician/jobs', icon: List },
+    { name: 'Offers', href: '/technician/offers', icon: Briefcase },
     { name: 'Messages', href: '/technician/messages', icon: MessageCircle },
+    { name: 'Earnings', href: '/technician/earnings', icon: Wallet },
     { name: 'Profile', href: '/technician/profile', icon: User },
 ];
 
 const adminItems: SidebarItem[] = [
-    { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Users', href: '/admin/users', icon: Users },
-    { name: 'Jobs', href: '/admin/jobs', icon: Briefcase },
+    { name: 'Providers', href: '/admin/providers', icon: ShieldCheck },
+    { name: 'Bookings', href: '/admin/bookings', icon: Briefcase },
+    { name: 'Finance', href: '/admin/finance', icon: Wallet },
+    { name: 'Support', href: '/support', icon: MessageCircle },
+    { name: 'CMS', href: '/admin/cms', icon: FileText },
+    { name: 'Notifications', href: '/admin/notifications', icon: Bell },
+    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+    { name: 'Audit Logs', href: '/admin/audit', icon: Activity },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
-export function AppSidebar({ role }: { role: 'client' | 'technician' | 'admin' }) {
+export function AppSidebar({ role }: { role: UserRole | 'client' | 'technician' }) {
     const pathname = usePathname();
     const { logout, user } = useAuthStore();
     const { isCollapsed, toggleSidebar } = useSidebar();
 
+    const isAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN';
     const items = role === 'client' ? clientItems : role === 'technician' ? technicianItems : adminItems;
     const roleLabel = role === 'client' ? 'Customer Portal' : role === 'technician' ? 'Technician Portal' : 'Admin Panel';
-    const userName = user?.name ?? 'User';
+    const userName = user?.firstName ?? 'User';
 
     return (
         <motion.div 
@@ -116,10 +127,10 @@ export function AppSidebar({ role }: { role: 'client' | 'technician' | 'admin' }
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
                 {items
                     .filter(item => {
-                        if (role === 'technician' && user?.status !== 'approved') {
+                        if (role === 'technician' && user?.status !== 'ACTIVE') {
                             return item.href === '/technician/onboarding-home';
                         }
-                        if (role === 'technician' && user?.status === 'approved') {
+                        if (role === 'technician' && user?.status === 'ACTIVE') {
                             return item.href !== '/technician/onboarding-home';
                         }
                         return true;

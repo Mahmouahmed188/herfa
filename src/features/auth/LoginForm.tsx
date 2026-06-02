@@ -1,72 +1,76 @@
 'use client';
 
 import * as React from 'react';
+import { Zap, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useAuthStore } from '@/store/useAuthStore';
-import * as api from '@/services/api';
-import { Link, useRouter } from "@/lib/navigation";
-import { Loader2, Eye, EyeOff, Mail, Lock, Zap } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Link } from '@/lib/navigation';
+import { useAuthStore } from './stores/useAuthStore';
+import { UserRole } from '@/types/api';
+import { login as apiLogin } from '@/services/api';
 
 const loginSchema = z.object({
-    email: z.string().email({ message: 'Invalid email address' }),
-    password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
 });
 
 type LoginValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-    const router = useRouter();
-    const { login } = useAuthStore();
-    const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState('');
-    const [showPassword, setShowPassword] = React.useState(false);
+  const router = useRouter();
+  const { login } = useAuthStore();
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginValues>({
-        resolver: zodResolver(loginSchema),
-    });
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    const onSubmit = async (data: LoginValues) => {
-        setLoading(true);
-        setError('');
+  const onSubmit = async (data: LoginValues) => {
+    setLoading(true);
+    setError('');
 
-        try {
-            const result = await api.login(data);
+    try {
+      const result = await apiLogin(data);
 
-            const resData = result;
+      if (result?.accessToken) {
+        const rawRole = result.user.role;
+        // Map backend roles to our UserRole type
+        let role: UserRole = 'ADMIN'; 
+        if (rawRole === 'client') role = 'ADMIN'; // Placeholder mapping
+        if (rawRole === 'provider') role = 'ADMIN'; // Placeholder
+        if (rawRole === 'admin') role = 'SUPER_ADMIN';
 
-            if (resData?.accessToken) {
-                const rawRole = resData.user.role;
-                let role: 'client' | 'technician' | 'admin' = 'client';
-                if (rawRole === 'provider') role = 'technician';
-                if (rawRole === 'admin') role = 'admin';
+        const storeUser = {
+          id: result.user.id,
+          email: result.user.email,
+          firstName: result.user.email.split('@')[0],
+          lastName: '',
+          role: role,
+          status: result.user.status === 'active' ? 'ACTIVE' : 'PENDING' as any,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
 
-                const storeUser = {
-                    id: resData.user.id,
-                    email: resData.user.email,
-                    name: resData.user.email.split('@')[0],
-                    role: role,
-                    status: resData.user.status
-                };
+        login(storeUser, result.accessToken);
 
-                login(storeUser, resData.accessToken);
-
-                if (role === 'technician' && resData.user.status !== 'approved') {
-                    router.push('/technician/onboarding-home' as any);
-                } else {
-                    router.push(`/${role}/dashboard` as any);
-                }
-            } else {
-                setError('Invalid email or password. Please try again.');
-            }
-
-        } catch (err) {
-            setError('Connection error. Please check if the backend is running.');
-        } finally {
-            setLoading(false);
+        if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
+          router.push('/admin/dashboard' as any);
+        } else {
+          router.push('/login' as any); // Or a non-admin dashboard if we had one here
         }
-    };
+      } else {
+        setError('Invalid email or password. Please try again.');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Connection error. Please check if the backend is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
     return (
         <div className="w-full max-w-md mx-auto">

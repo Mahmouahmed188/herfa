@@ -78,6 +78,26 @@
         "about": "About",
         "login": "Login / Join"
     },
+    "Header": {
+        "nav": {
+            "myBookings": "My Bookings",
+            "dashboard": "Dashboard",
+            "profile": "Profile",
+            "myJobs": "My Jobs",
+            "earnings": "Earnings",
+            "schedule": "Schedule",
+            "adminDashboard": "Dashboard",
+            "users": "Users",
+            "providers": "Providers",
+            "bookings": "Bookings",
+            "finance": "Finance",
+            "analytics": "Analytics",
+            "cms": "CMS",
+            "notifications": "Notifications",
+            "audit": "Audit Logs",
+            "settings": "Settings"
+        }
+    },
     "Common": {
         "loading": "Loading...",
         "error": "Something went wrong"

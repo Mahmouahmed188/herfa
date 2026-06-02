@@ -1,4 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Herfa Admin Dashboard
+
+The operational control center for the Herfa service marketplace platform.
+
+## Engineering Standards
+
+This project is governed by the [Herfa Admin Dashboard Constitution](.specify/memory/constitution.md). All contributions MUST adhere to the core principles:
+
+1. **Feature-Based Architecture**: Strict modularity by feature.
+2. **Zero-Trust & Permission-Based UI**: Dynamic RBAC-driven interface.
+3. **Type-Safe Enterprise Excellence**: Strict TypeScript + Zod validation.
+4. **Server-State Dominance**: TanStack Query for data fetching.
+5. **Consistent Design Language**: Radix UI + Tailwind CSS.
+6. **Observable Admin Operations**: Traceable actions and error monitoring.
+7. **Universal Accessibility & I18n**: WCAG 2.2 AA + Full RTL/LTR parity.
 
 ## Getting Started
 

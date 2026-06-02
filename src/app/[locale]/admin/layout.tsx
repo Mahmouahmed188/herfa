@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <ProtectedRoute>
       <div className="flex flex-1 min-h-screen">
-        <AppSidebar role="admin" />
+        <AppSidebar role="ADMIN" />
         <main
           className="flex-1 p-8 transition-all duration-300 ease-in-out"
           style={{

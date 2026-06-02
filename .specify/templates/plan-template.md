@@ -40,7 +40,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] **I. Feature-Based Architecture**: Does the design follow strict modularity in `src/features/`?
+- [ ] **II. Zero-Trust & Permission-Based UI**: Are route and component-level permission guards defined?
+- [ ] **III. Type-Safe Enterprise Excellence**: Are all data structures typed? Is Zod used for validation?
+- [ ] **IV. Server-State Dominance**: Is TanStack Query used for server data? Is Zustand limited to UI state?
+- [ ] **V. Consistent Design Language**: Does the UI use Radix/Tailwind and match the dashboard theme?
+- [ ] **VI. Observable Admin Operations**: Are critical actions logged? Is error tracking (Sentry) integrated?
+- [ ] **VII. Universal Accessibility & I18n**: Is WCAG 2.2 AA met? Is RTL/Arabic parity handled?
 
 ## Project Structure
 
