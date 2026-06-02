@@ -50,7 +50,7 @@ export function VerificationQueue() {
       accessorKey: 'id',
       cell: (row: ProviderVerification) => (
         <Button variant="outline" size="sm" asChild>
-          <Link href={`/admin/providers/verification/${row.id}`}>
+          <Link href={`/admin/providers/verification/${row.id}` as any}>
             Review
           </Link>
         </Button>

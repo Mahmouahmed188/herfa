@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useParams } from 'next/navigation';
-import { useVerificationDetails, useApproveProvider, useRejectProvider } from '../../../hooks/useVerification';
+import { useVerificationDetails, useApproveProvider, useRejectProvider } from '@/features/providers/hooks/useVerification';
 import { Loading } from '@/components/common/Loading';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +14,7 @@ import { FormField } from '@/components/ui/forms/FormField';
 import { Input } from '@/components/ui/input';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { rejectProviderSchema, RejectProviderInput } from '../../../schemas/verification';
+import { rejectProviderSchema, RejectProviderInput } from '@/features/providers/schemas/verification';
 
 /**
  * Provider Verification Details Page.

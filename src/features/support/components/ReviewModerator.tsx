@@ -90,3 +90,5 @@ export function ReviewModerator() {
     </div>
   );
 }
+
+export default ReviewModerator;

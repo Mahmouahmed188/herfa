@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Zap, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Zap, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { Link } from '@/lib/navigation';
 import { useAuthStore } from './stores/useAuthStore';
 import { UserRole } from '@/types/api';
-// ... rest of imports unchanged
+import { login as apiLogin } from '@/services/api';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -34,7 +34,7 @@ export function LoginForm() {
     setError('');
 
     try {
-      const result = await api.login(data);
+      const result = await apiLogin(data);
 
       if (result?.accessToken) {
         const rawRole = result.user.role;

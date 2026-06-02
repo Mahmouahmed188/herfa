@@ -126,3 +126,5 @@ export function BannerManager() {
     </div>
   );
 }
+
+export default BannerManager;

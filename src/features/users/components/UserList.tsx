@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useUsers } from '../hooks/useUsers';
+import { useUsers, useUpdateUserStatus } from '../hooks/useUsers';
 import { DataTable } from '@/components/ui/data-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -117,7 +117,7 @@ export function UserList() {
       accessorKey: 'id',
       cell: (row: User) => (
         <Button variant="ghost" size="sm" asChild>
-          <Link href={`/admin/users/${row.id}`}>
+          <Link href={`/admin/users/${row.id}` as any}>
             View Details
           </Link>
         </Button>

@@ -2,7 +2,18 @@ import { z } from 'zod';
 
 const UserRoleSchema = z.enum(['client', 'technician', 'admin']);
 
-const NavigationItemSchema: z.ZodType<NavigationItemSchemaType> = z.lazy(() =>
+interface NavigationItemValue {
+  id: string;
+  labelKey: string;
+  href: string;
+  roles?: string[];
+  icon?: string;
+  order: number;
+  children?: NavigationItemValue[];
+  dividerBefore?: boolean;
+}
+
+const NavigationItemSchema: z.ZodType<NavigationItemValue> = z.lazy(() =>
   z.object({
     id: z.string().min(1),
     labelKey: z.string().min(1),
@@ -14,8 +25,6 @@ const NavigationItemSchema: z.ZodType<NavigationItemSchemaType> = z.lazy(() =>
     dividerBefore: z.boolean().optional(),
   })
 );
-
-type NavigationItemSchemaType = z.infer<typeof NavigationItemSchema>;
 
 const NavigationConfigSchema = z.object({
   items: z.array(NavigationItemSchema),

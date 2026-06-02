@@ -44,3 +44,5 @@ export function ConversionFunnel() {
     </Card>
   );
 }
+
+export default ConversionFunnel;

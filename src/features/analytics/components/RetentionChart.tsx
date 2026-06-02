@@ -24,3 +24,5 @@ export function RetentionChart() {
     />
   );
 }
+
+export default RetentionChart;

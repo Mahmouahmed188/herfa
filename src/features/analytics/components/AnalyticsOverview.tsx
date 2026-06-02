@@ -55,3 +55,5 @@ export function AnalyticsOverview() {
     </div>
   );
 }
+
+export default AnalyticsOverview;

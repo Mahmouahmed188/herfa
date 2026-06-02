@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { createElement } from 'react';
 import { Loading } from '@/components/common/Loading';
 
 export function createLazyComponent<T>(
@@ -6,7 +7,7 @@ export function createLazyComponent<T>(
   loadingMessage = 'Loading...'
 ) {
   return dynamic(importFn, {
-    loading: () => <Loading fullPage />,
+    loading: () => createElement(Loading, { fullPage: true }),
   });
 }
 

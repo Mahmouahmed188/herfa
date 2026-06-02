@@ -10,9 +10,37 @@ import {
     ChevronRight, CheckCircle, ShieldCheck, ChevronLeft, PanelLeftClose, PanelLeftOpen,
     FileText, Bell, BarChart3, Activity, Shield
 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useSidebar } from '@/context/SidebarContext';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { UserRole } from '@/types/api';
-// ... rest of imports unchanged
+
+interface SidebarItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: number;
+}
+
+const clientItems: SidebarItem[] = [
+    { name: 'Dashboard', href: '/client/dashboard', icon: LayoutDashboard },
+    { name: 'Create Job', href: '/client/create-job', icon: Briefcase },
+    { name: 'My Jobs', href: '/client/jobs', icon: List },
+    { name: 'Saved', href: '/client/saved', icon: Heart },
+    { name: 'Wallet', href: '/client/wallet', icon: Wallet },
+    { name: 'Profile', href: '/client/profile', icon: User },
+];
+
+const technicianItems: SidebarItem[] = [
+    { name: 'Dashboard', href: '/technician/dashboard', icon: LayoutDashboard },
+    { name: 'Onboarding', href: '/technician/onboarding-home', icon: CheckCircle },
+    { name: 'Requests', href: '/technician/requests', icon: Activity },
+    { name: 'My Jobs', href: '/technician/jobs', icon: List },
+    { name: 'Offers', href: '/technician/offers', icon: Briefcase },
+    { name: 'Messages', href: '/technician/messages', icon: MessageCircle },
+    { name: 'Earnings', href: '/technician/earnings', icon: Wallet },
+    { name: 'Profile', href: '/technician/profile', icon: User },
+];
 
 const adminItems: SidebarItem[] = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -33,7 +61,7 @@ export function AppSidebar({ role }: { role: UserRole | 'client' | 'technician' 
     const { logout, user } = useAuthStore();
     const { isCollapsed, toggleSidebar } = useSidebar();
 
-    const isAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN' || role === 'admin';
+    const isAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN';
     const items = role === 'client' ? clientItems : role === 'technician' ? technicianItems : adminItems;
     const roleLabel = role === 'client' ? 'Customer Portal' : role === 'technician' ? 'Technician Portal' : 'Admin Panel';
     const userName = user?.firstName ?? 'User';
@@ -99,10 +127,10 @@ export function AppSidebar({ role }: { role: UserRole | 'client' | 'technician' 
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
                 {items
                     .filter(item => {
-                        if (role === 'technician' && user?.status !== 'approved') {
+                        if (role === 'technician' && user?.status !== 'ACTIVE') {
                             return item.href === '/technician/onboarding-home';
                         }
-                        if (role === 'technician' && user?.status === 'approved') {
+                        if (role === 'technician' && user?.status === 'ACTIVE') {
                             return item.href !== '/technician/onboarding-home';
                         }
                         return true;

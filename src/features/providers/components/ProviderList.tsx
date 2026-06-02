@@ -63,7 +63,7 @@ export function ProviderList() {
       accessorKey: 'id',
       cell: (row: any) => (
         <Button variant="ghost" size="sm" asChild>
-          <Link href={`/admin/providers/${row.id}`}>
+          <Link href={`/admin/providers/${row.id}` as any}>
             View Details
           </Link>
         </Button>

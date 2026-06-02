@@ -181,3 +181,5 @@ export function SupportTicketList() {
     </div>
   );
 }
+
+export default SupportTicketList;
