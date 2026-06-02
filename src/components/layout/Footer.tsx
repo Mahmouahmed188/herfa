@@ -50,7 +50,7 @@ export function Footer() {
         </div>
 
         <div className="text-center pt-8 border-t border-surfaceBorder">
-          <p className="text-gray-600 text-sm">© 2023 Herfa Inc. All rights reserved.</p>
+          <p className="text-gray-600 text-sm">© 2026 Herfa Inc. All rights reserved.</p>
         </div>
       </div>
     </footer>
