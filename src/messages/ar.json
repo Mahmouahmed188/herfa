@@ -78,6 +78,26 @@
         "about": "عن هرفة",
         "login": "دخول / تسجيل"
     },
+    "Header": {
+        "nav": {
+            "myBookings": "حجوزاتي",
+            "dashboard": "لوحة التحكم",
+            "profile": "الملف الشخصي",
+            "myJobs": "وظائفي",
+            "earnings": "الأرباح",
+            "schedule": "الجدول",
+            "adminDashboard": "لوحة التحكم",
+            "users": "المستخدمين",
+            "providers": "مقدمي الخدمة",
+            "bookings": "الحجوزات",
+            "finance": "المالية",
+            "analytics": "التحليلات",
+            "cms": "إدارة المحتوى",
+            "notifications": "الإشعارات",
+            "audit": "سجل التدقيق",
+            "settings": "الإعدادات"
+        }
+    },
     "Common": {
         "loading": "جاري التحميل...",
         "error": "حدث خطأ ما"

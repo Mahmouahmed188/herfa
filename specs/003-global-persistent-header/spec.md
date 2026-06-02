@@ -20,7 +20,7 @@ A visitor who has not logged in navigates the platform and sees a simplified hea
 
 **Acceptance Scenarios**:
 
-1. **Given** a guest user visits any public page, **When** the page loads, **Then** the header displays with public navigation items (home, sign in, sign up).
+1. **Given** a guest user visits any public page, **When** the page loads, **Then** the header displays with public navigation items (services, AI diagnosis, technicians, about).
 2. **Given** a guest user navigates from one public page to another, **When** the page transition completes, **Then** the header maintains identical positioning and styling.
 3. **Given** a guest user resizes the browser from desktop to mobile width, **When** the viewport changes below the tablet breakpoint, **Then** the header collapses into a mobile-friendly navigation pattern (e.g., hamburger menu) with all items still accessible.
 
@@ -103,11 +103,11 @@ A user switches between light and dark modes using a theme toggle in the header.
 ### Functional Requirements
 
 - **FR-001**: The header MUST appear on all application pages unless a page explicitly declares itself as a full-screen experience.
-- **FR-002**: Navigation elements in the header MUST maintain identical positioning, styling, and behavior across all pages where the header is visible.
-- **FR-003**: The header MUST adapt its navigation content based on the user's authentication state:
-  - Guest users see public-only navigation.
-  - Authenticated users see authorized navigation items based on their permissions.
-  - Admin users see admin and dashboard navigation items.
+- **FR-002**: Navigation elements in the header MUST maintain identical positioning, styling, and behavior across all pages where the header is visible. The currently active navigation item is determined by prefix-matching the current pathname against the item's target route.
+- **FR-003**: The header MUST adapt its navigation content based on the user's authentication state and role:
+  - Unauthenticated (guest) users see public-only navigation.
+  - Authenticated users (client, technician) see authorized navigation items based on their role.
+  - Admin users see all standard authenticated items plus admin-specific items (dashboard, users, providers, finance, analytics, CMS, settings).
 - **FR-004**: The header MUST support all platform languages, including a visible language switcher that updates header content immediately on selection.
 - **FR-005**: The header MUST support light mode and dark mode with a theme toggle control, persisting the user's preference across sessions.
 - **FR-006**: The header MUST be responsive across desktop, laptop, tablet, and mobile viewports with adapted navigation patterns (e.g., hamburger menu on mobile) while maintaining feature parity.
@@ -130,7 +130,8 @@ A user switches between light and dark modes using a theme toggle in the header.
 - **SC-001**: The header renders consistently across all applicable pages (at least 10 distinct page types) with identical styling, positioning, and behavior verified by visual regression testing.
 - **SC-002**: Users can navigate to any platform page using only the header navigation without encountering dead ends or broken links, verified by automated full-site navigation testing.
 - **SC-003**: The header renders correctly in all supported languages (minimum 2 languages, including at least one RTL language) with all text properly translated and layout correctly oriented.
-- **SC-004**: All header interactions (navigation clicks, language switch, theme toggle) respond within 100ms, and the initial header render completes within 500ms on a standard broadband connection.
+- **SC-004a**: All header interactions (navigation clicks, language switch, theme toggle) respond within 100ms on a standard broadband connection.
+- **SC-004b**: The initial header render completes within 500ms on a standard broadband connection with zero cumulative layout shift.
 - **SC-005**: The header passes WCAG 2.2 AA automated audit with zero critical or serious violations, and all navigation is operable via keyboard only.
 - **SC-006**: The header adapts correctly across all supported viewports (desktop 1920px, laptop 1366px, tablet 768px, mobile 375px) with functional parity and no content loss.
 - **SC-007**: Adding a new navigation item for a specific role requires changes only to the navigation configuration and does not require modifying the header component itself.

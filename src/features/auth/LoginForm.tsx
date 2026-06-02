@@ -1,9 +1,12 @@
 'use client';
 
 import * as React from 'react';
+import { Zap, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useRouter } from 'next/navigation';
+import { Link } from '@/lib/navigation';
 import { useAuthStore } from './stores/useAuthStore';
 import { UserRole } from '@/types/api';
 // ... rest of imports unchanged

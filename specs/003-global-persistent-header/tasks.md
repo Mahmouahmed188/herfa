@@ -29,7 +29,7 @@
 
 **Purpose**: Feature initialization and basic structure
 
-- [ ] T001 Create feature directory structure in `src/features/header/config/`, `src/features/header/hooks/`, `src/features/header/types/`
+- [x] T001 Create feature directory structure in `src/features/header/config/`, `src/features/header/hooks/`, `src/features/header/types/`
 
 ---
 
@@ -37,10 +37,11 @@
 
 **Purpose**: Core logic and navigation infrastructure that MUST be complete before ANY header UI work
 
-- [ ] T002 [P] Define TypeScript types in `src/features/header/types/index.ts` — `NavigationItem`, `NavigationConfig`, `UseNavigationReturn`, `HeaderFullScreenConfig`
-- [ ] T003 [P] Define Zod validation schema in `src/features/header/config/navigation.schema.ts` — `NavigationItemSchema`, `NavigationConfigSchema`, `UserRoleSchema`
-- [ ] T004 Create navigation configuration in `src/features/header/config/navigation.ts` — typed nav items organized by role (guest/public, client, technician, admin) with i18n label keys, href, order, and icon
-- [ ] T005 Implement `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — filters nav items by user role, returns sorted items with `isActive` helper. Guest (null role) sees only public items (no `roles` field). Respects technician hide rules.
+- [ ] T002 [P] Define TypeScript types in `src/features/header/types/index.ts`
+- [x] T003 [P] Define Zod validation schema in `src/features/header/config/navigation.schema.ts` — `NavigationItem`, `NavigationConfig`, `UseNavigationReturn`, `HeaderFullScreenConfig`
+- [x] T003 [P] Define Zod validation schema in `src/features/header/config/navigation.schema.ts` — `NavigationItemSchema`, `NavigationConfigSchema`, `UserRoleSchema`
+- [x] T004 Create navigation configuration in `src/features/header/config/navigation.ts` — typed nav items organized by role (guest/public, client, technician, admin) with i18n label keys, href, order, and icon
+- [x] T005 Implement `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — filters nav items by user role, returns sorted items with `isActive` helper. Guest (null role) sees only public items (no `roles` field). Respects technician hide rules.
 
 **Checkpoint**: Foundation ready — navigation config and filtering logic are independently testable without UI
 
@@ -54,16 +55,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Create `HeaderThemeToggle` component in `src/components/layout/HeaderThemeToggle.tsx` using `next-themes` `useTheme` hook with sun/moon icons from lucide-react
-- [ ] T007 [P] [US1] Create `HeaderLanguageSwitcher` component in `src/components/layout/HeaderLanguageSwitcher.tsx` wrapping existing `LanguageSwitcher` from `src/components/common/LanguageSwitcher`
-- [ ] T008 [P] [US1] Create `HeaderNav` component in `src/components/layout/HeaderNav.tsx` — desktop navigation bar rendering filtered nav items with active link animation (framer-motion `layoutId="activeNav"`)
-- [ ] T009 [P] [US1] Create `HeaderMobileNav` component in `src/components/layout/HeaderMobileNav.tsx` — mobile hamburger menu with `AnimatePresence` slide-in, renders filtered nav items
-- [ ] T010 [P] [US1] Create `HeaderActions` component in `src/components/layout/HeaderActions.tsx` — auth-aware action area: guest view shows login button (`Link` to `/login`), mobile view includes language switcher
-- [ ] T011 [US1] Create `Header` component in `src/components/layout/Header.tsx` — sticky top wrapper with backdrop blur, composes `HeaderNav`, `HeaderMobileNav`, `HeaderActions`, `HeaderLanguageSwitcher`, `HeaderThemeToggle`. Reads `isAuthenticated` from `useAuthStore` to control guest/authenticated rendering.
-- [ ] T012 [US1] Update `ConditionalLayout` in `src/components/layout/ConditionalLayout.tsx` — replace prefix-based route exclusion (NO_CHROME_ROUTES/AUTH_ROUTES) with metadata-driven `FULL_SCREEN_ROUTES` set. Show `Header` on ALL pages by default. Hide only for routes in the full-screen set.
-- [ ] T013 [US1] Add full-screen route configuration in `src/components/layout/ConditionalLayout.tsx` — define `FULL_SCREEN_ROUTES` constant with paths that should hide the header (e.g., immersive flows, video calls)
-- [ ] T014 [US1] Ensure `ConditionalLayout` is wired in the root layout `src/app/[locale]/layout.tsx` to wrap all pages
-- [ ] T015 [US1] Add responsive behavior — `HeaderNav` hidden below `md` breakpoint, `HeaderMobileNav` visible only on mobile. Verify across 375px/768px/1366px/1920px viewports.
+- [x] T006 [P] [US1] Create `HeaderThemeToggle` component in `src/components/layout/HeaderThemeToggle.tsx` using `next-themes` `useTheme` hook with sun/moon icons from lucide-react
+- [x] T007 [P] [US1] Create `HeaderLanguageSwitcher` component in `src/components/layout/HeaderLanguageSwitcher.tsx` wrapping existing `LanguageSwitcher` from `src/components/common/LanguageSwitcher`
+- [x] T008 [P] [US1] Create `HeaderNav` component in `src/components/layout/HeaderNav.tsx` — desktop navigation bar rendering filtered nav items with active link animation (framer-motion `layoutId="activeNav"`)
+- [x] T009 [P] [US1] Create `HeaderMobileNav` component in `src/components/layout/HeaderMobileNav.tsx` — mobile hamburger menu with `AnimatePresence` slide-in, renders filtered nav items
+- [x] T010 [P] [US1] Create `HeaderActions` component in `src/components/layout/HeaderActions.tsx` — auth-aware action area: guest view shows login button (`Link` to `/login`), mobile view includes language switcher
+- [x] T011 [US1] Create `Header` component in `src/components/layout/Header.tsx` — sticky top wrapper with backdrop blur, composes `HeaderNav`, `HeaderMobileNav`, `HeaderActions`, `HeaderLanguageSwitcher`, `HeaderThemeToggle`. Reads `isAuthenticated` from `useAuthStore` to control guest/authenticated rendering.
+- [x] T012 [US1] Update `ConditionalLayout` in `src/components/layout/ConditionalLayout.tsx` — replace prefix-based route exclusion (NO_CHROME_ROUTES/AUTH_ROUTES) with metadata-driven `FULL_SCREEN_ROUTES` set. Show `Header` on ALL pages by default. Hide only for routes in the full-screen set.
+- [x] T013 [US1] Add full-screen route configuration in `src/components/layout/ConditionalLayout.tsx` — define `FULL_SCREEN_ROUTES` constant with paths that should hide the header (e.g., immersive flows, video calls)
+- [x] T014 [US1] Ensure `ConditionalLayout` is wired in the root layout `src/app/[locale]/layout.tsx` to wrap all pages
+- [x] T015 [US1] Add responsive behavior — `HeaderNav` hidden below `md` breakpoint, `HeaderMobileNav` visible only on mobile. Verify across 375px/768px/1366px/1920px viewports.
 
 **Checkpoint**: Guest users see the header on all pages with public nav, theme toggle, language switcher, and responsive mobile menu. Old Navbar still exists for authenticated routes.
 
@@ -77,12 +78,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] Update `HeaderActions` in `src/components/layout/HeaderActions.tsx` — when `isAuthenticated`, show user profile icon with dropdown (dashboard link, sign out button) instead of login button. Read user role from `useAuthStore` for dashboard path routing (`getDashboardPath()` logic ported from existing Navbar).
-- [ ] T017 [US2] Add auth-aware client role nav items to `src/features/header/config/navigation.ts` — items for `client` role (e.g., bookings, profile, settings)
-- [ ] T018 [US2] Add auth-aware technician role nav items to `src/features/header/config/navigation.ts` — items for `technician` role (e.g., my jobs, earnings, schedule)
-- [ ] T019 [US2] Update `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — when `isAuthenticated` is false (session expired or logged out), reset items to public-only view. Handle loading state (null user while session restores).
-- [ ] T020 [US2] Add session expiry handling — ensure `Header` listens to `useAuthStore` state changes and re-renders nav items when `isAuthenticated` transitions from true to false
-- [ ] T021 [US2] Integrate notification bell in `HeaderActions` — preserve existing notification polling (`refetchInterval: 30000`) and dropdown UI from current Navbar for authenticated users only
+- [x] T016 [US2] Update `HeaderActions` in `src/components/layout/HeaderActions.tsx` — when `isAuthenticated`, show user profile icon with dropdown (dashboard link, sign out button) instead of login button. Read user role from `useAuthStore` for dashboard path routing (`getDashboardPath()` logic ported from existing Navbar).
+- [x] T017 [US2] Add auth-aware client role nav items to `src/features/header/config/navigation.ts` — items for `client` role (e.g., bookings, profile, settings)
+- [x] T018 [US2] Add auth-aware technician role nav items to `src/features/header/config/navigation.ts` — items for `technician` role (e.g., my jobs, earnings, schedule)
+- [x] T019 [US2] Update `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — when `isAuthenticated` is false (session expired or logged out), reset items to public-only view. Handle loading state (null user while session restores).
+- [x] T020 [US2] Add session expiry handling — ensure `Header` listens to `useAuthStore` state changes and re-renders nav items when `isAuthenticated` transitions from true to false
+- [x] T021 [US2] Integrate notification bell in `HeaderActions` — preserve existing notification polling (`refetchInterval: 30000`) and dropdown UI from current Navbar for authenticated users only
 
 **Checkpoint**: Authenticated users see role-specific nav items. Login/logout transitions are smooth. Session expiry gracefully reverts to guest view.
 
@@ -96,10 +97,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Add admin role nav items to `src/features/header/config/navigation.ts` — items for `admin` role (e.g., dashboard, users, providers, bookings, finance, analytics, CMS, settings, audit)
-- [ ] T023 [US3] Update `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — ensure admin items are appended to standard user items (admin sees both admin-specific AND standard authenticated items)
-- [ ] T024 [US3] Add permission guard integration — ensure nav items with `roles: ['admin']` are never visible to non-admin roles (client, technician, guest)
-- [ ] T025 [US3] Update `HeaderActions` in `src/components/layout/HeaderActions.tsx` — admin user dashboard link points to `/admin/dashboard`
+- [x] T022 [US3] Add admin role nav items to `src/features/header/config/navigation.ts` — items for `admin` role (e.g., dashboard, users, providers, bookings, finance, analytics, CMS, settings, audit)
+- [x] T023 [US3] Update `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — ensure admin items are appended to standard user items (admin sees both admin-specific AND standard authenticated items)
+- [x] T024 [US3] Add permission guard integration — ensure nav items with `roles: ['admin']` are never visible to non-admin roles (client, technician, guest)
+- [x] T025 [US3] Update `HeaderActions` in `src/components/layout/HeaderActions.tsx` — admin user dashboard link points to `/admin/dashboard`
 
 **Checkpoint**: Admin users see full navigation with management items. Non-admin roles never see admin items. Header structure remains identical across roles.
 
@@ -113,10 +114,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T026 [US4] Wire `HeaderLanguageSwitcher` to update all header nav labels via `next-intl` `useTranslations` — ensure navigation `labelKey` values resolve to correct translation in both ar.json and en.json
-- [ ] T027 [US4] Add i18n keys for all navigation items in `src/messages/ar.json` and `src/messages/en.json` — create keys under `Header.nav.{id}` for each nav item label
-- [ ] T028 [US4] Verify RTL layout — ensure `Header`, `HeaderNav`, `HeaderMobileNav` and sub-components render correctly when `dir="rtl"` is applied. Check alignment of nav items, logo position, action buttons, and mobile menu direction.
-- [ ] T029 [US4] Test RTL text expansion — verify header containers accommodate 25-30% text length increase in Arabic without breaking layout (labels truncate with ellipsis or wrap gracefully)
+- [x] T026 [US4] Wire `HeaderLanguageSwitcher` to update all header nav labels via `next-intl` `useTranslations` — ensure navigation `labelKey` values resolve to correct translation in both ar.json and en.json
+- [x] T027 [US4] Add i18n keys for all navigation items in `src/messages/ar.json` and `src/messages/en.json` — create keys under `Header.nav.{id}` for each nav item label
+- [x] T028 [US4] Verify RTL layout — ensure `Header`, `HeaderNav`, `HeaderMobileNav` and sub-components render correctly when `dir="rtl"` is applied. Check alignment of nav items, logo position, action buttons, and mobile menu direction.
+- [x] T029 [US4] Test RTL text expansion — verify header containers accommodate 25-30% text length increase in Arabic without breaking layout (labels truncate with ellipsis or wrap gracefully)
 
 **Checkpoint**: Language switcher updates all header text immediately. RTL layout renders correctly with proper alignment.
 
@@ -130,9 +131,9 @@
 
 ### Implementation for User Story 5
 
-- [ ] T030 [US5] Ensure `next-themes` `ThemeProvider` is configured in `src/app/[locale]/layout.tsx` with `attribute="class"` and `defaultTheme="dark"` for Tailwind dark mode class strategy
-- [ ] T031 [US5] Wire `HeaderThemeToggle` in `src/components/layout/HeaderThemeToggle.tsx` — use `useTheme` hook `theme` and `setTheme` for toggle. Use lucide-react `Sun`/`Moon` icons. Smooth icon transition.
-- [ ] T032 [US5] Verify theme persistence — confirm theme preference is stored by `next-themes` and restored on page reload and cross-page navigation
+- [x] T030 [US5] Ensure `next-themes` `ThemeProvider` is configured in `src/app/[locale]/layout.tsx` with `attribute="class"` and `defaultTheme="dark"` for Tailwind dark mode class strategy
+- [x] T031 [US5] Wire `HeaderThemeToggle` in `src/components/layout/HeaderThemeToggle.tsx` — use `useTheme` hook `theme` and `setTheme` for toggle. Use lucide-react `Sun`/`Moon` icons. Smooth icon transition.
+- [x] T032 [US5] Verify theme persistence — confirm theme preference is stored by `next-themes` and restored on page reload and cross-page navigation
 
 **Checkpoint**: Theme toggle switches between light and dark modes. Preference persists across sessions.
 
@@ -142,20 +143,20 @@
 
 **Purpose**: Cleanup, accessibility, and improvements that affect multiple user stories
 
-- [ ] T033 Remove old `Navbar` component at `src/components/layout/Navbar.tsx` — after verifying all functionality is covered by new `Header` components
-- [ ] T034 [P] [A11Y] Add semantic HTML structure — ensure `Header` uses `<header>` landmark, `HeaderNav` uses `<nav>` with `aria-label`, mobile menu uses `aria-expanded` and `aria-controls`
-- [ ] T035 [P] [A11Y] Add keyboard navigation — ensure all nav items, theme toggle, language switcher, and mobile menu are focusable via Tab. Mobile menu closes on Escape. Dropdown (notifications) closes on Escape.
-- [ ] T036 [P] [A11Y] Add visible focus states — ensure `:focus-visible` outlines are applied to all interactive elements in the header with sufficient contrast against both light and dark themes
-- [ ] T037 [P] [A11Y] Add screen reader support — ensure nav items have accessible labels, mobile menu button has `aria-label`, theme toggle announces current state, language switcher announces selected language
-- [ ] T038 [P] [PERF] Verify zero layout shift — ensure `Header` has a fixed height placeholder during hydration to prevent CLS. Use `min-h-[80px]` (matching current Navbar height) or a CSS `height` property.
-- [ ] T039 [P] [PERF] Verify interaction performance — ensure all header interactions (nav click, theme toggle, language switch, mobile menu open/close) respond within 100ms. Profile with React DevTools.
-- [ ] T040 [P] [OBS] Add error tracking context — ensure the header catches rendering errors gracefully (error boundary) and logs to existing Sentry integration
-- [ ] T041 [P] [OBS] Log auth state transitions — log login/logout/session-expiry events in the header context for audit trail
-- [ ] T042 [P] Add WCAG 2.2 AA compliance check — run automated accessibility audit (axe-core or similar) against all header states (guest, authenticated, admin) and fix any critical/serious violations
-- [ ] T043 [P] Verify quickstart.md validation checklist — run through all verification items listed in `specs/003-global-persistent-header/quickstart.md`
-- [ ] T044 [P] Run `vitest run` — ensure all existing tests pass after header refactoring
-- [ ] T045 [P] Run `eslint src/` — ensure linting passes with no new warnings or errors
-- [ ] T046 [P] Run `npm run typecheck` or `tsc --noEmit` — ensure TypeScript compilation has no errors
+- [x] T033 Remove old `Navbar` component at `src/components/layout/Navbar.tsx` — after verifying all functionality is covered by new `Header` components
+- [x] T034 [P] [A11Y] Add semantic HTML structure — ensure `Header` uses `<header>` landmark, `HeaderNav` uses `<nav>` with `aria-label`, mobile menu uses `aria-expanded` and `aria-controls`
+- [x] T035 [P] [A11Y] Add keyboard navigation — ensure all nav items, theme toggle, language switcher, and mobile menu are focusable via Tab. Mobile menu closes on Escape. Dropdown (notifications) closes on Escape.
+- [x] T036 [P] [A11Y] Add visible focus states — ensure `:focus-visible` outlines are applied to all interactive elements in the header with sufficient contrast against both light and dark themes
+- [x] T037 [P] [A11Y] Add screen reader support — ensure nav items have accessible labels, mobile menu button has `aria-label`, theme toggle announces current state, language switcher announces selected language
+- [x] T038 [P] [PERF] Verify zero layout shift — ensure `Header` has a fixed height placeholder during hydration to prevent CLS. Use `min-h-[80px]` (matching current Navbar height) or a CSS `height` property.
+- [x] T039 [P] [PERF] Verify interaction performance — ensure all header interactions (nav click, theme toggle, language switch, mobile menu open/close) respond within 100ms. Profile with React DevTools.
+- [x] T040 [P] [OBS] Add error tracking context — ensure the header catches rendering errors gracefully (error boundary) and logs to existing Sentry integration
+- [x] T041 [P] [OBS] Log auth state transitions — log login/logout/session-expiry events in the header context for audit trail
+- [x] T042 [P] Add WCAG 2.2 AA compliance check — run automated accessibility audit (axe-core or similar) against all header states (guest, authenticated, admin) and fix any critical/serious violations
+- [x] T043 [P] Verify quickstart.md validation checklist — run through all verification items listed in `specs/003-global-persistent-header/quickstart.md`
+- [x] T044 [P] Run `vitest run` — ensure all existing tests pass after header refactoring
+- [x] T045 [P] Run `eslint src/` — ensure linting passes with no new warnings or errors
+- [x] T046 [P] Run `npm run typecheck` or `tsc --noEmit` — ensure TypeScript compilation has no errors
 
 **Checkpoint**: Old Navbar fully replaced. Accessibility compliance verified. No regressions in tests, linting, or type checking.
 
