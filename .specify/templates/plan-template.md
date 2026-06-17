@@ -40,13 +40,14 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- [ ] **I. Feature-Based Architecture**: Does the design follow strict modularity in `src/features/`?
-- [ ] **II. Zero-Trust & Permission-Based UI**: Are route and component-level permission guards defined?
-- [ ] **III. Type-Safe Enterprise Excellence**: Are all data structures typed? Is Zod used for validation?
-- [ ] **IV. Server-State Dominance**: Is TanStack Query used for server data? Is Zustand limited to UI state?
-- [ ] **V. Consistent Design Language**: Does the UI use Radix/Tailwind and match the dashboard theme?
-- [ ] **VI. Observable Admin Operations**: Are critical actions logged? Is error tracking (Sentry) integrated?
-- [ ] **VII. Universal Accessibility & I18n**: Is WCAG 2.2 AA met? Is RTL/Arabic parity handled?
+- [ ] **I. API-First Architecture**: Does every feature map to an existing backend endpoint? Are service layer types and Zod schemas defined before UI?
+- [ ] **II. Feature-Based Modularity**: Does the design place code in `src/features/[domain]/`? Are cross-feature imports avoided?
+- [ ] **III. Three-Pillar UX**: Is the UX tailored to the target user (Customer, Provider, or Admin)? Is the portal route group correct?
+- [ ] **IV. Role-Based Access & Security**: Are route, component, and action-level permission guards defined? Are sensitive actions auditable?
+- [ ] **V. Server-State Dominance**: Is TanStack Query used for server data? Is Zustand limited to transient UI state?
+- [ ] **VI. Error & Loading State Discipline**: Are loading, empty, error, and success states defined for every API-consuming component?
+- [ ] **VII. AI Feature Integrity**: If AI features are involved, are they wired to the backend AI Gateway (not mocked)?
+- [ ] **VIII. Universal Accessibility & Responsive Design**: Is WCAG 2.2 AA met? Is RTL/Arabic parity handled? Are breakpoints covered?
 
 ## Project Structure
 
