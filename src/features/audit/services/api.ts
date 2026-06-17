@@ -18,7 +18,7 @@ export const auditApi = {
     query?: string;
     module?: string;
   }) => {
-    const response = await api.get<PaginatedResponse<AuditLog>>('/audit/logs', { params });
+    const response = await api.get<PaginatedResponse<AuditLog>>('/admin/activity-logs', { params });
     return response.data;
   },
 };

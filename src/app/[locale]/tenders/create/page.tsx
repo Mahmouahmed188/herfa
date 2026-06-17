@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, Calendar, DollarSign, MapPin, Image as ImageIcon, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useMutation } from '@tanstack/react-query';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
 import Button from '@/components/ui/button';
@@ -14,54 +15,33 @@ export default function CreateTenderPage() {
     const serviceId = searchParams.get('serviceId');
     const router = useRouter();
     const { isAuthenticated } = useAuthStore();
-    const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const [error, setError] = useState('');
     const [tenderId, setTenderId] = useState('');
 
     const [form, setForm] = useState({
         title: '',
         description: '',
-        budgetMin: '',
-        budgetMax: '',
-        address: '',
+        budget: '',
         deadline: '',
     });
 
-    useEffect(() => {
-        if (!isAuthenticated) {
-            router.push('/login' as any);
-        }
-    }, [isAuthenticated, router]);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!serviceId) {
-            setError('Missing service ID');
-            return;
-        }
-
-        setIsLoading(true);
-        setError('');
-
-        try {
-            const result = await api.createTender({
-                serviceId,
-                title: form.title,
-                description: form.description,
-                budgetMin: form.budgetMin ? parseFloat(form.budgetMin) : undefined,
-                budgetMax: form.budgetMax ? parseFloat(form.budgetMax) : undefined,
-                address: form.address,
-                deadline: form.deadline ? new Date(form.deadline).toISOString() : undefined,
-            });
+    const createTenderMutation = useMutation({
+        mutationFn: (data: api.CreateTenderPayload) => api.createTender(data),
+        onSuccess: (result) => {
             setTenderId(result.id);
             setIsSuccess(true);
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        } catch (err: any) {
-            setError(err.message || 'Failed to create tender. Please try again.');
-        } finally {
-            setIsLoading(false);
-        }
+        },
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        createTenderMutation.mutate({
+            title: form.title,
+            description: form.description,
+            budget: form.budget ? parseFloat(form.budget) : 0,
+            deadline: form.deadline ? new Date(form.deadline).toISOString() : undefined,
+        });
     };
 
     if (isSuccess) {
@@ -138,27 +118,16 @@ export default function CreateTenderPage() {
                         <div className="bg-[#1A2C22] border border-white/5 rounded-[40px] p-10">
                             <label className="block text-sm font-bold text-gray-400 mb-6 uppercase tracking-widest flex items-center gap-2">
                                 <DollarSign className="w-4 h-4 text-primary" />
-                                Budget Range (Optional)
+                                Budget
                             </label>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <input
-                                        type="number"
-                                        placeholder="Min"
-                                        className="w-full bg-[#0E1512] border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-primary/50 text-white"
-                                        value={form.budgetMin}
-                                        onChange={(e) => setForm({ ...form, budgetMin: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type="number"
-                                        placeholder="Max"
-                                        className="w-full bg-[#0E1512] border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-primary/50 text-white"
-                                        value={form.budgetMax}
-                                        onChange={(e) => setForm({ ...form, budgetMax: e.target.value })}
-                                    />
-                                </div>
+                            <div>
+                                <input
+                                    type="number"
+                                    placeholder="Budget amount"
+                                    className="w-full bg-[#0E1512] border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-primary/50 text-white"
+                                    value={form.budget}
+                                    onChange={(e) => setForm({ ...form, budget: e.target.value })}
+                                />
                             </div>
                         </div>
 
@@ -182,28 +151,28 @@ export default function CreateTenderPage() {
                             <MapPin className="w-4 h-4 text-primary" />
                             Work Location
                         </label>
-                        <input
-                            type="text"
-                            placeholder="Street name, Building, Area"
-                            className="w-full bg-[#0E1512] border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-primary/50 text-white"
-                            value={form.address}
-                            onChange={(e) => setForm({ ...form, address: e.target.value })}
-                        />
+                            <input
+                                type="text"
+                                placeholder="Street name, Building, Area"
+                                className="w-full bg-[#0E1512] border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-primary/50 text-white"
+                                value={''}
+                                readOnly
+                            />
                     </div>
 
-                    {error && (
+                    {createTenderMutation.isError && (
                         <div className="flex items-center gap-3 p-6 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-400">
                             <AlertCircle className="w-5 h-5 shrink-0" />
-                            <p className="text-sm font-bold">{error}</p>
+                            <p className="text-sm font-bold">{createTenderMutation.error?.message || 'Failed to create tender.'}</p>
                         </div>
                     )}
 
                     <Button 
                         type="submit"
-                        disabled={isLoading}
+                        disabled={createTenderMutation.isPending}
                         className="w-full rounded-[32px] py-6 h-auto text-lg font-black shadow-2xl shadow-primary/30"
                     >
-                        {isLoading ? (
+                        {createTenderMutation.isPending ? (
                             <>
                                 <Loader2 className="w-6 h-6 animate-spin mr-3" />
                                 Publishing Tender...

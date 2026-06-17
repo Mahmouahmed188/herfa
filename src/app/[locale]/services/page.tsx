@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, ChevronRight, Briefcase, Zap, Wrench, Paintbrush, Hammer, Thermometer } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@/lib/navigation';
 import * as api from '@/services/api';
 import Button from '@/components/ui/button';
@@ -29,23 +30,13 @@ const CATEGORY_ICONS: Record<string, any> = {
 export default function ServicesListingPage() {
     const locale = useLocale();
     const t = useTranslations('Services');
-    const [services, setServices] = useState<Service[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        async function fetchServices() {
-            try {
-                const data = await api.getServices();
-                setServices(data);
-            } catch (error) {
-                console.error('Failed to fetch services', error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        fetchServices();
-    }, []);
+    const { data: services, isLoading } = useQuery({
+        queryKey: ['services'],
+        queryFn: () => api.getServices(),
+        staleTime: 1000 * 60 * 5,
+    });
 
     const filteredServices = Array.isArray(services) ? services.filter(service =>
         service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

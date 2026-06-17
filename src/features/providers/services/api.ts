@@ -17,7 +17,7 @@ export const providerApi = {
     query?: string;
   }) => {
     const response = await api.get<PaginatedResponse<ProviderVerification>>(
-      '/providers/verification',
+      '/admin/provider-verifications',
       { params }
     );
     return response.data;
@@ -25,22 +25,22 @@ export const providerApi = {
 
   getVerificationDetails: async (id: string) => {
     const response = await api.get<ApiResponse<ProviderVerification>>(
-      `/providers/verification/${id}`
+      `/admin/provider-verifications/${id}`
     );
     return response.data;
   },
 
   approveProvider: async (data: ApproveProviderInput) => {
-    const response = await api.post<ApiResponse<any>>(
-      `/providers/verification/${data.providerId}/approve`,
+    const response = await api.patch<ApiResponse<any>>(
+      `/admin/provider-verifications/${data.providerId}/approve`,
       data
     );
     return response.data;
   },
 
   rejectProvider: async (data: RejectProviderInput) => {
-    const response = await api.post<ApiResponse<any>>(
-      `/providers/verification/${data.providerId}/reject`,
+    const response = await api.patch<ApiResponse<any>>(
+      `/admin/provider-verifications/${data.providerId}/reject`,
       data
     );
     return response.data;

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 import { Calendar, Clock, MapPin, User, ChevronLeft, Star, ShieldCheck, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
@@ -30,8 +31,6 @@ export default function BookingPage() {
     const router = useRouter();
     const { user, isAuthenticated } = useAuthStore();
 
-    const [technician, setTechnician] = useState<TechnicianInfo | null>(null);
-    const [loadingTech, setLoadingTech] = useState(true);
     const [step, setStep] = useState<BookingStep>('details');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -46,49 +45,30 @@ export default function BookingPage() {
     });
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-    // Load technician info
-    useEffect(() => {
-        async function loadTechnician() {
-            if (!id) return;
-            setLoadingTech(true);
-            try {
-                const data = await api.getProviderById(id as string);
-                if (data) {
-                    setTechnician({
-                        id: data.id || data.userId,
-                        name: data.user?.firstName
-                            ? `${data.user.firstName} ${data.user.lastName || ''}`.trim()
-                            : data.businessName || 'Technician',
-                        title: data.services?.[0]?.service?.name || data.businessName || 'Professional',
-                        rating: parseFloat(data.rating) || 4.5,
-                        reviews: data.totalJobsCompleted || 0,
-                        hourlyRate: data.services?.[0]?.price || 50,
-                        image: data.profileImage || data.user?.profileImage ||
-                            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-                        verified: data.verificationStatus === 'verified',
-                        available: data.isAvailable,
-                        location: data.address,
-                    });
-                }
-            } catch {
-                // Fallback to mock if API fails
-                setTechnician({
-                    id: id as string,
-                    name: 'Professional Technician',
-                    title: 'Home Services Expert',
-                    rating: 4.8,
-                    reviews: 120,
-                    hourlyRate: 45,
-                    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-                    verified: true,
-                    available: true,
-                });
-            } finally {
-                setLoadingTech(false);
-            }
+    const { data: techData, isLoading: loadingTech } = useQuery({
+        queryKey: ['provider', id],
+        queryFn: () => api.getProviderById(id as string),
+        enabled: !!id,
+        staleTime: 1000 * 60 * 10,
+    });
+
+    const technician: TechnicianInfo | null = techData
+        ? {
+            id: techData.id || techData.userId,
+            name: techData.user?.firstName
+                ? `${techData.user.firstName} ${techData.user.lastName || ''}`.trim()
+                : techData.businessName || 'Technician',
+            title: techData.services?.[0]?.service?.name || techData.businessName || 'Professional',
+            rating: parseFloat(techData.rating) || 4.5,
+            reviews: techData.totalJobsCompleted || 0,
+            hourlyRate: techData.services?.[0]?.price || 50,
+            image: techData.profileImage || techData.user?.profileImage ||
+                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+            verified: techData.verificationStatus === 'verified',
+            available: techData.isAvailable,
+            location: techData.address,
         }
-        loadTechnician();
-    }, [id]);
+        : null;
 
     const validate = () => {
         const errors: Record<string, string> = {};
@@ -125,13 +105,15 @@ export default function BookingPage() {
         setError('');
         try {
             const result = await api.createBooking({
-                serviceId: technician?.id || id as string,  // Use first available service ID
-                title: `${technician?.title || 'Service'} Appointment`,
+                serviceListingId: technician?.id || id as string,
+                providerId: technician?.id || id as string,
+                scheduledDate: form.date ? new Date(form.date).toISOString() : new Date().toISOString(),
                 description: form.description,
-                address: form.address,
-                scheduledDate: form.date,
-                scheduledTime: form.time,
-                notes: form.notes,
+                location: {
+                    address: form.address,
+                    latitude: 0,
+                    longitude: 0,
+                },
             });
             setBookingId(result?.id || 'HERFA-' + Date.now().toString(36).toUpperCase());
             setStep('success');

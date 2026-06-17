@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { ChevronLeft, Clock, DollarSign, User, ShieldCheck, CheckCircle, XCircle, Loader2, AlertCircle, MessageSquare, Award, Star } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
 import Button from '@/components/ui/button';
@@ -14,8 +15,7 @@ interface Tender {
     title: string;
     description: string;
     status: string;
-    budgetMin: number;
-    budgetMax: number;
+    budget: number;
     address: string;
     deadline: string;
     createdAt: string;
@@ -28,9 +28,8 @@ interface Tender {
 
 interface Offer {
     id: string;
-    price: number;
-    message: string;
-    estimatedDays: number;
+    amount: number;
+    notes: string;
     status: string;
     createdAt: string;
     providerId: string;
@@ -44,56 +43,47 @@ interface Offer {
 export default function TenderDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { user, isAuthenticated } = useAuthStore();
-    const [tender, setTender] = useState<Tender | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isActionLoading, setIsActionLoading] = useState<string | null>(null);
+    const queryClient = useQueryClient();
     const [offerForm, setOfferForm] = useState({ price: '', message: '', estimatedDays: '' });
     const [showOfferForm, setShowOfferForm] = useState(false);
 
-    useEffect(() => {
-        fetchTender();
-    }, [id]);
+    const { data: tender, isLoading } = useQuery({
+        queryKey: ['tender', id],
+        queryFn: () => api.getTenderById(id!),
+        enabled: !!id,
+        staleTime: 1000 * 60 * 10,
+    });
 
-    const fetchTender = async () => {
-        if (!id) return;
-        try {
-            const data = await api.getTenderById(id);
-            setTender(data);
-        } catch (error) {
-            console.error('Failed to fetch tender', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const acceptOfferMutation = useMutation({
+        mutationFn: (offerId: string) => api.acceptOffer(offerId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['tender', id] });
+        },
+    });
 
-    const handleAcceptOffer = async (offerId: string) => {
-        setIsActionLoading(offerId);
-        try {
-            await api.acceptOffer(offerId);
-            fetchTender();
-        } catch (error) {
-            alert('Failed to accept offer');
-        } finally {
-            setIsActionLoading(null);
-        }
-    };
-
-    const handleSubmitOffer = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsActionLoading('submit');
-        try {
-            await api.submitOffer(id as string, {
-                price: parseFloat(offerForm.price),
-                message: offerForm.message,
-                estimatedDays: parseInt(offerForm.estimatedDays),
-            });
+    const submitOfferMutation = useMutation({
+        mutationFn: (data: { tenderId: string; payload: api.CreateOfferPayload }) =>
+            api.submitOffer(data.tenderId, data.payload),
+        onSuccess: () => {
             setShowOfferForm(false);
-            fetchTender();
-        } catch (error: any) {
-            alert(error.message || 'Failed to submit offer');
-        } finally {
-            setIsActionLoading(null);
-        }
+            setOfferForm({ price: '', message: '', estimatedDays: '' });
+            queryClient.invalidateQueries({ queryKey: ['tender', id] });
+        },
+    });
+
+    const handleAcceptOffer = (offerId: string) => {
+        acceptOfferMutation.mutate(offerId);
+    };
+
+    const handleSubmitOffer = (e: React.FormEvent) => {
+        e.preventDefault();
+        submitOfferMutation.mutate({
+            tenderId: id as string,
+            payload: {
+                amount: parseFloat(offerForm.price),
+                notes: offerForm.message,
+            },
+        });
     };
 
     if (isLoading) {
@@ -106,10 +96,12 @@ export default function TenderDetailPage() {
 
     if (!tender) return null;
 
-    const isOwner = user?.id === tender.userId;
+    const tenderData = tender as any;
+
+    const isOwner = user?.id === tenderData.userId;
     const isProvider = user?.role === 'technician';
-    const offers = Array.isArray(tender.offers) ? tender.offers : [];
-    const hasAlreadyOffered = offers.some(o => o.providerId === user?.id);
+    const offers = Array.isArray(tenderData.offers) ? tenderData.offers as Offer[] : [];
+    const hasAlreadyOffered = offers.some((o) => o.providerId === user?.id);
 
     return (
         <div className="bg-[#0A0F0D] min-h-screen text-white pt-32 pb-24 px-6">
@@ -125,23 +117,23 @@ export default function TenderDetailPage() {
                         <div>
                             <div className="flex flex-wrap items-center gap-4 mb-6">
                                 <span className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-primary uppercase tracking-widest">
-                                    {tender.service?.name || 'Service Request'}
+                                    {tenderData.service?.name || 'Service Request'}
                                 </span>
                                 <span className={`text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest border ${
-                                    tender.status === 'open' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-white/10 border-white/10 text-gray-400'
+                                    tenderData.status === 'open' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-white/10 border-white/10 text-gray-400'
                                 }`}>
-                                    Status: {tender.status}
+                                    Status: {tenderData.status}
                                 </span>
                             </div>
-                            <h1 className="text-4xl font-black mb-6 leading-tight">{tender.title}</h1>
+                            <h1 className="text-4xl font-black mb-6 leading-tight">{tenderData.title}</h1>
                             <div className="flex flex-wrap gap-8 text-sm text-gray-400">
                                 <div className="flex items-center gap-2">
                                     <Clock className="w-4 h-4 text-primary" />
-                                    Posted: {new Date(tender.createdAt).toLocaleDateString()}
+                                    Posted: {new Date(tenderData.createdAt).toLocaleDateString()}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <DollarSign className="w-4 h-4 text-primary" />
-                                    Budget: ${tender.budgetMin || '0'} - ${tender.budgetMax || 'Any'}
+                                    Budget: ${tenderData.budget || 'N/A'}
                                 </div>
                             </div>
                         </div>
@@ -149,7 +141,7 @@ export default function TenderDetailPage() {
                         <div className="bg-[#1A2C22] border border-white/5 rounded-[40px] p-10">
                             <h2 className="text-xl font-bold mb-6">Project Description</h2>
                             <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
-                                {tender.description}
+                                {tenderData.description}
                             </p>
                         </div>
 
@@ -171,13 +163,13 @@ export default function TenderDetailPage() {
                                                     <div className="flex-1">
                                                         <div className="flex items-center justify-between mb-2">
                                                             <h3 className="font-bold text-lg">{offer.provider?.firstName} {offer.provider?.lastName}</h3>
-                                                            <span className="text-2xl font-black text-primary">${offer.price}</span>
+                                                            <span className="text-2xl font-black text-primary">${offer.amount}</span>
                                                         </div>
-                                                        <p className="text-gray-400 text-sm mb-6 leading-relaxed italic">"{offer.message}"</p>
+                                                        <p className="text-gray-400 text-sm mb-6 leading-relaxed italic">"{offer.notes}"</p>
                                                         <div className="flex items-center gap-6 text-xs text-gray-500 mb-8">
                                                             <div className="flex items-center gap-2">
                                                                 <Clock className="w-3 h-3" />
-                                                                {offer.estimatedDays} days delivery
+                                                                Delivery: Standard
                                                             </div>
                                                             <div className="flex items-center gap-2">
                                                                 <Star className="w-3 h-3 fill-primary text-primary" />
@@ -186,13 +178,13 @@ export default function TenderDetailPage() {
                                                         </div>
 
                                                         {tender.status === 'open' && (
-                                                            <Button 
-                                                                onClick={() => handleAcceptOffer(offer.id)}
-                                                                disabled={isActionLoading !== null}
-                                                                className="rounded-2xl px-8 py-3 h-auto font-bold text-sm"
-                                                            >
-                                                                {isActionLoading === offer.id ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Accept Offer'}
-                                                            </Button>
+                                    <Button 
+                                        onClick={() => handleAcceptOffer(offer.id)}
+                                        disabled={acceptOfferMutation.isPending}
+                                        className="rounded-2xl px-8 py-3 h-auto font-bold text-sm"
+                                    >
+                                        {acceptOfferMutation.isPending && acceptOfferMutation.variables === offer.id ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Accept Offer'}
+                                    </Button>
                                                         )}
 
                                                         {offer.status === 'accepted' && (
@@ -219,7 +211,7 @@ export default function TenderDetailPage() {
                     {/* Sidebar */}
                     <div className="space-y-8">
                         {/* Provider Action */}
-                        {isProvider && !isOwner && tender.status === 'open' && (
+                        {isProvider && !isOwner && tenderData.status === 'open' && (
                             <div className="bg-primary/10 border border-primary/20 rounded-[40px] p-10">
                                 {hasAlreadyOffered ? (
                                     <div className="text-center">
@@ -270,8 +262,8 @@ export default function TenderDetailPage() {
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <Button type="button" variant="outline" onClick={() => setShowOfferForm(false)} className="rounded-xl py-3 border-white/10">Cancel</Button>
-                                            <Button type="submit" disabled={isActionLoading === 'submit'} className="rounded-xl py-3">
-                                                {isActionLoading === 'submit' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Submit'}
+                                            <Button type="submit" disabled={submitOfferMutation.isPending} className="rounded-xl py-3">
+                                                {submitOfferMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Submit'}
                                             </Button>
                                         </div>
                                     </form>
@@ -284,21 +276,21 @@ export default function TenderDetailPage() {
                             <div className="space-y-4">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-gray-500">Service</span>
-                                    <span className="font-medium">{tender.service?.name}</span>
+                                    <span className="font-medium">{tenderData.service?.name}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-gray-500">Deadline</span>
-                                    <span className="font-medium">{tender.deadline ? new Date(tender.deadline).toLocaleDateString() : 'N/A'}</span>
+                                    <span className="font-medium">{tenderData.deadline ? new Date(tenderData.deadline).toLocaleDateString() : 'N/A'}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-gray-500">Location</span>
-                                    <span className="font-medium text-right max-w-[150px]">{tender.address}</span>
+                                    <span className="font-medium text-right max-w-[150px]">{tenderData.address}</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Summary for accepted offer */}
-                        {tender.status === 'completed' && (
+                        {tenderData.status === 'completed' && (
                             <div className="bg-primary/20 border border-primary/40 rounded-[40px] p-8 text-center">
                                 <CheckCircle className="w-10 h-10 text-primary mx-auto mb-4" />
                                 <h3 className="font-black text-lg mb-2">Project Assigned!</h3>

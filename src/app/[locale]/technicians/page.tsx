@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import { Search, MapPin, ChevronDown, SlidersHorizontal, X, Zap, Wrench, Paintbrush, Hammer, Thermometer } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 import TechnicianResultCard, { TechnicianProps } from '@/components/technicians/TechnicianResultCard';
 import FilterSidebar, { FilterValues } from '@/components/technicians/FilterSidebar';
 import Button from '@/components/ui/button';
@@ -139,8 +140,6 @@ export default function ServicesAndCategoriesPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const sortRef = useRef<HTMLDivElement>(null);
 
-    const [allTechnicians, setAllTechnicians] = useState<TechnicianProps[]>(MOCK_TECHNICIANS);
-    const [isLoading, setIsLoading] = useState(true);
     const [filters, setFilters] = useState<FilterValues>({
         categories: [],
         maxPrice: 500,
@@ -149,57 +148,39 @@ export default function ServicesAndCategoriesPage() {
         availableOnly: false,
     });
 
-    // Close sort dropdown on outside click
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (sortRef.current && !sortRef.current.contains(e.target as Node)) {
-                setIsSortOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, []);
+    const { data: apiTechnicians, isLoading } = useQuery({
+        queryKey: ['technicians', filters.availableOnly, filters.maxPrice],
+        queryFn: () => api.searchProviders({
+            isAvailable: filters.availableOnly || undefined,
+            maxPrice: filters.maxPrice < 500 ? filters.maxPrice : undefined,
+        }),
+        staleTime: 1000 * 60 * 5,
+    });
 
-    // Fetch technicians from backend
-    useEffect(() => {
-        async function fetchTechnicians() {
-            setIsLoading(true);
-            try {
-                const res = await api.searchProviders({
-                    isAvailable: filters.availableOnly || undefined,
-                    maxPrice: filters.maxPrice < 500 ? filters.maxPrice : undefined,
-                });
-                if (res && Array.isArray(res) && res.length > 0) {
-                    const mapped: TechnicianProps[] = res.map((p: any) => ({
-                        id: p.id || p.userId,
-                        name: p.user?.firstName
-                            ? `${p.user.firstName} ${p.user.lastName || ''}`.trim()
-                            : p.businessName || p.user?.email?.split('@')[0] || 'Unknown',
-                        title: p.services?.[0]?.service?.name || p.businessName || 'Technician',
-                        rating: parseFloat(p.rating) || 4.5,
-                        reviews: p.totalJobsCompleted || 0,
-                        hourlyRate: p.services?.[0]?.price || 50,
-                        image: p.profileImage || p.user?.profileImage ||
-                            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-                        matchPercentage: 90,
-                        skills: p.services?.map((s: any) => s.service?.name).filter(Boolean) || ['General'],
-                        verified: p.verificationStatus === 'verified',
-                        available: p.isAvailable || false,
-                        experience: `${p.totalJobsCompleted || 0} Jobs`,
-                        location: p.address || 'Location not set',
-                        description: p.bio || p.businessDescription || 'Professional technician ready to help.',
-                    }));
-                    setAllTechnicians(mapped);
-                }
-            } catch (err) {
-                console.error('Failed to load technicians from API, using mock data:', err);
-                // Keep mock data as fallback
-            } finally {
-                setIsLoading(false);
-            }
+    const allTechnicians: TechnicianProps[] = useMemo(() => {
+        if (apiTechnicians && Array.isArray(apiTechnicians) && apiTechnicians.length > 0) {
+            return apiTechnicians.map((p: any) => ({
+                id: p.id || p.userId,
+                name: p.user?.firstName
+                    ? `${p.user.firstName} ${p.user.lastName || ''}`.trim()
+                    : p.businessName || p.user?.email?.split('@')[0] || 'Unknown',
+                title: p.services?.[0]?.service?.name || p.businessName || 'Technician',
+                rating: parseFloat(p.rating) || 4.5,
+                reviews: p.totalJobsCompleted || 0,
+                hourlyRate: p.services?.[0]?.price || 50,
+                image: p.profileImage || p.user?.profileImage ||
+                    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+                matchPercentage: 90,
+                skills: p.services?.map((s: any) => s.service?.name).filter(Boolean) || ['General'],
+                verified: p.verificationStatus === 'verified',
+                available: p.isAvailable || false,
+                experience: `${p.totalJobsCompleted || 0} Jobs`,
+                location: p.address || 'Location not set',
+                description: p.bio || p.businessDescription || 'Professional technician ready to help.',
+            }));
         }
-        fetchTechnicians();
-    }, [filters.availableOnly]);
+        return MOCK_TECHNICIANS;
+    }, [apiTechnicians]);
 
     const handleFilterChange = useCallback((newFilters: FilterValues) => {
         setFilters(newFilters);

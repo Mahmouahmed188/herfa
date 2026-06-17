@@ -27,17 +27,17 @@ export interface ConversionFunnel {
 
 export const analyticsApi = {
   getOverview: async (period?: string) => {
-    const response = await api.get<ApiResponse<AnalyticsOverview>>('/analytics/overview', { params: { period } });
+    const response = await api.get<ApiResponse<AnalyticsOverview>>('/admin/dashboard/overview', { params: { period } });
     return response.data;
   },
 
   getRevenueChart: async (period?: string) => {
-    const response = await api.get<ApiResponse<RevenueChartData>>('/analytics/revenue', { params: { period } });
+    const response = await api.get<ApiResponse<RevenueChartData>>('/admin/dashboard/revenue', { params: { period } });
     return response.data;
   },
 
   getBookingChart: async (period?: string) => {
-    const response = await api.get<ApiResponse<RevenueChartData>>('/analytics/bookings', { params: { period } });
+    const response = await api.get<ApiResponse<RevenueChartData>>('/admin/dashboard/bookings', { params: { period } });
     return response.data;
   },
 

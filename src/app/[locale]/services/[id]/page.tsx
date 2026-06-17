@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'next/navigation';
 import { ChevronLeft, Star, Clock, ShieldCheck, CheckCircle, ArrowRight, Zap, Info } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
 import Button from '@/components/ui/button';
@@ -25,23 +26,13 @@ export default function ServiceDetailPage() {
     const { id } = useParams<{ id: string }>();
     const locale = useLocale();
     const router = useRouter();
-    const [service, setService] = useState<Service | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        async function fetchService() {
-            if (!id) return;
-            try {
-                const data = await api.getServiceById(id);
-                setService(data);
-            } catch (error) {
-                console.error('Failed to fetch service detail', error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        fetchService();
-    }, [id]);
+    const { data: service, isLoading } = useQuery({
+        queryKey: ['service', id],
+        queryFn: () => api.getServiceById(id!),
+        enabled: !!id,
+        staleTime: 1000 * 60 * 10,
+    });
 
     if (isLoading) {
         return (

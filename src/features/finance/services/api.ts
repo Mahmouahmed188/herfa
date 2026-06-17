@@ -29,7 +29,7 @@ export const financeApi = {
 
   getRevenueStats: async (params?: { range?: string }) => {
     const response = await api.get<ApiResponse<any>>(
-      '/finance/stats/revenue',
+      '/admin/dashboard/revenue',
       { params }
     );
     return response.data;

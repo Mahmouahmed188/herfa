@@ -15,10 +15,10 @@ import { MapPin, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const createJobSchema = z.object({
-    serviceId: z.string().min(1, "Please select a service"),
+    categoryId: z.string().min(1, "Please select a service"),
     title: z.string().min(5, "Title must be at least 5 characters"),
     description: z.string().min(10, "Description must be at least 10 characters"),
-    address: z.string().min(1, "Location is required"),
+    address: z.string().optional(),
 });
 
 type CreateJobValues = z.infer<typeof createJobSchema>;
@@ -38,7 +38,14 @@ export function CreateJobForm() {
     });
 
     const createJobMutation = useMutation({
-        mutationFn: (data: CreateJobValues) => api.createJob(data),
+        mutationFn: (data: CreateJobValues) => api.createJob({
+            title: data.title,
+            description: data.description,
+            categoryId: data.categoryId,
+            latitude: 0,
+            longitude: 0,
+            address: data.address,
+        }),
         onSuccess: () => {
             router.push('/client/dashboard');
         },
@@ -54,7 +61,7 @@ export function CreateJobForm() {
 
     const handleSelectService = (id: string) => {
         setSelectedService(id);
-        setValue('serviceId', id, { shouldValidate: true });
+        setValue('categoryId', id, { shouldValidate: true });
     }
 
     const services = Array.isArray(servicesRes) ? servicesRes : (servicesRes?.data || []);
@@ -93,7 +100,7 @@ export function CreateJobForm() {
                                 ))}
                             </div>
                         )}
-                        {errors.serviceId && <p className="text-sm text-destructive">{errors.serviceId.message}</p>}
+                        {errors.categoryId && <p className="text-sm text-destructive">{errors.categoryId.message}</p>}
                     </div>
 
                     <div className="space-y-4">

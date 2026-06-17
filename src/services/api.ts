@@ -51,7 +51,7 @@ export interface LoginPayload {
 
 export async function login(payload: LoginPayload) {
   const cleanPayload = {
-    identifier: payload.email,
+    email: payload.email,
     password: payload.password,
   };
 
@@ -68,7 +68,7 @@ export async function login(payload: LoginPayload) {
 }
 
 export async function getCurrentUser() {
-  return fetchWithAuth('/auth/me', { method: 'GET' });
+  return fetchWithAuth('/users/me', { method: 'GET' });
 }
 
 export function logout() {
@@ -129,7 +129,7 @@ export async function getProviders() {
 }
 
 export async function getProviderReviews(providerId: string, page = 1, limit = 10) {
-  return fetchWithAuth(`/reviews/provider/${providerId}?page=${page}&limit=${limit}`, { method: 'GET' });
+  return fetchWithAuth(`/providers/${providerId}/reviews?page=${page}&limit=${limit}`, { method: 'GET' });
 }
 
 // --- JOBS (CUSTOMER) ---
@@ -139,7 +139,18 @@ export async function getMyJobs(params?: Record<string, string>) {
   return fetchWithAuth(`/jobs/my-jobs${query}`, { method: 'GET' });
 }
 
-export async function createJob(data: any) {
+export interface CreateJobPayload {
+  title: string;
+  description: string;
+  categoryId: string;
+  latitude: number;
+  longitude: number;
+  address?: string;
+  budget?: number;
+  scheduledDate?: string;
+}
+
+export async function createJob(data: CreateJobPayload) {
   return fetchWithAuth('/jobs', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -160,20 +171,19 @@ export async function cancelJob(id: string, reason?: string) {
 // --- BOOKING ---
 
 export interface CreateBookingPayload {
-  serviceId: string;
-  providerId?: string;
-  title?: string;
+  serviceListingId: string;
+  providerId: string;
+  scheduledDate: string;
   description?: string;
-  address: string;
-  latitude?: number;
-  longitude?: number;
-  scheduledDate?: string;
-  scheduledTime?: string;
-  notes?: string;
+  location?: {
+    address: string;
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export async function createBooking(data: CreateBookingPayload) {
-  return fetchWithAuth('/jobs', {
+  return fetchWithAuth('/bookings', {
     method: 'POST',
     body: JSON.stringify(data),
   });
@@ -237,14 +247,10 @@ export function toggleFavoriteLocal(technicianId: string): boolean {
 // --- TENDERS ---
 
 export interface CreateTenderPayload {
-  serviceId: string;
   title: string;
   description: string;
-  budgetMin?: number;
-  budgetMax?: number;
-  address?: string;
+  budget: number;
   deadline?: string;
-  images?: string[];
 }
 
 export async function createTender(data: CreateTenderPayload) {
@@ -280,9 +286,8 @@ export async function cancelTender(id: string) {
 // --- OFFERS ---
 
 export interface CreateOfferPayload {
-  price: number;
-  message?: string;
-  estimatedDays?: number;
+  amount: number;
+  notes?: string;
 }
 
 export async function submitOffer(tenderId: string, data: CreateOfferPayload) {

@@ -19,7 +19,7 @@ export const usersApi = {
   },
 
   updateUserStatus: async (id: string, status: 'ACTIVE' | 'SUSPENDED', reason: string) => {
-    const response = await api.post<ApiResponse<any>>(`/users/${id}/status`, {
+    const response = await api.patch<ApiResponse<any>>(`/admin/users/${id}/status`, {
       status,
       reason,
     });

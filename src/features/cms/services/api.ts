@@ -21,17 +21,17 @@ export interface Banner extends BaseEntity {
 
 export const cmsApi = {
   getCategories: async (params?: { page?: number; limit?: number }) => {
-    const response = await api.get<PaginatedResponse<Category>>('/cms/categories', { params });
+    const response = await api.get<PaginatedResponse<Category>>('/admin/categories', { params });
     return response.data;
   },
 
   updateCategory: async (id: string, data: Partial<Category>) => {
-    const response = await api.patch<ApiResponse<Category>>(`/cms/categories/${id}`, data);
+    const response = await api.patch<ApiResponse<Category>>(`/admin/categories/${id}`, data);
     return response.data;
   },
 
   createCategory: async (data: Omit<Category, keyof BaseEntity | 'serviceCount'>) => {
-    const response = await api.post<ApiResponse<Category>>('/cms/categories', data);
+    const response = await api.post<ApiResponse<Category>>('/admin/categories', data);
     return response.data;
   },
 

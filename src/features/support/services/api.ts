@@ -68,12 +68,12 @@ export const supportApi = {
   },
 
   getReviews: async (params?: { page?: number; status?: string }) => {
-    const response = await api.get<PaginatedResponse<ReviewItem>>('/support/reviews', { params });
+    const response = await api.get<PaginatedResponse<ReviewItem>>('/admin/reviews', { params });
     return response.data;
   },
 
   moderateReview: async (id: string, action: 'APPROVED' | 'REJECTED' | 'FLAGGED', reason?: string) => {
-    const response = await api.post<ApiResponse<ReviewItem>>(`/support/reviews/${id}/moderate`, { action, reason });
+    const response = await api.delete<ApiResponse<ReviewItem>>(`/admin/reviews/${id}`, { data: { action, reason } });
     return response.data;
   },
 
