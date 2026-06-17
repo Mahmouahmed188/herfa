@@ -1,13 +1,24 @@
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the implementation plan
-at specs/005-frontend-api-alignment/plan.md
+at specs/006-auth-profile-completion/plan.md
 
 Generated artifacts:
-- [research.md](specs/005-frontend-api-alignment/research.md)
-- [data-model.md](specs/005-frontend-api-alignment/data-model.md)
-- [contracts/](specs/005-frontend-api-alignment/contracts/report-schema.md)
-- [quickstart.md](specs/005-frontend-api-alignment/quickstart.md)
+- [research.md](specs/006-auth-profile-completion/research.md)
+- [data-model.md](specs/006-auth-profile-completion/data-model.md)
+- [contracts/](specs/006-auth-profile-completion/contracts/auth-api.md)
+- [quickstart.md](specs/006-auth-profile-completion/quickstart.md)
+
+## Auth & Profile Implementation
+
+Run linting and type checking:
+```
+npm run lint
+npm run type-check
+npm test
+```
+
+See full spec: [specs/006-auth-profile-completion/spec.md](specs/006-auth-profile-completion/spec.md)
 
 ## API Alignment Tooling
 
