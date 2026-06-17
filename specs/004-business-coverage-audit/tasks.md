@@ -35,8 +35,8 @@ description: "Task list for Frontend Business Coverage Audit"
 
 **Purpose**: Create the output directory and initialize the report document shell.
 
-- [ ] T001 [P] Create `docs/` directory at project root if not present
-- [ ] T002 Create the report shell at `docs/frontend-business-gap-analysis.md` with
+- [X] T001 [P] Create `docs/` directory at project root if not present
+- [X] T002 Create the report shell at `docs/frontend-business-gap-analysis.md` with
       title, metadata, and all section headings from the report schema defined in
       `specs/004-business-coverage-audit/contracts/report-schema.md`
 
@@ -49,19 +49,19 @@ description: "Task list for Frontend Business Coverage Audit"
 **Purpose**: Audit the full codebase inventory from `research.md` to establish the
 baseline data that powers every report section.
 
-- [ ] T003 [P] Catalog all 43 frontend page files from `src/app/[locale]/` in a
+- [X] T003 [P] Catalog all 43 frontend page files from `src/app/[locale]/` in a
       structured list with route group (public/auth/customer/provider/admin),
       route path, and page purpose per `specs/004-business-coverage-audit/research.md`
-- [ ] T004 [P] Catalog all 15 feature modules from `src/features/` with their
+- [X] T004 [P] Catalog all 15 feature modules from `src/features/` with their
       services, hooks, schemas, and components per research.md
-- [ ] T005 [P] Catalog all 75+ API service functions from `src/services/api.ts`
+- [X] T005 [P] Catalog all 75+ API service functions from `src/services/api.ts`
       and `src/features/*/services/api.ts` with HTTP method, route, and source
       (core/feature) per research.md
-- [ ] T006 [P] Catalog all 12 TanStack Query hook files from `src/features/*/hooks/`
+- [X] T006 [P] Catalog all 12 TanStack Query hook files from `src/features/*/hooks/`
       with their query keys and associated service functions per research.md
-- [ ] T007 [P] Catalog all 7 forms (react-hook-form) and 4 Zod schema files from
+- [X] T007 [P] Catalog all 7 forms (react-hook-form) and 4 Zod schema files from
       `src/features/*/schemas/` per research.md
-- [ ] T008 Consolidate all catalogs into a cross-reference mapping that links
+- [X] T008 Consolidate all catalogs into a cross-reference mapping that links
       every frontend artifact to its backend module per the CoverageGap entity
       in `specs/004-business-coverage-audit/data-model.md`
 
@@ -81,29 +81,29 @@ the "Existing Frontend Coverage" or "Missing Business Areas" section of the repo
 
 ### Implementation for User Story 1
 
-- [ ] T009 [P] [US1] Write the "Existing Frontend Coverage" section in
+- [X] T009 [P] [US1] Write the "Existing Frontend Coverage" section in
       `docs/frontend-business-gap-analysis.md` listing every page with:
       Exists status, Backend Connected status (Yes/Partial/No), and specific
       missing features per `contracts/report-schema.md`
-- [ ] T010 [P] [US1] Write the "Missing Business Areas" section in
+- [X] T010 [P] [US1] Write the "Missing Business Areas" section in
       `docs/frontend-business-gap-analysis.md` covering every backend module
       (Auth, Bookings, Providers, Payments, Support, Notifications, CMS,
       Analytics, Audit, Settings, Jobs, Tenders, Messages) with frontend
       implementation status per `contracts/report-schema.md`
-- [ ] T011 [P] [US1] Audit form coverage — for each of the 7 forms in
+- [X] T011 [P] [US1] Audit form coverage — for each of the 7 forms in
       `src/features/*/`, verify they have Zod validation (react-hook-form + zod)
       and document gaps in `docs/frontend-business-gap-analysis.md#existing-frontend-coverage`
-- [ ] T012 [P] [US1] Audit dashboard coverage — for each portal dashboard
+- [X] T012 [P] [US1] Audit dashboard coverage — for each portal dashboard
       (`/client/dashboard`, `/technician/dashboard`, `/admin/dashboard`),
       document what KPIs and widgets are rendered vs what the backend supports
       in `docs/frontend-business-gap-analysis.md#existing-frontend-coverage`
-- [ ] T013 [P] [US1] Audit role-based screen coverage — verify each portal
+- [X] T013 [P] [US1] Audit role-based screen coverage — verify each portal
       (customer, provider, admin) has the pages defined in the constitution's
       folder structure guidelines and document gaps in the report
-- [ ] T014 [P] [US1] Audit loading state and error boundary coverage — scan
+- [X] T014 [P] [US1] Audit loading state and error boundary coverage — scan
       all page files in `src/app/[locale]/` for `loading.tsx` and `error.tsx`;
       document gaps in the report
-- [ ] T015 [US1] Consolidate all US1 findings into the report and apply the
+- [X] T015 [US1] Consolidate all US1 findings into the report and apply the
       BackendModule-to-CoverageGap relationship defined in
       `specs/004-business-coverage-audit/data-model.md`
 
@@ -124,23 +124,23 @@ endpoint against the codebase.
 
 ### Implementation for User Story 2
 
-- [ ] T016 [P] [US2] Write the "API Coverage Matrix" section in
+- [X] T016 [P] [US2] Write the "API Coverage Matrix" section in
       `docs/frontend-business-gap-analysis.md` with method, route, connected
       status, has-hook status, used-in-UI status, and source (core/feature)
       for every backend endpoint per `contracts/report-schema.md`
-- [ ] T017 [P] [US2] Map core API endpoints (from `src/services/api.ts`) to the
+- [X] T017 [P] [US2] Map core API endpoints (from `src/services/api.ts`) to the
       matrix — mark each as Connected or Not Connected based on hook/service
       coverage per research.md findings
-- [ ] T018 [P] [US2] Map feature service endpoints (from `src/features/*/services/api.ts`)
+- [X] T018 [P] [US2] Map feature service endpoints (from `src/features/*/services/api.ts`)
       to the matrix — mark each as Connected, Partial, or Not Connected per
       research.md findings
-- [ ] T019 [P] [US2] Cross-reference matrix entries with TanStack Query hooks
+- [X] T019 [P] [US2] Cross-reference matrix entries with TanStack Query hooks
       (`useQuery`/`useMutation` in `src/features/*/hooks/`) — mark hasHook
       Yes/No per research.md findings
-- [ ] T020 [P] [US2] Cross-reference matrix entries with actual page usage —
+- [X] T020 [P] [US2] Cross-reference matrix entries with actual page usage —
       grep for each service function call in `src/app/[locale]/` page files and
       mark usedInUI Yes/Partial/No
-- [ ] T021 [US2] Add a summary row to the matrix showing total endpoints,
+- [X] T021 [US2] Add a summary row to the matrix showing total endpoints,
       connected count, partial count, not-connected count, and overall
       coverage percentage
 
@@ -159,20 +159,20 @@ references the specific backend module and frontend gap it addresses.
 
 ### Implementation for User Story 3
 
-- [ ] T022 [P] [US3] Identify Critical priority gaps — features or endpoints that
+- [X] T022 [P] [US3] Identify Critical priority gaps — features or endpoints that
       block a core business flow with no workaround (e.g., missing provider
       verification screen blocks provider onboarding) and document in
       `docs/frontend-business-gap-analysis.md#categorized-findings`
-- [ ] T023 [P] [US3] Identify High priority gaps — significant feature gaps with
+- [X] T023 [P] [US3] Identify High priority gaps — significant feature gaps with
       partial workarounds (e.g., missing admin support page despite having
       supportService) and document in the report
-- [ ] T024 [P] [US3] Identify Medium priority gaps — important but non-blocking
+- [X] T024 [P] [US3] Identify Medium priority gaps — important but non-blocking
       improvements (e.g., missing loading states on pages) and document in
       the report
-- [ ] T025 [P] [US3] Identify Low priority gaps — polish items and nice-to-have
+- [X] T025 [P] [US3] Identify Low priority gaps — polish items and nice-to-have
       enhancements (e.g., missing `/client/wallet` page) and document in the
       report
-- [ ] T026 [US3] Write the "Frontend Roadmap" section in
+- [X] T026 [US3] Write the "Frontend Roadmap" section in
       `docs/frontend-business-gap-analysis.md` with three priority tiers (P1, P2, P3),
       each referencing the backend module and effort estimate (small/medium/large)
 
@@ -191,29 +191,29 @@ associated backend module. A developer can verify against the backend contracts.
 
 ### Implementation for User Story 4
 
-- [ ] T027 [P] [US4] Write the "Missing Screens" section in
+- [X] T027 [P] [US4] Write the "Missing Screens" section in
       `docs/frontend-business-gap-analysis.md` — list every screen the backend
       supports but the frontend does not have, grouped by portal
       (Customer: wallet, saved technicians; Provider: (none); Admin: support
       management, tender oversight)
-- [ ] T028 [P] [US4] Write the "Missing Components" section in
+- [X] T028 [P] [US4] Write the "Missing Components" section in
       `docs/frontend-business-gap-analysis.md` — list reusable components that
       need to be built (e.g., provider verification status badge, booking
       timeline stepper, dispute resolution panel) with their target domain
-- [ ] T029 [P] [US4] Audit missing tenders module frontend — document that
+- [X] T029 [P] [US4] Audit missing tenders module frontend — document that
       tenders have no dedicated feature module (only core API functions exist)
       and list the required service/hook/component scaffolding in the report
-- [ ] T030 [P] [US4] Audit missing jobs module frontend — document that jobs
+- [X] T030 [P] [US4] Audit missing jobs module frontend — document that jobs
       have only core API functions (no feature service) and list required
       scaffolding
-- [ ] T031 [P] [US4] Audit missing messages module frontend — document that
+- [X] T031 [P] [US4] Audit missing messages module frontend — document that
       messages have only core API functions (no feature service) and list
       required scaffolding
-- [ ] T032 [P] [US4] Audit missing tender listing page — document that only
+- [X] T032 [P] [US4] Audit missing tender listing page — document that only
       `/tenders/create` and `/tenders/[id]` exist; no `/tenders` (list) page
-- [ ] T033 [P] [US4] Audit missing admin support page — document that
+- [X] T033 [P] [US4] Audit missing admin support page — document that
       `supportService` exists but no `/admin/support` route renders it
-- [ ] T034 [US4] Write the "Missing Business Flows" section in
+- [X] T034 [US4] Write the "Missing Business Flows" section in
       `docs/frontend-business-gap-analysis.md` — describe end-to-end flows that
       are absent or incomplete (Provider onboarding → verification → first job;
       Booking creation → tracking → completion → review; Tender creation →
@@ -228,19 +228,19 @@ section defined in the report schema.
 
 **Purpose**: Final review, cross-referencing, and validation of the complete report.
 
-- [ ] T035 [P] Cross-reference the report against all backend API service
+- [X] T035 [P] Cross-reference the report against all backend API service
       contracts — verify no endpoint is missing from the API Coverage Matrix.
       Add any overlooked endpoints.
-- [ ] T036 [P] Cross-reference the report against all frontend pages in
+- [X] T036 [P] Cross-reference the report against all frontend pages in
       `src/app/[locale]/` — verify every page appears in "Existing Frontend
       Coverage". Add any overlooked pages.
-- [ ] T037 [P] Verify all priority assignments — check that no Critical item
+- [X] T037 [P] Verify all priority assignments — check that no Critical item
       has a workaround, no High item is actually Critical, and the P1/P2/P3
       roadmap tiers are consistent with the priority categorization.
-- [ ] T038 [P] Add a "Re-running the Audit" section to the report documenting
+- [X] T038 [P] Add a "Re-running the Audit" section to the report documenting
       the process from `specs/004-business-coverage-audit/quickstart.md` so the
       document can be updated after future feature implementations.
-- [ ] T039 Final read-through of `docs/frontend-business-gap-analysis.md` —
+- [X] T039 Final read-through of `docs/frontend-business-gap-analysis.md` —
       fix typos, broken links, inconsistent terminology, and ensure SC-005
       (readable by both technical and non-technical stakeholders).
 
