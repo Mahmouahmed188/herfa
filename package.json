@@ -11,7 +11,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "api-align:audit": "npx tsx src/lib/align/run-audit.ts",
+    "api-align:fix-safe": "npx tsx src/lib/align/run-audit.ts --fix-only",
+    "api-align:report": "npx tsx src/lib/align/run-audit.ts --report-only"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

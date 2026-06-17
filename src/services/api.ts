@@ -1,9 +1,10 @@
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
-// Helper to get token from localStorage
 const getAuthHeaders = () => {
   if (typeof window === 'undefined') return { 'Content-Type': 'application/json' };
-  const token = localStorage.getItem('token');
+  const token = useAuthStore.getState().token;
   return {
     'Content-Type': 'application/json',
     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
@@ -38,8 +39,7 @@ export async function register(data: any) {
   });
 
   if (result.accessToken) {
-    localStorage.setItem('token', result.accessToken);
-    localStorage.setItem('user', JSON.stringify(result.user));
+    useAuthStore.getState().login(result.user, result.accessToken);
   }
   return { data: result };
 }
@@ -61,8 +61,7 @@ export async function login(payload: LoginPayload) {
   });
 
   if (result.accessToken) {
-    localStorage.setItem('token', result.accessToken);
-    localStorage.setItem('user', JSON.stringify(result.user));
+    useAuthStore.getState().login(result.user, result.accessToken);
   }
   return result;
 }
@@ -73,8 +72,7 @@ export async function getCurrentUser() {
 
 export function logout() {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    useAuthStore.getState().logout();
   }
 }
 
