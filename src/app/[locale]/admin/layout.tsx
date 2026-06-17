@@ -8,7 +8,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { isCollapsed } = useSidebar();
 
   return (
-    <ProtectedRoute>
+    <ProtectedRoute allowedRoles={['ADMIN', 'SUPER_ADMIN']}>
       <div className="flex flex-1 min-h-screen">
         <AppSidebar role="ADMIN" />
         <main

@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
 import Button from '@/components/ui/button';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 export default function CreateTenderPage() {
     const searchParams = useSearchParams();

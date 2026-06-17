@@ -1,31 +1,39 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useRouter, usePathname } from 'next/navigation';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { UserRole } from '@/types/api';
+import type { ReactNode } from 'react';
 
-import { usePathname } from 'next/navigation';
+interface ProtectedRouteProps {
+  children: ReactNode;
+  allowedRoles?: UserRole[];
+}
 
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+export default function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
   const { isAuthenticated, user } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token && !isAuthenticated) {
+    if (!isAuthenticated) {
       router.push('/login');
       return;
     }
 
-    // Technician status protection
-    if (user?.role === 'technician' && user?.status !== 'approved') {
+    if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+      router.push('/login');
+      return;
+    }
+
+    if (user?.role === 'PROVIDER' && user?.status !== 'ACTIVE') {
         const isPublicOnboarding = pathname.includes('/technician/onboarding-home');
         if (!isPublicOnboarding) {
             router.push('/technician/onboarding-home');
         }
     }
-  }, [isAuthenticated, user, router, pathname]);
+  }, [isAuthenticated, user, router, pathname, allowedRoles]);
 
   return <>{children}</>;
 }

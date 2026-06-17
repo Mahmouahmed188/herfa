@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as api from '@/services/api';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 export default function TechnicianMessagesPage() {
     const { user } = useAuthStore();

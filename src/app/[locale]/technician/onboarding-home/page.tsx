@@ -7,7 +7,7 @@ import {
     Clock, Image as ImageIcon, Briefcase,
     Loader2, ArrowRight, X
 } from 'lucide-react';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as api from '@/services/api';
 import { Button } from '@/components/ui/button';
@@ -49,7 +49,7 @@ export default function TechnicianOnboardingPage() {
         mutationFn: (data: VerificationData) => api.submitVerification(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['verificationStatus'] });
-            updateUser({ status: 'pending' });
+            updateUser({ status: 'PENDING' });
             toast.success('Application submitted for review');
         },
         onError: (error: any) => {

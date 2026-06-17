@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Calendar, Clock, MapPin, User, ChevronLeft, Star, ShieldCheck, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 interface TechnicianInfo {
     id: string;

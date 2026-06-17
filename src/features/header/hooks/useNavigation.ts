@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { navigationConfig } from '../config/navigation';
 import type { NavigationItem, UseNavigationReturn } from '../types';
 

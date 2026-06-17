@@ -8,9 +8,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const { isCollapsed } = useSidebar();
 
   return (
-    <ProtectedRoute>
+    <ProtectedRoute allowedRoles={['CUSTOMER']}>
       <div className="flex flex-1 min-h-screen">
-        <AppSidebar role="client" />
+        <AppSidebar role="CUSTOMER" />
         <main
           className="flex-1 p-8 transition-all duration-300 ease-in-out"
           style={{

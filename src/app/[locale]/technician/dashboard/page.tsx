@@ -7,7 +7,7 @@ import {
     ArrowRight, Star, AlertCircle
 } from 'lucide-react';
 import { Link } from "@/lib/navigation";
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 import * as api from '@/services/api';
 
@@ -42,7 +42,7 @@ export default function TechnicianDashboard() {
             {/* Header */}
             <div>
                 <h1 className="text-2xl font-bold text-white">Technician Dashboard</h1>
-                <p className="text-gray-400 mt-1">Welcome back, {user?.name || 'Pro'}. Here's what's happening today.</p>
+                <p className="text-gray-400 mt-1">Welcome back, {user?.firstName || user?.email?.split('@')[0] || 'Pro'}. Here's what's happening today.</p>
             </div>
 
             {/* Stats Grid */}

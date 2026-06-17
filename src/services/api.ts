@@ -70,10 +70,31 @@ export async function getCurrentUser() {
   return fetchWithAuth('/users/me', { method: 'GET' });
 }
 
-export function logout() {
+export async function refreshToken() {
+  return fetchWithAuth('/auth/refresh', { method: 'POST' });
+}
+
+export async function logout() {
+  try {
+    await fetchWithAuth('/auth/logout', { method: 'POST' });
+  } catch {
+    // Proceed with local logout even if backend is unavailable
+  }
   if (typeof window !== 'undefined') {
     useAuthStore.getState().logout();
   }
+}
+
+export async function updateProfile(data: {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  avatarUrl?: string;
+}) {
+  return fetchWithAuth('/users/me', {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
 }
 
 // --- SERVICES / CATEGORIES ---
@@ -349,7 +370,7 @@ export async function uploadFile(file: File) {
   const formData = new FormData();
   formData.append('file', file);
 
-  const token = localStorage.getItem('token');
+  const token = useAuthStore.getState().token;
   const response = await fetch(`${API_URL}/uploads`, {
     method: 'POST',
     headers: {

@@ -4,19 +4,12 @@ import * as React from 'react';
 import { Zap, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { Link } from '@/lib/navigation';
 import { useAuthStore } from './stores/useAuthStore';
-import { UserRole } from '@/types/api';
 import { login as apiLogin } from '@/services/api';
-
-const loginSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
-});
-
-type LoginValues = z.infer<typeof loginSchema>;
+import { loginSchema, LoginValues } from './schemas/validation';
+import { getDashboardRoute } from './services/redirect';
 
 export function LoginForm() {
   const router = useRouter();
@@ -41,31 +34,22 @@ export function LoginForm() {
       const result = await apiLogin(data);
 
       if (result?.accessToken) {
-        const rawRole = result.user.role;
-        // Map backend roles to our UserRole type
-        let role: UserRole = 'ADMIN';
-        if (rawRole === 'client') role = 'ADMIN'; // Placeholder mapping
-        if (rawRole === 'provider') role = 'ADMIN'; // Placeholder
-        if (rawRole === 'admin') role = 'SUPER_ADMIN';
-
         const storeUser = {
           id: result.user.id,
           email: result.user.email,
-          firstName: result.user.email.split('@')[0],
-          lastName: '',
-          role: role,
-          status: result.user.status === 'active' ? 'ACTIVE' : ('PENDING' as any),
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          firstName: result.user.firstName || result.user.email.split('@')[0],
+          lastName: result.user.lastName || '',
+          role: result.user.role,
+          avatarUrl: result.user.avatarUrl,
+          status: result.user.status || 'ACTIVE',
+          createdAt: result.user.createdAt || new Date().toISOString(),
+          updatedAt: result.user.updatedAt || new Date().toISOString(),
         };
 
         login(storeUser, result.accessToken);
 
-        if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
-          router.push('/admin/dashboard' as any);
-        } else {
-          router.push('/login' as any); // Or a non-admin dashboard if we had one here
-        }
+        const dashboardRoute = getDashboardRoute(storeUser.role);
+        router.push(dashboardRoute);
       } else {
         setError('Invalid email or password. Please try again.');
       }

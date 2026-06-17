@@ -60,10 +60,10 @@ export default function AdminUsersPage() {
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                                        {user.name?.charAt(0)?.toUpperCase() || user.firstName?.charAt(0)?.toUpperCase() || 'U'}
+                                                        {user.firstName?.charAt(0)?.toUpperCase() || user.email?.charAt(0)?.toUpperCase() || 'U'}
                                                     </div>
                                                     <div>
-                                                        <div className="font-semibold">{user.name || `${user.firstName || ''} ${user.lastName || ''}`}</div>
+                                                        <div className="font-semibold">{`${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email}</div>
                                                         <div className="text-xs text-muted-foreground">{user.id.substring(0, 8)}...</div>
                                                     </div>
                                                 </div>
@@ -84,7 +84,7 @@ export default function AdminUsersPage() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="capitalize px-2 py-1 bg-secondary rounded text-xs font-medium flex w-fit items-center gap-1">
-                                                    {user.role === 'provider' || user.role === 'technician' ? <ShieldCheck className="w-3 h-3" /> : <UserIcon className="w-3 h-3" />}
+                                                    {user.role === 'PROVIDER' ? <ShieldCheck className="w-3 h-3" /> : <UserIcon className="w-3 h-3" />}
                                                     {user.role}
                                                 </span>
                                             </td>

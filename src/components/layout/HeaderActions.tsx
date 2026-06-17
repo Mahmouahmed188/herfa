@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Bell, User as UserIcon, AlertCircle } from 'lucide-react';
 import { Link } from '@/lib/navigation';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 export function HeaderActions() {
   const t = useTranslations('Navbar');
   const queryClient = useQueryClient();
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
   const [showNotifications, setShowNotifications] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
@@ -54,8 +54,8 @@ export function HeaderActions() {
   });
 
   const getDashboardPath = () => {
-    if (user?.role === 'admin') return '/admin/dashboard' as const;
-    if (user?.role === 'technician') return '/technician/dashboard' as const;
+    if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') return '/admin/dashboard' as const;
+    if (user?.role === 'PROVIDER') return '/technician/dashboard' as const;
     return '/client/dashboard' as const;
   };
 
@@ -145,7 +145,7 @@ export function HeaderActions() {
           </button>
         </Link>
         <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-white text-black text-[10px] font-bold rounded-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-all duration-300 whitespace-nowrap shadow-xl">
-          {user?.role === 'technician' ? 'Technician Portal' : 'User Dashboard'}
+          {user?.role === 'PROVIDER' ? 'Technician Portal' : 'User Dashboard'}
           <div className="absolute -top-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-b-white" />
         </div>
       </div>
@@ -154,7 +154,7 @@ export function HeaderActions() {
         variant="ghost"
         size="sm"
         className="text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded-xl"
-        onClick={logout}
+        onClick={() => api.logout()}
       >
         Sign Out
       </Button>

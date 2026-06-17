@@ -208,12 +208,12 @@ export default function AboutPage() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href={{ pathname: '/register', query: { role: 'client' } }}>
+                        <Link href={{ pathname: '/register', query: { role: 'CUSTOMER' } }}>
                             <Button className="w-full sm:w-auto h-14 px-8 text-lg">
                                 Join as a Client
                             </Button>
                         </Link>
-                        <Link href={{ pathname: '/register', query: { role: 'technician' } }}>
+                        <Link href={{ pathname: '/register', query: { role: 'PROVIDER' } }}>
                             <Button variant="outline" className="w-full sm:w-auto h-14 px-8 text-lg bg-transparent border-slate-300 dark:border-surface-border text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-surface-dark">
                                 Join as a Technician
                             </Button>

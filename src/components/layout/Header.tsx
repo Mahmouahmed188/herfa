@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useNavigation } from '@/features/header/hooks/useNavigation';
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderNav } from './HeaderNav';

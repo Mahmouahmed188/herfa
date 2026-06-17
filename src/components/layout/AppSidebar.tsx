@@ -56,14 +56,14 @@ const adminItems: SidebarItem[] = [
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
-export function AppSidebar({ role }: { role: UserRole | 'client' | 'technician' }) {
+export function AppSidebar({ role }: { role: UserRole }) {
     const pathname = usePathname();
     const { logout, user } = useAuthStore();
     const { isCollapsed, toggleSidebar } = useSidebar();
 
     const isAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN';
-    const items = role === 'client' ? clientItems : role === 'technician' ? technicianItems : adminItems;
-    const roleLabel = role === 'client' ? 'Customer Portal' : role === 'technician' ? 'Technician Portal' : 'Admin Panel';
+    const items = role === 'CUSTOMER' ? clientItems : role === 'PROVIDER' ? technicianItems : adminItems;
+    const roleLabel = role === 'CUSTOMER' ? 'Customer Portal' : role === 'PROVIDER' ? 'Technician Portal' : 'Admin Panel';
     const userName = user?.firstName ?? 'User';
 
     return (
@@ -127,10 +127,10 @@ export function AppSidebar({ role }: { role: UserRole | 'client' | 'technician' 
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
                 {items
                     .filter(item => {
-                        if (role === 'technician' && user?.status !== 'ACTIVE') {
+                        if (role === 'PROVIDER' && user?.status !== 'ACTIVE') {
                             return item.href === '/technician/onboarding-home';
                         }
-                        if (role === 'technician' && user?.status === 'ACTIVE') {
+                        if (role === 'PROVIDER' && user?.status === 'ACTIVE') {
                             return item.href !== '/technician/onboarding-home';
                         }
                         return true;

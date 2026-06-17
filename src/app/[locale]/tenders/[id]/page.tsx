@@ -8,7 +8,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
 import Button from '@/components/ui/button';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 interface Tender {
     id: string;
@@ -99,7 +99,7 @@ export default function TenderDetailPage() {
     const tenderData = tender as any;
 
     const isOwner = user?.id === tenderData.userId;
-    const isProvider = user?.role === 'technician';
+    const isProvider = user?.role === 'PROVIDER';
     const offers = Array.isArray(tenderData.offers) ? tenderData.offers as Offer[] : [];
     const hasAlreadyOffered = offers.some((o) => o.providerId === user?.id);
 

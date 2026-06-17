@@ -7,7 +7,7 @@ import {
 import { Link } from "@/lib/navigation";
 import { useQuery } from '@tanstack/react-query';
 import * as api from '@/services/api';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { format } from 'date-fns';
 
 const savedTechnicians = [
@@ -42,7 +42,7 @@ export default function ClientDashboard() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
-                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Welcome back, {user?.name || 'User'} 👋</p>
+                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Welcome back, {user?.firstName || user?.email?.split('@')[0] || 'User'} 👋</p>
                 </div>
                 <Link
                     href="/client/create-job"

@@ -3,21 +3,13 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Link, useRouter } from '@/lib/navigation';
+import { Link } from '@/lib/navigation';
+import { useRouter } from 'next/navigation';
 import * as api from '@/services/api';
 import { Loader2, Eye, EyeOff, Mail, Lock, User, Phone, HardHat } from 'lucide-react';
 
-const registerSchema = z.object({
-  firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
-  lastName: z.string().min(2, { message: 'Last name must be at least 2 characters' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  phone: z.string().min(10, { message: 'Phone number must be at least 10 digits' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
-  role: z.enum(['customer', 'provider']),
-});
-
-type RegisterValues = z.infer<typeof registerSchema>;
+import { registerSchema, RegisterValues } from './schemas/validation';
+import { getDashboardRoute } from './services/redirect';
 
 export function RegisterForm() {
   const router = useRouter();
@@ -34,7 +26,7 @@ export function RegisterForm() {
   } = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      role: 'customer',
+      role: 'CUSTOMER',
       firstName: '',
       lastName: '',
       email: '',
@@ -43,7 +35,7 @@ export function RegisterForm() {
     },
   });
 
-  const selectedRole = watch('role');
+  const selectedRole = watch('role') as string;
 
   const onSubmit = async (data: RegisterValues) => {
     setLoading(true);
@@ -59,7 +51,9 @@ export function RegisterForm() {
       });
 
       if (result.data?.accessToken) {
-        router.push('/login');
+        const userRole = result.data.user?.role || 'CUSTOMER';
+        const dashboardRoute = getDashboardRoute(userRole);
+        router.push(dashboardRoute);
       } else {
         setError(result.data?.message || 'Registration failed. Please try again.');
       }
@@ -86,15 +80,15 @@ export function RegisterForm() {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => setValue('role', 'customer', { shouldValidate: true })}
+              onClick={() => setValue('role', 'CUSTOMER', { shouldValidate: true })}
               className={`flex flex-col items-center gap-1 p-4 rounded-xl border-2 transition-all ${
-                selectedRole === 'customer'
+                selectedRole === 'CUSTOMER'
                   ? 'border-primary bg-primary/5'
                   : 'border-slate-200 dark:border-surface-border hover:border-primary/40'
               }`}
             >
               <User
-                className={`w-6 h-6 ${selectedRole === 'customer' ? 'text-primary' : 'text-slate-400'}`}
+                className={`w-6 h-6 ${selectedRole === 'CUSTOMER' ? 'text-primary' : 'text-slate-400'}`}
               />
 
               <span
@@ -106,15 +100,15 @@ export function RegisterForm() {
             </button>
             <button
               type="button"
-              onClick={() => setValue('role', 'provider', { shouldValidate: true })}
+              onClick={() => setValue('role', 'PROVIDER', { shouldValidate: true })}
               className={`flex flex-col items-center gap-1 p-4 rounded-xl border-2 transition-all ${
-                selectedRole === 'provider'
+                selectedRole === 'PROVIDER'
                   ? 'border-primary bg-primary/5'
                   : 'border-slate-200 dark:border-surface-border hover:border-primary/40'
               }`}
             >
               <HardHat
-                className={`w-6 h-6 ${selectedRole === 'provider' ? 'text-primary' : 'text-slate-400'}`}
+                className={`w-6 h-6 ${selectedRole === 'PROVIDER' ? 'text-primary' : 'text-slate-400'}`}
               />
 
               <span

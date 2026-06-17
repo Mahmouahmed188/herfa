@@ -26,12 +26,13 @@ export interface BaseEntity {
   updatedAt: string;
 }
 
-export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'SUPPORT' | 'FINANCE' | 'CONTENT';
+export type UserRole = 'CUSTOMER' | 'PROVIDER' | 'ADMIN' | 'SUPER_ADMIN';
 
 export interface User extends BaseEntity {
   email: string;
   firstName: string;
   lastName: string;
+  phone?: string;
   role: UserRole;
   avatarUrl?: string;
   status: 'ACTIVE' | 'SUSPENDED' | 'PENDING';

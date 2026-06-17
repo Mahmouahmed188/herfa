@@ -1,4 +1,4 @@
-import type { UserRole } from '@/store/useAuthStore';
+import type { UserRole } from '@/types/api';
 
 export interface NavigationItem {
   id: string;
