@@ -7,6 +7,7 @@ import {
     Clock, Image as ImageIcon, Briefcase,
     Loader2, ArrowRight, X
 } from 'lucide-react';
+import Link from 'next/link';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as api from '@/services/api';
@@ -97,6 +98,19 @@ export default function TechnicianOnboardingPage() {
 
     return (
         <div className="max-w-4xl mx-auto px-6 py-12">
+            {/* Redirect to new unified verification */}
+            <div className="mb-6 p-4 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-between">
+                <p className="text-sm text-primary font-medium">
+                    New verification experience available
+                </p>
+                <Link
+                    href="/provider/verification"
+                    className="text-sm font-semibold text-primary hover:underline"
+                >
+                    Go to Verification →
+                </Link>
+            </div>
+
             {/* Status Header */}
             <div className="text-center mb-12">
                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">

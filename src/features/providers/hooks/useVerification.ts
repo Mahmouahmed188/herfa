@@ -7,6 +7,46 @@ import { toast } from 'sonner';
  * Aligns with the "Server-State Dominance" principle.
  */
 
+// --- Provider-facing hooks ---
+
+export function useSubmitVerification() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: providerApi.submitVerification,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['verificationStatus'] });
+      queryClient.invalidateQueries({ queryKey: ['providers', 'verification'] });
+      toast.success('Verification submitted successfully');
+    },
+  });
+}
+
+export function useVerificationStatus() {
+  return useQuery({
+    queryKey: ['verificationStatus'],
+    queryFn: () => providerApi.getVerificationStatus(),
+    retry: false,
+  });
+}
+
+export function useVerificationHistory() {
+  return useQuery({
+    queryKey: ['verificationHistory'],
+    queryFn: () => providerApi.getVerificationHistory(),
+    retry: false,
+  });
+}
+
+export function useUploadFile() {
+  return useMutation({
+    mutationFn: (params: { file: File; onProgress?: (percent: number) => void }) =>
+      providerApi.uploadFile(params.file, params.onProgress),
+  });
+}
+
+// --- Admin hooks ---
+
 export function useVerificationQueue(params?: {
   page?: number;
   limit?: number;

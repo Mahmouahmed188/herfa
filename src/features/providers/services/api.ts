@@ -2,6 +2,7 @@ import { api } from '@/lib/axios';
 import { PaginatedResponse, ApiResponse } from '@/types/api';
 import { 
   ProviderVerification, 
+  VerificationHistoryEvent,
   ApproveProviderInput, 
   RejectProviderInput 
 } from '../schemas/verification';
@@ -11,6 +12,51 @@ import {
  * Aligns with the "Admin Dashboard Architecture" standards.
  */
 export const providerApi = {
+  // --- Provider-facing endpoints ---
+
+  submitVerification: async (data: {
+    frontIdImage: string;
+    backIdImage: string;
+    personalPhoto: string;
+    documents: string[];
+    portfolio: string[];
+  }) => {
+    const response = await api.post<ApiResponse<{
+      id: string;
+      status: string;
+      submittedAt: string;
+    }>>('/verification/submit', data);
+    return response.data;
+  },
+
+  getVerificationStatus: async () => {
+    const response = await api.get<ApiResponse<ProviderVerification>>('/verification/status');
+    return response.data;
+  },
+
+  getVerificationHistory: async () => {
+    const response = await api.get<ApiResponse<VerificationHistoryEvent[]>>('/verification/history');
+    return response.data;
+  },
+
+  uploadFile: async (file: File, onProgress?: (percent: number) => void) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await api.post<{ url: string }>('/uploads', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (progressEvent) => {
+        if (onProgress && progressEvent.total) {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          onProgress(percent);
+        }
+      },
+    });
+    return response.data;
+  },
+
+  // --- Admin endpoints ---
+
   getVerificationQueue: async (params?: {
     page?: number;
     limit?: number;

@@ -9,104 +9,7 @@ import FilterSidebar, { FilterValues } from '@/components/technicians/FilterSide
 import Button from '@/components/ui/button';
 import * as api from '@/services/api';
 
-const MOCK_TECHNICIANS: TechnicianProps[] = [
-    {
-        id: '1',
-        name: 'Alex Johnson',
-        title: 'Master Electrician',
-        rating: 4.9,
-        reviews: 128,
-        hourlyRate: 45,
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-        matchPercentage: 98,
-        skills: ['Residential', 'Smart Home', 'Electrical'],
-        verified: true,
-        available: true,
-        experience: '12 Years XP',
-        location: 'Nasr City, Cairo',
-        description: 'Specialized in smart home installations and complex residential wiring. Certified master electrician.'
-    },
-    {
-        id: '4',
-        name: 'Emily Wilson',
-        title: 'Plumbing Expert',
-        rating: 4.7,
-        reviews: 84,
-        hourlyRate: 40,
-        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-        matchPercentage: 88,
-        skills: ['Pipe Repair', 'Installation', 'Plumbing'],
-        verified: false,
-        available: true,
-        experience: '6 Years XP',
-        location: 'Zamalek, Cairo',
-        description: 'Dependable plumbing services for leak detection and pipe replacement. Available 24/7.'
-    },
-    {
-        id: '5',
-        name: 'David Miller',
-        title: 'Carpenter',
-        rating: 4.9,
-        reviews: 156,
-        hourlyRate: 50,
-        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-        matchPercentage: 85,
-        skills: ['Custom Furniture', 'Flooring', 'Carpentry'],
-        verified: true,
-        available: false,
-        experience: '10 Years XP',
-        location: 'Heliopolis, Cairo',
-        description: 'Master craftsman specializing in custom furniture and flooring installation.'
-    },
-    {
-        id: '3',
-        name: 'Michael Chen',
-        title: 'HVAC Specialist',
-        rating: 5.0,
-        reviews: 210,
-        hourlyRate: 55,
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-        matchPercentage: 92,
-        skills: ['AC Repair', 'Heating', 'HVAC'],
-        verified: true,
-        available: true,
-        experience: '15 Years XP',
-        location: 'New Cairo, Egypt',
-        description: 'Expert in all types of heating and cooling systems for residential buildings.'
-    },
-    {
-        id: '2',
-        name: 'Sarah Davis',
-        title: 'Interior Designer',
-        rating: 4.8,
-        reviews: 95,
-        hourlyRate: 60,
-        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-        matchPercentage: 95,
-        skills: ['Modern', 'Renovation', 'Painting'],
-        verified: true,
-        available: false,
-        experience: '8 Years XP',
-        location: 'Maadi, Cairo',
-        description: 'Creating modern, functional spaces tailored to your lifestyle and renovations.'
-    },
-    {
-        id: '6',
-        name: 'Omar Khalid',
-        title: 'Painting Specialist',
-        rating: 4.6,
-        reviews: 67,
-        hourlyRate: 35,
-        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-        matchPercentage: 80,
-        skills: ['Interior Painting', 'Exterior', 'Painting'],
-        verified: true,
-        available: true,
-        experience: '5 Years XP',
-        location: 'Giza, Egypt',
-        description: 'Professional painter specializing in interior and exterior paint jobs with premium materials.'
-    },
-];
+
 
 const CATEGORY_ICONS = [
     { name: 'Plumbing', icon: Wrench, color: 'text-blue-400' },
@@ -179,7 +82,7 @@ export default function ServicesAndCategoriesPage() {
                 description: p.bio || p.businessDescription || 'Professional technician ready to help.',
             }));
         }
-        return MOCK_TECHNICIANS;
+        return [];
     }, [apiTechnicians]);
 
     const handleFilterChange = useCallback((newFilters: FilterValues) => {
