@@ -58,7 +58,7 @@ export function RegisterForm() {
         setError(result.data?.message || 'Registration failed. Please try again.');
       }
     } catch (err) {
-      setError('Connection error. Please check if the backend is running.');
+      setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

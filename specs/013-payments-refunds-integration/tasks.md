@@ -18,9 +18,9 @@
 
 **Purpose**: Feature initialization and basic structure
 
-- [ ] T001 Update `src/features/finance/schemas/index.ts` to include Payment and Refund Zod schemas
-- [ ] T002 [P] Define TypeScript interfaces in `src/features/finance/types/index.ts` matching backend DTOs
-- [ ] T003 [P] Add i18n keys for payments and refunds in `src/messages/en.json` and `src/messages/ar.json`
+- [x] T001 Update `src/features/finance/schemas/index.ts` to include Payment and Refund Zod schemas
+- [x] T002 [P] Define TypeScript interfaces in `src/features/finance/types/index.ts` matching backend DTOs
+- [x] T003 [P] Add i18n keys for payments and refunds in `src/messages/en.json` and `src/messages/ar.json`
 
 ---
 
@@ -28,10 +28,10 @@
 
 **Purpose**: Core logic and API integration that MUST be complete before ANY UI work
 
-- [ ] T004 Implement Customer and Provider payment endpoints in `src/features/finance/services/api.ts`
-- [ ] T005 [P] Implement `usePayments` hook with TanStack Query in `src/features/finance/hooks/usePayments.ts`
-- [ ] T006 [P] Implement `useRefunds` hook with TanStack Query in `src/features/finance/hooks/useRefunds.ts`
-- [ ] T007 [P] Create `PermissionGuard` configuration for payment and refund actions in `src/features/auth/constants.ts`
+- [x] T004 Implement Customer and Provider payment endpoints in `src/features/finance/services/api.ts`
+- [x] T005 [P] Implement `usePayments` hook with TanStack Query in `src/features/finance/hooks/usePayments.ts`
+- [x] T006 [P] Implement `useRefunds` hook with TanStack Query in `src/features/finance/hooks/useRefunds.ts`
+- [x] T007 [P] Create `PermissionGuard` configuration for payment and refund actions in `src/features/auth/constants.ts`
 
 **Checkpoint**: Foundation ready - UI implementation can now begin in parallel
 
@@ -45,12 +45,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [P] [US1] Create `PaymentHistoryTable` component in `src/features/finance/components/PaymentHistoryTable.tsx`
-- [ ] T009 [P] [US1] Create `PaymentStatusBadge` component in `src/features/finance/components/PaymentStatusBadge.tsx`
-- [ ] T010 [P] [US1] Create `PaymentFilterBar` component in `src/features/finance/components/PaymentFilterBar.tsx`
-- [ ] T011 [US1] Implement Customer Payment History page in `src/app/[locale]/(dashboard)/finance/history/page.tsx`
-- [ ] T012 [US1] Implement Provider Payment History page in `src/app/[locale]/(provider)/earnings/history/page.tsx`
-- [ ] T013 [US1] Verify RTL layout and localized currency formatting for the history list
+- [x] T008 [P] [US1] Create `PaymentHistoryTable` component in `src/features/finance/components/PaymentHistoryTable.tsx`
+- [x] T009 [x] [US1] Create `PaymentStatusBadge` component in `src/features/finance/components/PaymentStatusBadge.tsx`
+- [x] T010 [P] [US1] Create `PaymentFilterBar` component in `src/features/finance/components/PaymentFilterBar.tsx`
+- [x] T011 [US1] Implement Admin Payment History in `src/app/[locale]/(dashboard)/finance/history/page.tsx`
+- [x] T012 [US1] Update Customer Wallet history in `src/app/[locale]/client/wallet/page.tsx`
+- [x] T013 [US1] Update Provider Earnings history in `src/app/[locale]/technician/earnings/page.tsx`
+- [x] T013a [US1] Verify RTL layout and localized currency formatting for all history lists
 
 **Checkpoint**: At this point, User Story 1 (Payment History) should be fully functional and testable independently.
 

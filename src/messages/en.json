@@ -335,5 +335,33 @@
         "highestRating": "Highest Rating",
         "lowestRating": "Lowest Rating",
         "hiddenReview": "This review is not available"
+    },
+    "Finance": {
+        "title": "Financial Management",
+        "subtitle": "Monitor revenue, process payouts, and track provider wallets.",
+        "payoutRequests": "Payout Requests",
+        "totalRevenue": "Total Revenue",
+        "pendingPayouts": "Pending Payouts",
+        "avgCommission": "Average Commission",
+        "activeWallets": "Active Wallets",
+        "paymentHistory": "Payment History",
+        "earnings": "Earnings",
+        "totalEarnings": "Total Earnings",
+        "pendingEarnings": "Pending Earnings",
+        "refunds": "Refunds",
+        "refundTracking": "Refund Tracking",
+        "requestRefund": "Request Refund",
+        "refundReason": "Refund Reason",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date",
+        "transactionId": "Transaction ID",
+        "bookingId": "Booking ID",
+        "paymentMethod": "Payment Method",
+        "timeline": "Status Timeline",
+        "details": "Details",
+        "noPayments": "No payments found.",
+        "noRefunds": "No refunds found.",
+        "payouts": "Payouts"
     }
 }

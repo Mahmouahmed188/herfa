@@ -335,5 +335,33 @@
         "highestRating": "أعلى تقييم",
         "lowestRating": "أقل تقييم",
         "hiddenReview": "هذا التقييم غير متاح"
+    },
+    "Finance": {
+        "title": "الإدارة المالية",
+        "subtitle": "مراقبة الإيرادات، معالجة المدفوعات، وتتبع محافظ مقدمي الخدمة.",
+        "payoutRequests": "طلبات صرف المستحقات",
+        "totalRevenue": "إجمالي الإيرادات",
+        "pendingPayouts": "مدفوعات معلقة",
+        "avgCommission": "متوسط العمولة",
+        "activeWallets": "المحافظ النشطة",
+        "paymentHistory": "سجل المدفوعات",
+        "earnings": "الأرباح",
+        "totalEarnings": "إجمالي الأرباح",
+        "pendingEarnings": "أرباح معلقة",
+        "refunds": "المرتجعات",
+        "refundTracking": "تتبع المرتجعات",
+        "requestRefund": "طلب استرداد",
+        "refundReason": "سبب الاسترداد",
+        "amount": "المبلغ",
+        "status": "الحالة",
+        "date": "التاريخ",
+        "transactionId": "رقم المعاملة",
+        "bookingId": "رقم الحجز",
+        "paymentMethod": "طريقة الدفع",
+        "timeline": "مخطط الحالة",
+        "details": "التفاصيل",
+        "noPayments": "لا توجد مدفوعات.",
+        "noRefunds": "لا توجد طلبات استرداد.",
+        "payouts": "المدفوعات"
     }
 }

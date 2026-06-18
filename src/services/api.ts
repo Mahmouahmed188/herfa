@@ -35,7 +35,10 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
 export async function register(data: any) {
   const result = await fetchWithAuth('/auth/register', {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      ...data,
+      role: data.role?.toLowerCase(),
+    }),
   });
 
   if (result.accessToken) {

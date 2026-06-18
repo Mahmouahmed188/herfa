@@ -1,7 +1,7 @@
 import { UserRole } from '@/types/api';
 
-export function getDashboardRoute(role: UserRole): string {
-  switch (role) {
+export function getDashboardRoute(role: UserRole | string): string {
+  switch (role.toUpperCase()) {
     case 'CUSTOMER':
       return '/client/dashboard';
     case 'PROVIDER':
