@@ -363,5 +363,14 @@
         "noPayments": "No payments found.",
         "noRefunds": "No refunds found.",
         "payouts": "Payouts"
+    },
+    "AppDownload": {
+        "title": "Download the Herfa App",
+        "subtitle": "Get the Herfa app on your mobile device and access services anywhere, anytime.",
+        "getItOn": "Get it on",
+        "googlePlay": "Google Play",
+        "downloadOn": "Download on the",
+        "appStore": "App Store",
+        "scanToDownload": "Scan to download"
     }
 }

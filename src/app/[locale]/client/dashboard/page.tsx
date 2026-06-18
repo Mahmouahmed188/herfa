@@ -12,6 +12,7 @@ import { NotificationCard } from '@/features/notifications/components/Notificati
 import { ProfileSummary } from '@/features/client/components/ProfileSummary';
 import { ActiveBookingList } from '@/features/bookings/components/ActiveBookingList';
 import { useActiveBookings } from '@/features/bookings/hooks/useActiveBookings';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 function StatCardSkeleton() {
   return (
@@ -27,12 +28,23 @@ function StatCardSkeleton() {
 }
 
 export default function ClientDashboard() {
+  return (
+    <ProtectedRoute allowedRoles={['CUSTOMER']}>
+      <ClientDashboardContent />
+    </ProtectedRoute>
+  );
+}
+
+function ClientDashboardContent() {
   const { user } = useAuthStore();
-  const { data: stats, isLoading: statsLoading } = useDashboardStats();
-  const { data: unreadData } = useUnreadCount();
-  const { data: notificationsData } = useCustomerNotifications(1, 3);
+  const { data: stats, isLoading: statsLoading, error: statsError } = useDashboardStats();
+  const { data: unreadData, error: unreadError } = useUnreadCount();
+  const { data: notificationsData, error: notificationsError } = useCustomerNotifications(1, 3);
   const { mutate: markAsRead } = useMarkAsRead();
-  const { data: activeBookings, isLoading: activeLoading } = useActiveBookings();
+  const { data: activeBookings, isLoading: activeLoading, error: bookingsError } = useActiveBookings();
+
+  // Log errors for debugging
+  console.log('Dashboard Errors:', { statsError, unreadError, notificationsError, bookingsError });
 
   const unreadCount = unreadData && typeof unreadData === 'object' && 'count' in unreadData
     ? (unreadData as { count: number }).count

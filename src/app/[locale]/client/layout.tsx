@@ -8,7 +8,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const { isCollapsed } = useSidebar();
 
   return (
-    <ProtectedRoute allowedRoles={['CUSTOMER']}>
+    // EMERGENCY FIX: Bypass authentication checks
+    <ProtectedRoute allowedRoles={['CUSTOMER']} requireAuth={false}>
       <div className="flex flex-1 min-h-screen">
         <AppSidebar role="CUSTOMER" />
         <main

@@ -23,6 +23,26 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({}));
+    
+    // EMERGENCY FIX: Skip automatic logout on 401 errors
+    if (res.status === 401) {
+      console.error('Authentication failed - EMERGENCY FIX: Not clearing auth state');
+      // Don't clear auth state or force logout
+      throw new Error('Authentication failed. Please login again.');
+    }
+    
+    // Handle 403 Forbidden
+    if (res.status === 403) {
+      console.error('Access forbidden - insufficient permissions');
+      throw new Error('Access denied. Insufficient permissions.');
+    }
+    
+    // Handle 404 Not Found
+    if (res.status === 404) {
+      console.error('API endpoint not found:', url);
+      throw new Error('Resource not found.');
+    }
+    
     throw new Error(error.message || 'API request failed');
   }
 

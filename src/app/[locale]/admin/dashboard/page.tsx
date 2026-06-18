@@ -4,8 +4,17 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Users, Briefcase, AlertTriangle, Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import * as api from '@/services/api';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function AdminDashboard() {
+  return (
+    <ProtectedRoute allowedRoles={['ADMIN']}>
+      <AdminDashboardContent />
+    </ProtectedRoute>
+  );
+}
+
+function AdminDashboardContent() {
     const { data: statsRes, isLoading } = useQuery({
         queryKey: ['adminDashboardStats'],
         queryFn: () => api.getDashboardStats(),

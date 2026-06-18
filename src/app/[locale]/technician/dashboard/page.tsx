@@ -13,8 +13,17 @@ import * as api from '@/services/api';
 import { useCustomerNotifications, useUnreadCount, useMarkAsRead } from '@/features/notifications/hooks/useCustomerNotifications';
 import { useProviderEarnings } from '@/features/finance/hooks/usePayments';
 import { NotificationCard } from '@/features/notifications/components/NotificationCard';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function TechnicianDashboard() {
+  return (
+    <ProtectedRoute allowedRoles={['PROVIDER']}>
+      <TechnicianDashboardContent />
+    </ProtectedRoute>
+  );
+}
+
+function TechnicianDashboardContent() {
     const { user } = useAuthStore();
 
     const { data: earningsData } = useProviderEarnings();

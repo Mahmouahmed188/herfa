@@ -6,8 +6,17 @@ import { useProfile } from '@/features/auth/hooks/useProfile';
 import { ProfileView } from '@/features/auth/components/ProfileView';
 import { ProfileForm } from '@/features/auth/components/ProfileForm';
 import { Loader2 } from 'lucide-react';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function ClientProfilePage() {
+  return (
+    <ProtectedRoute allowedRoles={['CUSTOMER']}>
+      <ClientProfileContent />
+    </ProtectedRoute>
+  );
+}
+
+function ClientProfileContent() {
     const { user } = useAuthStore();
     const { data: profileData, isLoading } = useProfile();
     const [isEditing, setIsEditing] = React.useState(false);

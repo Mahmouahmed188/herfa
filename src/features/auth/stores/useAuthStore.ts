@@ -26,11 +26,19 @@ export const useAuthStore = create<AuthState>()(
     login: (user, token) => {
       console.log('Auth Store - Login:', { user, token });
       sessionService.setTokenCookie(token);
+      // Also store in localStorage as fallback
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('herfa_token', token);
+      }
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
-      console.log('Auth Store - Logout');
+      console.log('Auth Store - Logout - EMERGENCY FIX: Available but not auto-triggered');
       sessionService.removeTokenCookie();
+      // Also remove from localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('herfa_token');
+      }
       set({ user: null, token: null, isAuthenticated: false, refreshTokenExists: false });
     },
     updateUser: (updatedUser) =>
@@ -43,8 +51,16 @@ export const useAuthStore = create<AuthState>()(
       console.log('Auth Store - Set Token:', { token });
       if (token) {
         sessionService.setTokenCookie(token);
+        // Also store in localStorage as fallback
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('herfa_token', token);
+        }
       } else {
         sessionService.removeTokenCookie();
+        // Also remove from localStorage
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('herfa_token');
+        }
       }
       set({ token });
     },

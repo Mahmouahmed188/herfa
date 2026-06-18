@@ -16,17 +16,28 @@ export function useDashboardStats() {
   return useQuery({
     queryKey: ['clientJobs', 'stats'],
     queryFn: async () => {
-      const response = await api.getMyJobs();
-      const jobs = (Array.isArray(response) ? response : []) as JobLike[];
-      const stats: DashboardStats = {
-        activeOrders: jobs.filter(
-          (j) => j.status !== 'COMPLETED' && j.status !== 'CANCELLED'
-        ).length,
-        pendingCount: jobs.filter((j) => j.status === 'PENDING').length,
-        completedCount: jobs.filter((j) => j.status === 'COMPLETED').length,
-        totalOrders: jobs.length,
-      };
-      return stats;
+      try {
+        const response = await api.getMyJobs();
+        const jobs = (Array.isArray(response) ? response : []) as JobLike[];
+        const stats: DashboardStats = {
+          activeOrders: jobs.filter(
+            (j) => j.status !== 'COMPLETED' && j.status !== 'CANCELLED'
+          ).length,
+          pendingCount: jobs.filter((j) => j.status === 'PENDING').length,
+          completedCount: jobs.filter((j) => j.status === 'COMPLETED').length,
+          totalOrders: jobs.length,
+        };
+        return stats;
+      } catch (error) {
+        console.error('Failed to load dashboard stats:', error);
+        // Return default stats instead of throwing
+        return {
+          activeOrders: 0,
+          pendingCount: 0,
+          completedCount: 0,
+          totalOrders: 0,
+        };
+      }
     },
   });
 }

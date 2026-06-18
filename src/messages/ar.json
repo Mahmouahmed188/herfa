@@ -363,5 +363,14 @@
         "noPayments": "لا توجد مدفوعات.",
         "noRefunds": "لا توجد طلبات استرداد.",
         "payouts": "المدفوعات"
+    },
+    "AppDownload": {
+        "title": "تنزيل تطبيق Herfa",
+        "subtitle": "احصل على تطبيق Herfa على جهازك المحمول ووصول الخدمات في أي وقت وأي مكان.",
+        "getItOn": "احصل على",
+        "googlePlay": "Google Play",
+        "downloadOn": "تنزيل من",
+        "appStore": "App Store",
+        "scanToDownload": "مسح للتنزيل"
     }
 }

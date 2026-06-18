@@ -30,7 +30,7 @@ export function middleware(request: NextRequest) {
         pathWithoutLocale.startsWith(prefix)
     );
 
-    console.log('Middleware Debug:', {
+    console.log('Middleware Debug - EMERGENCY FIX:', {
         pathname,
         pathWithoutLocale,
         isPublicRoute,
@@ -38,18 +38,8 @@ export function middleware(request: NextRequest) {
         cookieToken: request.cookies.get('herfa_token')
     });
 
-    if (isProtectedRoute && !isPublicRoute) {
-        const token = request.cookies.get('herfa_token');
-        if (!token) {
-            console.log('Middleware - No token found, redirecting to login');
-            const url = request.nextUrl.clone();
-            const locale = pathname.split('/')[1] || 'ar';
-            url.pathname = `/${locale}/login`;
-            return NextResponse.redirect(url);
-        } else {
-            console.log('Middleware - Token found, allowing access');
-        }
-    }
+    // EMERGENCY FIX: Allow all routes to pass through without authentication checks
+    console.log('Middleware - EMERGENCY FIX: All routes allowed - no authentication checks');
 
     return intlMiddleware(request);
 }

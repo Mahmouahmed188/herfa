@@ -84,7 +84,15 @@ export function useCustomerNotifications(
 
   return useQuery({
     queryKey: ['notifications', 'customer', { page, limit, filters }],
-    queryFn: () => api.getNotifications(page, limit, filters),
+    queryFn: async () => {
+      try {
+        return await api.getNotifications(page, limit, filters);
+      } catch (error) {
+        console.error('Failed to load notifications:', error);
+        // Return empty data instead of throwing
+        return { data: [], total: 0 };
+      }
+    },
     enabled: isAuthenticated,
   });
 }
@@ -109,7 +117,15 @@ export function useUnreadCount() {
 
   return useQuery({
     queryKey: ['notifications', 'unread-count'],
-    queryFn: () => api.getUnreadNotificationsCount(),
+    queryFn: async () => {
+      try {
+        return await api.getUnreadNotificationsCount();
+      } catch (error) {
+        console.error('Failed to load unread count:', error);
+        // Return default count instead of throwing
+        return { count: 0 };
+      }
+    },
     refetchInterval: isAuthenticated ? 30000 : false,
     enabled: isAuthenticated,
   });

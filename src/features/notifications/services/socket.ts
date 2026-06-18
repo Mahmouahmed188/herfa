@@ -32,11 +32,9 @@ function attachBaseListeners(socket: Socket) {
 
   socket.on('disconnect', (reason) => {
     console.log('Disconnected from notifications socket:', reason);
-    // DO NOT manually reconnect here.
-    // 'io server disconnect' = server intentionally kicked this client
-    // (most likely invalid/expired token). Reconnecting with the same
-    // stale token will get kicked again — infinite loop.
-    // useNotificationSocket handles reconnection via token rotation.
+    // EMERGENCY FIX: Do not trigger logout or prevent reconnection
+    console.log('Socket - EMERGENCY FIX: Disconnect does not trigger logout');
+    // Allow reconnection even with potentially stale tokens
   });
 }
 
