@@ -30,13 +30,24 @@ export function middleware(request: NextRequest) {
         pathWithoutLocale.startsWith(prefix)
     );
 
+    console.log('Middleware Debug:', {
+        pathname,
+        pathWithoutLocale,
+        isPublicRoute,
+        isProtectedRoute,
+        cookieToken: request.cookies.get('herfa_token')
+    });
+
     if (isProtectedRoute && !isPublicRoute) {
         const token = request.cookies.get('herfa_token');
         if (!token) {
+            console.log('Middleware - No token found, redirecting to login');
             const url = request.nextUrl.clone();
             const locale = pathname.split('/')[1] || 'ar';
             url.pathname = `/${locale}/login`;
             return NextResponse.redirect(url);
+        } else {
+            console.log('Middleware - Token found, allowing access');
         }
     }
 

@@ -17,25 +17,30 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>()(
-  (set) => ({
+  (set, get) => ({
     user: null,
     isAuthenticated: false,
     token: null,
     refreshTokenExists: false,
     isInitializing: true, // true until useInitializeAuth resolves
     login: (user, token) => {
+      console.log('Auth Store - Login:', { user, token });
       sessionService.setTokenCookie(token);
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
+      console.log('Auth Store - Logout');
       sessionService.removeTokenCookie();
       set({ user: null, token: null, isAuthenticated: false, refreshTokenExists: false });
     },
     updateUser: (updatedUser) =>
-      set((state) => ({
-        user: state.user ? { ...state.user, ...updatedUser } : null,
-      })),
+      set((state) => {
+        const newUser = state.user ? { ...state.user, ...updatedUser } : null;
+        console.log('Auth Store - Update User:', { updatedUser, newUser });
+        return { user: newUser };
+      }),
     setToken: (token) => {
+      console.log('Auth Store - Set Token:', { token });
       if (token) {
         sessionService.setTokenCookie(token);
       } else {
@@ -43,7 +48,13 @@ export const useAuthStore = create<AuthState>()(
       }
       set({ token });
     },
-    setRefreshTokenExists: (exists) => set({ refreshTokenExists: exists }),
-    setInitializing: (value) => set({ isInitializing: value }),
+    setRefreshTokenExists: (exists) => {
+      console.log('Auth Store - Set Refresh Token Exists:', { exists });
+      set({ refreshTokenExists: exists });
+    },
+    setInitializing: (value) => {
+      console.log('Auth Store - Set Initializing:', { value });
+      set({ isInitializing: value });
+    },
   })
 );
