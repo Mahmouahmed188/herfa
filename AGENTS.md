@@ -1,33 +1,33 @@
 <!-- SPECKIT START -->
 ---
 
-**Current feature**: [Notifications Center](specs/012-notifications-center/plan.md)
+**Current feature**: [AI Chat Assistant](specs/013-ai-chat-assistant/plan.md)
 
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the implementation plan
-at specs/012-notifications-center/plan.md
+at specs/013-ai-chat-assistant/plan.md
 
 Generated artifacts:
-- [research.md](specs/012-notifications-center/research.md)
-- [data-model.md](specs/012-notifications-center/data-model.md)
-- [contracts/](specs/012-notifications-center/contracts/notifications-api.md)
-- [contracts/](specs/012-notifications-center/contracts/announcements-api.md)
-- [contracts/](specs/012-notifications-center/contracts/websocket-events.md)
-- [quickstart.md](specs/012-notifications-center/quickstart.md)
-- [spec.md](specs/012-notifications-center/spec.md)
+- [research.md](specs/013-ai-chat-assistant/research.md)
+- [data-model.md](specs/013-ai-chat-assistant/data-model.md)
+- [contracts/](specs/013-ai-chat-assistant/contracts/api-contracts.md)
+- [contracts/](specs/013-ai-chat-assistant/contracts/websocket-events.md)
+- [quickstart.md](specs/013-ai-chat-assistant/quickstart.md)
+- [spec.md](specs/013-ai-chat-assistant/spec.md)
 
-## Notifications Center
+## AI Chat Assistant
 
-Complete the Notifications Center and fully integrate all notification-related business functionality with the backend Notifications Module. Implement notification list (paginated, filterable), read/unread management, notification detail view with deep-link navigation, announcements system, global announcement banner, real-time updates (WebSocket with polling fallback), provider notification page, and dashboard integrations.
+Complete the AI Chat Assistant feature and fully integrate it with the backend AI Gateway and AI Service. Implement AI chat screen with real-time messaging, conversation management, backend AI integration, authentication, error handling, loading states, mobile responsiveness, and WebSocket support.
 
 ### Implementation Order
 
-1. **Foundation** — Align frontend API layer with backend spec (mark-read endpoint, notification types), extend Zod schemas, update TanStack Query hooks
-2. **Notification Details & Provider Page** — Build NotificationDetail component, create `/provider/notifications` page, add deep-link navigation for all notification types
-3. **Announcements Page & Banner** — Build AnnouncementCard, AnnouncementBanner components, create `/announcements` list and detail pages
-4. **WebSocket Integration** — Add Socket.io client to `/notifications` namespace, wire real-time events to TanStack Query cache invalidation
-5. **Dashboard Enhancement** — Add notification widget to provider dashboard, enhance admin notification center template/history tabs
-6. **API Audit** — Generate docs/notifications-center-audit.md documenting endpoint coverage and mismatches
+1. **Backend Foundation** — Implement AI Gateway Module with chat endpoints, AI Client Service, circuit breaker, rate limiting, and request logging
+2. **Frontend Chat Interface** — Create ChatContainer, MessageList, MessageBubble, ChatInput components with proper styling and responsive design
+3. **API Integration** — Implement AI Chat Service with TanStack Query hooks, authentication, and error handling
+4. **Real-time Features** — Add WebSocket support for live chat, typing indicators, and message streaming
+5. **Conversation Management** — Implement conversation history, persistence, and state management
+6. **Enhanced Features** — Add file upload, rich text support, AI response formatting, and performance optimization
+7. **Monitoring & Analytics** — Implement comprehensive logging, health monitoring, and admin dashboard
 
 ### Running Checks
 
@@ -37,11 +37,11 @@ npm run type-check
 npm test
 ```
 
-See full spec: [specs/012-notifications-center/spec.md](specs/012-notifications-center/spec.md)
+See full spec: [specs/013-ai-chat-assistant/spec.md](specs/013-ai-chat-assistant/spec.md)
 
 ---
 
-**Previous feature**: [Reviews & Ratings System](specs/011-reviews-ratings-system/plan.md)
+**Previous feature**: [Notifications Center](specs/012-notifications-center/plan.md)
 
-Also referenced: specs/009-booking-lifecycle-completion/plan.md
+Also referenced: specs/011-reviews-ratings-system/plan.md, specs/009-booking-lifecycle-completion/plan.md
 <!-- SPECKIT END -->
