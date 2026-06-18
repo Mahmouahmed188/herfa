@@ -1,34 +1,33 @@
 <!-- SPECKIT START -->
+---
+
+**Current feature**: [Real-Time Tracking System](specs/010-tracking-system/plan.md)
+
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the implementation plan
-at specs/009-booking-lifecycle-completion/plan.md
+at specs/010-tracking-system/plan.md
 
 Generated artifacts:
-- [research.md](specs/009-booking-lifecycle-completion/research.md)
-- [data-model.md](specs/009-booking-lifecycle-completion/data-model.md)
-- [contracts/](specs/009-booking-lifecycle-completion/contracts/booking-api.md)
-- [contracts/](specs/009-booking-lifecycle-completion/contracts/jobs-api.md)
-- [contracts/](specs/009-booking-lifecycle-completion/contracts/tracking-api.md)
-- [contracts/](specs/009-booking-lifecycle-completion/contracts/notifications-api.md)
-- [quickstart.md](specs/009-booking-lifecycle-completion/quickstart.md)
-- [spec.md](specs/009-booking-lifecycle-completion/spec.md)
+- [research.md](specs/010-tracking-system/research.md)
+- [data-model.md](specs/010-tracking-system/data-model.md)
+- [contracts/](specs/010-tracking-system/contracts/tracking-api.md)
+- [contracts/](specs/010-tracking-system/contracts/websocket-events.md)
+- [contracts/](specs/010-tracking-system/contracts/notifications-api.md)
+- [quickstart.md](specs/010-tracking-system/quickstart.md)
+- [spec.md](specs/010-tracking-system/spec.md)
 
-## Booking Lifecycle Completion
+## Real-Time Tracking System
 
-Complete the entire Booking Lifecycle workflow and ensure all booking-related business processes are fully aligned with the backend implementation. Connect booking creation, details, timeline, cancellation, tracking, notifications, history, provider management, and API audit.
+Complete the Real-Time Tracking System and fully integrate all tracking-related business functionality with the backend Tracking Module. Connect live tracking map, tracking session lifecycle, provider location updates, tracking timeline, tracking history, booking-tracking integration, and tracking notifications.
 
 ### Implementation Order
 
-1. **Status Enum Alignment** — Add `ASSIGNED` and `ON_THE_WAY` to all three booking status definitions
-2. **API Service Consolidation** — Migrate all booking/job API calls from `fetchWithAuth` to axios-based feature service; add missing endpoints
-3. **Customer Booking Detail Page** — Create `/client/jobs/[id]/page.tsx` with booking info, provider info, payment info, timeline, cancel action
-4. **Booking Timeline Enhancement** — Extend timeline to use backend data with status transitions, provider events, cancellation, completion
-5. **Booking Cancellation Flow** — Add cancellation dialog with reason, confirmation, backend error handling, status refresh
-6. **Active Booking Tracking** — Create tracking page with live progress, provider location, ETA, WebSocket integration
-7. **Booking Notifications** — Add booking notification types and hooks, link clicks to booking details
-8. **Provider Booking Management** — Add accept/reject, status update, complete booking for provider pages
-9. **Mock Data Cleanup** — Remove mock/fallback booking data from all pages
-10. **API Audit** — Generate docs/booking-lifecycle-audit.md
+1. **Foundation** — Install map deps (leaflet, react-leaflet), add tracking endpoints to booking service, implement WebSocket onmessage handler, add tracking notification types
+2. **Live Tracking Map** — Create reusable TrackingMapView component with provider marker, customer destination, route polyline, ETA, status banner
+3. **Tracking Timeline & Session** — Create tracking timeline component, enhance session display with duration and online/offline state
+4. **Tracking History** — Create tracking history page with pagination, filtering, session detail view
+5. **Integration & Cleanup** — Update booking detail, dashboard, provider pages; remove mock tracking data
+6. **Environment Config** — Configure NEXT_PUBLIC_WS_URL
 
 ### Running Checks
 
@@ -38,5 +37,11 @@ npm run type-check
 npm test
 ```
 
-See full spec: [specs/009-booking-lifecycle-completion/spec.md](specs/009-booking-lifecycle-completion/spec.md)
+See full spec: [specs/010-tracking-system/spec.md](specs/010-tracking-system/spec.md)
+
+---
+
+**Previous feature**: [Booking Lifecycle Completion](specs/009-booking-lifecycle-completion/plan.md)
+
+Also referenced: specs/009-booking-lifecycle-completion/plan.md
 <!-- SPECKIT END -->
