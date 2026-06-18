@@ -48,6 +48,14 @@ export function BookingCard({ booking }: { booking: CustomerBooking }) {
             >
               View Details <ArrowRight className="w-3 h-3" />
             </Link>
+            {booking.status === 'COMPLETED' && (
+              <Link
+                href={{ pathname: '/client/reviews/new/[bookingId]', params: { bookingId: booking.id } }}
+                className="text-primary text-sm font-semibold hover:underline"
+              >
+                Write a Review
+              </Link>
+            )}
           </div>
         </CardContent>
       </div>

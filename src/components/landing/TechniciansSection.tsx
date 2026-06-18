@@ -1,7 +1,6 @@
 'use client';
 
 import { ArrowRight, Star } from 'lucide-react';
-import Button from "@/components/ui/button";
 import { useTranslations } from 'next-intl';
 import { Link } from "@/lib/navigation";
 
@@ -10,7 +9,6 @@ const technicians = [
         name: "Ahmed H.",
         title: "Electrical Engineer",
         rating: "4.9",
-        reviews: "124",
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBZjQonIH3a-D03DzTjyLxRVdj8h_mOC9uQuZ_2eyw9lYHZH3ybvCl_w06OmfPT-vhAJd_BZAqrukCuqjRPjvB4CwSovBgVXdqGcErZu7uxBdYr1EMtVDAceg1LmDLC5BdRo6mird4hE7agG2pne_LwHcyuZ1zgTWbUFb9Wr5mtEOLCBqQr9xrQSVQSeKNVBdxObo8iSMXWbT2CpfJC_3J8VcPU_B7GPFEK__fDr-_2t0DFQSnrE99d7CLM3gaitRN1R72bi2mNZq8",
         tags: ["Wiring", "Installations"]
     },
@@ -18,7 +16,6 @@ const technicians = [
         name: "Sarah J.",
         title: "Civil Engineer",
         rating: "4.8",
-        reviews: "89",
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBZeBPhLaYOv_WKAvfRtlSbfjHHJKanQzYK24hrMHGowUuyIkEv6SdbnFrxBPo-KBR9ly7BOgvy6StG1WDXu8EOJejkL5dOCJdcH3t-UHLNFgFO43qlSiVXqIRplZzc3Vv1H1gn_SX0LRWDC8kftQYFHPVFTjnNNObxC3Dw6RJAh2wwq0SR3UbNV_R84_RH3zY1uLXYz1_hOsMVt3xVxkN5Hf8sPzWTbwVgIKlxlFuwABlXhZzjRdABlsZbUbC2NJFkjrEVZFXhM2I",
         tags: ["Structural", "Design"]
     },
@@ -26,7 +23,6 @@ const technicians = [
         name: "Mike C.",
         title: "HVAC Specialist",
         rating: "5.0",
-        reviews: "210",
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBaJEh8Rhzxn2ZCIl2YhkZ9_m0rmT2pn5uMBScqdjuF6S0V8xEj7kxZlTL-dqQguEnH2X_FRgsnF3bjYYad1Yef2i3X_S2sj4Ge9Vb3M2AJb2QwC0RMP3874wMsBlv-7zyNWLcoh1a6FAlvTqdZ3JgeF-mYWHQrtU9eLFcCxMs6EVMQhFknW7JwkWr_Bj8R_nLgQ_04Ct7LMmKuu4tjmFmUU2-nfDxkHEVd4gM7Mh1o0K4fTvTFPrwbjpd7E8xZTZu2wPeDffovWFc",
         tags: ["AC Repair", "Heating"]
     },
@@ -34,7 +30,6 @@ const technicians = [
         name: "David M.",
         title: "Plumbing Expert",
         rating: "4.7",
-        reviews: "156",
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBAFwDRTuvb_zvDxF_0reqR1Luhxu0U0Ri2pbdUHw7EMa8GUoQNaghk3sBQX91-noVqkVGEWq7RRNCHSRaHi9g460D8sZS2K1RV7fbjqruYbnIr8IeJHz50loVg2xZWwTeTFRHBsUrclkXm1Q2b_3vG17sCWsC-uX0Em7gtqFKkSlbagN0kIE-0BLYSEJiDoPIBQwBTub3z5cHsNLdMv55Fn7UWe4F94vxwhcoJmEbM6-ZAhDoZZimQ1xMdCjr8GNPmifOTBuZrGqY",
         tags: ["Repairs", "Installation"]
     }
@@ -69,7 +64,6 @@ export default function TechniciansSection() {
                                 <div className="flex items-center gap-1 bg-yellow-400/10 w-fit px-2 py-1 rounded-lg">
                                     <Star className="text-yellow-400 text-sm fill-current" />
                                     <span className="text-slate-700 dark:text-gray-200 text-sm font-bold">{tech.rating}</span>
-                                    <span className="text-slate-400 text-xs">({tech.reviews} {t('reviews')})</span>
                                 </div>
                                 <div className="flex flex-wrap gap-2 mt-2">
                                     {tech.tags.map(tag => (

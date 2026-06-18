@@ -252,5 +252,69 @@
         "referralTitle": "قم بدعوة صديق واحصل على $50",
         "referralDesc": "شارك رمزك الفريد واكسب مكافآت عن كل تسجيل.",
         "shareCode": "مشاركة الرمز"
+    },
+    "Reviews": {
+        "title": "التقييمات",
+        "writeReview": "كتابة تقييم",
+        "editReview": "تعديل التقييم",
+        "myReviews": "تقييماتي",
+        "rating": "التقييم",
+        "comment": "تعليق",
+        "commentPlaceholder": "شارك تجربتك...",
+        "submitReview": "إرسال التقييم",
+        "updatingReview": "جاري تحديث التقييم...",
+        "submittingReview": "جاري إرسال التقييم...",
+        "reviewSubmitted": "تم إرسال التقييم بنجاح",
+        "reviewUpdated": "تم تحديث التقييم بنجاح",
+        "reviewDeleted": "تم حذف التقييم بنجاح",
+        "deleteConfirm": "هل أنت متأكد من حذف هذا التقييم؟",
+        "noReviews": "لا توجد تقييمات بعد",
+        "noReviewsDesc": "لم تكتب أي تقييمات بعد.",
+        "noProviderReviews": "لم يتم تلقي تقييمات بعد",
+        "noProviderReviewsDesc": "تقييمات العملاء ستظهر هنا بعد الموافقة عليها.",
+        "averageRating": "متوسط التقييم",
+        "totalReviews": "{count} تقييم",
+        "ratingDistribution": "توزيع التقييمات",
+        "reviewFor": "تقييم لـ {provider}",
+        "byCustomer": "بواسطة {customer}",
+        "createdAt": "تم التقييم في {date}",
+        "updatedAt": "تم التحديث في {date}",
+        "moderation": {
+            "approved": "مقبول",
+            "pending": "قيد المراجعة",
+            "flagged": "مبلغ عنه",
+            "rejected": "تمت إزالته"
+        },
+        "errors": {
+            "loadFailed": "فشل تحميل التقييمات",
+            "submitFailed": "فشل إرسال التقييم",
+            "updateFailed": "فشل تحديث التقييم",
+            "deleteFailed": "فشل حذف التقييم",
+            "notFound": "التقييم غير موجود",
+            "notOwner": "يمكنك فقط تعديل تقييماتك",
+            "duplicate": "لقد قمت بتقييم هذا الحجز مسبقاً"
+        },
+        "empty": {
+            "title": "لا توجد تقييمات بعد",
+            "action": "كن أول من يقيم"
+        },
+        "dashboard": {
+            "title": "لوحة التقييمات",
+            "totalReviews": "إجمالي التقييمات",
+            "averageRating": "متوسط التقييم",
+            "recentReviews": "أحدث التقييمات",
+            "ratingTrend": "اتجاه التقييم",
+            "viewAll": "عرض كل التقييمات"
+        },
+        "flagReview": "الإبلاغ عن التقييم",
+        "reviewFlagged": "تم الإبلاغ عن التقييم للمراجعة",
+        "flagFailed": "فشل الإبلاغ عن التقييم",
+        "viewDetails": "عرض التفاصيل",
+        "sortBy": "ترتيب حسب",
+        "newest": "الأحدث",
+        "oldest": "الأقدم",
+        "highestRating": "أعلى تقييم",
+        "lowestRating": "أقل تقييم",
+        "hiddenReview": "هذا التقييم غير متاح"
     }
 }

@@ -26,10 +26,10 @@
 
 **Purpose**: Create the feature module directory structure and define data contracts
 
-- [ ] T001 Create `src/features/reviews/` directory structure with subdirectories: `components/`, `hooks/`, `services/`, `schemas/`, `types/`
-- [ ] T002 [P] Define TypeScript interfaces in `src/features/reviews/types/index.ts` — Review, ReviewCreateRequest, ReviewUpdateRequest, RatingStats, PaginatedResponse wrapper, and ModerationState enum
-- [ ] T003 [P] Define Zod validation schemas in `src/features/reviews/schemas/validation.ts` — reviewCreateSchema (rating: 1-5 int, comment: optional string), reviewUpdateSchema matching backend DTO validation rules
-- [ ] T004 [P] Add review-related i18n keys to `src/messages/en.json` and `src/messages/ar.json` for all review UI text (create, edit, history, ratings, moderation, empty states, errors)
+- [X] T001 Create `src/features/reviews/` directory structure with subdirectories: `components/`, `hooks/`, `services/`, `schemas/`, `types/`
+- [X] T002 [P] Define TypeScript interfaces in `src/features/reviews/types/index.ts` — Review, ReviewCreateRequest, ReviewUpdateRequest, RatingStats, PaginatedResponse wrapper, and ModerationState enum
+- [X] T003 [P] Define Zod validation schemas in `src/features/reviews/schemas/validation.ts` — reviewCreateSchema (rating: 1-5 int, comment: optional string), reviewUpdateSchema matching backend DTO validation rules
+- [X] T004 [P] Add review-related i18n keys to `src/messages/en.json` and `src/messages/ar.json` for all review UI text (create, edit, history, ratings, moderation, empty states, errors)
 
 ---
 
@@ -37,13 +37,13 @@
 
 **Purpose**: API service layer, TanStack Query hooks, and shared components that ALL user stories depend on
 
-- [ ] T005 Implement review API service in `src/features/reviews/services/api.ts` using axios from `src/lib/axios.ts` — `POST /reviews`, `GET /reviews`, `GET /reviews/provider`, `GET /reviews/:id`, `PATCH /reviews/:id`, `DELETE /reviews/:id`, `POST /reviews/:id/flag` — each returning typed responses
-- [ ] T006 [P] Implement provider review API in `src/features/reviews/services/api.ts` — `GET /providers/:providerId/reviews` for public/provider review list with pagination params
-- [ ] T007 [P] Implement TanStack Query hooks in `src/features/reviews/hooks/useReviews.ts` — `useReviewList(params)`, `useProviderReviewList(providerId, params)`, `useReviewDetail(id)` with query key convention `['reviews', 'list', ...params]`, `['reviews', 'detail', id]`
-- [ ] T008 [P] Implement TanStack Query mutation hooks in `src/features/reviews/hooks/useReviewMutations.ts` — `useCreateReview()`, `useUpdateReview()`, `useDeleteReview()`, `useFlagReview()` with proper cache invalidation on success
-- [ ] T009 [P] Implement TanStack Query hooks in `src/features/reviews/hooks/useRatingStats.ts` — `useProviderRatingStats(providerId)` query
-- [ ] T010 [P] Create reusable `StarRating` display component in `src/components/ui/star-rating.tsx` — read-only star display with half-star support, RTL-aware, keyboard accessible
-- [ ] T011 [P] Create interactive `StarRating` input component in `src/features/reviews/components/StarRating.tsx` — click/hover star selection, keyboard navigation (arrow keys), form integration support
+- [X] T005 Implement review API service in `src/features/reviews/services/api.ts` using axios from `src/lib/axios.ts` — `POST /reviews`, `GET /reviews`, `GET /reviews/provider`, `GET /reviews/:id`, `PATCH /reviews/:id`, `DELETE /reviews/:id`, `POST /reviews/:id/flag` — each returning typed responses
+- [X] T006 [P] Implement provider review API in `src/features/reviews/services/api.ts` — `GET /providers/:providerId/reviews` for public/provider review list with pagination params
+- [X] T007 [P] Implement TanStack Query hooks in `src/features/reviews/hooks/useReviews.ts` — `useReviewList(params)`, `useProviderReviewList(providerId, params)`, `useReviewDetail(id)` with query key convention `['reviews', 'list', ...params]`, `['reviews', 'detail', id]`
+- [X] T008 [P] Implement TanStack Query mutation hooks in `src/features/reviews/hooks/useReviewMutations.ts` — `useCreateReview()`, `useUpdateReview()`, `useDeleteReview()`, `useFlagReview()` with proper cache invalidation on success
+- [X] T009 [P] Implement TanStack Query hooks in `src/features/reviews/hooks/useRatingStats.ts` — `useProviderRatingStats(providerId)` query
+- [X] T010 [P] Create reusable `StarRating` display component in `src/components/ui/star-rating.tsx` — read-only star display with half-star support, RTL-aware, keyboard accessible
+- [X] T011 [P] Create interactive `StarRating` input component in `src/features/reviews/components/StarRating.tsx` — click/hover star selection, keyboard navigation (arrow keys), form integration support
 
 **Checkpoint**: Foundation ready — API services, hooks, and shared UI primitives available for all user stories
 
@@ -55,10 +55,10 @@
 
 **Independent Test**: Customer navigates to a completed booking, fills out review form (star rating + optional comment), submits, and receives success confirmation
 
-- [ ] T012 [P] [US1] Build `ReviewForm` component in `src/features/reviews/components/ReviewForm.tsx` — integrates StarRating input, comment textarea, React Hook Form with Zod resolver, displays backend validation errors via `setError`
-- [ ] T013 [US1] Create review creation page at `src/app/[locale]/(customer)/reviews/new/[bookingId]/page.tsx` — loads booking context, validates eligibility, renders ReviewForm, handles submission feedback via sonner toast
-- [ ] T014 [US1] Add review creation link to completed booking details page — show "Write a Review" action on completed bookings in `src/features/bookings/components/` if review not already submitted
-- [ ] T015 [US1] Add booking eligibility check — verify booking is completed and no review exists before showing create review page
+- [X] T012 [P] [US1] Build `ReviewForm` component in `src/features/reviews/components/ReviewForm.tsx` — integrates StarRating input, comment textarea, React Hook Form with Zod resolver, displays backend validation errors via `setError`
+- [X] T013 [US1] Create review creation page at `src/app/[locale]/client/reviews/new/[bookingId]/page.tsx` — loads booking context, validates eligibility, renders ReviewForm, handles submission feedback via sonner toast
+- [X] T014 [US1] Add review creation link to completed booking details page — show "Write a Review" action on completed bookings in `src/features/bookings/components/` if review not already submitted
+- [X] T015 [US1] Add booking eligibility check — verify booking is completed and no review exists before showing create review page
 
 **Checkpoint**: MVP complete — customers can successfully submit reviews for completed bookings
 
@@ -70,11 +70,11 @@
 
 **Independent Test**: Provider navigates to their reviews page, sees average rating, rating distribution, total count, and a paginated list of all customer reviews
 
-- [ ] T016 [P] [US5] Build `RatingSummary` component in `src/features/reviews/components/RatingSummary.tsx` — displays average rating, total review count, and per-star distribution bar chart using existing Recharts components
-- [ ] T017 [P] [US5] Build `ReviewCard` component in `src/features/reviews/components/ReviewCard.tsx` — displays rating, comment text, reviewer name, creation date, and moderation badge (if exposed)
-- [ ] T018 [P] [US5] Build `ReviewList` component in `src/features/reviews/components/ReviewList.tsx` — paginated list using ReviewCard with sorting (date, rating) and empty state ("No reviews yet")
-- [ ] T019 [US5] Create provider reviews page at `src/app/[locale]/(provider)/reviews/page.tsx` — renders RatingSummary + ReviewList with data from `useProviderReviewList()` and `useProviderRatingStats()`
-- [ ] T020 [US5] Add provider reviews link to provider navigation sidebar
+- [X] T016 [P] [US5] Build `RatingSummary` component in `src/features/reviews/components/RatingSummary.tsx` — displays average rating, total review count, and per-star distribution bar chart using existing Recharts components
+- [X] T017 [P] [US5] Build `ReviewCard` component in `src/features/reviews/components/ReviewCard.tsx` — displays rating, comment text, reviewer name, creation date, and moderation badge (if exposed)
+- [X] T018 [P] [US5] Build `ReviewList` component in `src/features/reviews/components/ReviewList.tsx` — paginated list using ReviewCard with sorting (date, rating) and empty state ("No reviews yet")
+- [X] T019 [US5] Create provider reviews page at `src/app/[locale]/technician/reviews/page.tsx` — renders RatingSummary + ReviewList with data from `useProviderReviewList()` and `useProviderRatingStats()`
+- [X] T020 [US5] Add provider reviews link to provider navigation sidebar
 
 **Checkpoint**: Providers can see their full ratings and review data
 
@@ -86,10 +86,10 @@
 
 **Independent Test**: Customer navigates to an existing review, edits rating/comment in a pre-filled form, submits, and sees updated review data
 
-- [ ] T021 [P] [US2] Add edit mode to `ReviewForm` component in `src/features/reviews/components/ReviewForm.tsx` — accept optional `initialData` prop for pre-filling rating and comment
-- [ ] T022 [US2] Create review edit page at `src/app/[locale]/(customer)/reviews/[reviewId]/edit/page.tsx` — loads existing review data via `useReviewDetail()`, renders ReviewForm in edit mode, submits via `useUpdateReview()`, refreshes on success
-- [ ] T023 [US2] Add "Edit Review" action link to review detail view for the review owner
-- [ ] T024 [US2] Handle ownership validation — show error state if non-owner tries to access edit page (backend enforces, frontend shows 403 response)
+- [X] T021 [P] [US2] Add edit mode to `ReviewForm` component in `src/features/reviews/components/ReviewForm.tsx` — accept optional `initialData` prop for pre-filling rating and comment
+- [X] T022 [US2] Create review edit page at `src/app/[locale]/client/reviews/[reviewId]/edit/page.tsx` — loads existing review data via `useReviewDetail()`, renders ReviewForm in edit mode, submits via `useUpdateReview()`, refreshes on success
+- [X] T023 [US2] Add "Edit Review" action link to review detail view for the review owner
+- [X] T024 [US2] Handle ownership validation — show error state if non-owner tries to access edit page (backend enforces, frontend shows 403 response)
 
 **Checkpoint**: Customers can edit their reviews with pre-filled form and data refresh
 
@@ -101,9 +101,9 @@
 
 **Independent Test**: User navigates to a review detail page and sees rating, comment, timestamps, reviewer/provider info, and moderation status (if exposed)
 
-- [ ] T025 [P] [US3] Create customer review detail page at `src/app/[locale]/(customer)/reviews/[reviewId]/page.tsx` — renders ReviewCard with full details, timestamps, provider info
-- [ ] T026 [P] [US3] Create provider review detail page at `src/app/[locale]/(provider)/reviews/[reviewId]/page.tsx` — renders ReviewCard with full details, reviewer info, customer info
-- [ ] T027 [US3] Build `ModerationBadge` component in `src/features/reviews/components/ModerationBadge.tsx` — displays moderation state (PENDING/APPROVED/FLAGGED/REJECTED) as colored badge, only shown when backend exposes it
+- [X] T025 [P] [US3] Create customer review detail page at `src/app/[locale]/client/reviews/[reviewId]/page.tsx` — renders ReviewCard with full details, timestamps, provider info
+- [X] T026 [P] [US3] Create provider review detail page at `src/app/[locale]/technician/reviews/[reviewId]/page.tsx` — renders ReviewCard with full details, reviewer info, customer info
+- [X] T027 [US3] Build `ModerationBadge` component in `src/features/reviews/components/ModerationBadge.tsx` — displays moderation state (PENDING/APPROVED/FLAGGED/REJECTED) as colored badge, only shown when backend exposes it
 
 **Checkpoint**: Review detail views work for both customers and providers
 
@@ -115,8 +115,8 @@
 
 **Independent Test**: Customer with multiple reviews navigates to history page, applies filters/sorting, navigates pages, clicks into a review detail
 
-- [ ] T028 [P] [US4] Create customer review history page at `src/app/[locale]/(customer)/reviews/page.tsx` — renders ReviewList with `useReviewList()` hook, pagination controls, filter sidebar (by date range, rating, status), sort selector
-- [ ] T029 [US4] Add review history link to customer navigation sidebar and customer dashboard
+- [X] T028 [P] [US4] Create customer review history page at `src/app/[locale]/client/reviews/page.tsx` — renders ReviewList with `useReviewList()` hook, pagination controls, filter sidebar (by date range, rating, status), sort selector
+- [X] T029 [US4] Add review history link to customer navigation sidebar and customer dashboard
 
 **Checkpoint**: Customers can browse, filter, and sort their full review history
 
@@ -128,8 +128,8 @@
 
 **Independent Test**: Unauthenticated user visits a provider's public profile, sees rating summary and paginated reviews
 
-- [ ] T030 [P] [US6] Add reviews section to public provider profile at `src/app/[locale]/technicians/[id]/page.tsx` — renders RatingSummary and ReviewList using public endpoint, handles authentication-gated data hiding
-- [ ] T031 [US6] Ensure public reviews section gracefully handles unauthenticated state — show public data only, no auth prompts for review data that is publicly accessible
+- [X] T030 [P] [US6] Add reviews section to public provider profile at `src/app/[locale]/technicians/[id]/page.tsx` — renders RatingSummary and ReviewList using public endpoint, handles authentication-gated data hiding
+- [X] T031 [US6] Ensure public reviews section gracefully handles unauthenticated state — show public data only, no auth prompts for review data that is publicly accessible
 
 **Checkpoint**: Public provider profiles display reviews without requiring login
 
@@ -141,9 +141,9 @@
 
 **Independent Test**: Provider accesses review dashboard, sees aggregated metrics, recent reviews, and trend data (when available)
 
-- [ ] T032 [P] [US7] Build `ReviewDashboard` component in `src/features/reviews/components/ReviewDashboard.tsx` — aggregates RatingSummary, recent reviews list (latest 5), and trend chart (when data available)
-- [ ] T033 [US7] Enhance provider reviews page at `src/app/[locale]/(provider)/reviews/page.tsx` — add trend visualization section using Recharts when backend provides `/analytics/reviews` data, gracefully hide when unavailable
-- [ ] T034 [US7] Add analytics integration — attempt to fetch trend data from `/analytics/reviews` endpoint, silently degrade if endpoint not available
+- [X] T032 [P] [US7] Build `ReviewDashboard` component in `src/features/reviews/components/ReviewDashboard.tsx` — aggregates RatingSummary, recent reviews list (latest 5), and trend chart (when data available)
+- [X] T033 [US7] Enhance provider reviews page at `src/app/[locale]/technician/reviews/page.tsx` — add trend visualization section using Recharts when backend provides `/analytics/reviews` data, gracefully hide when unavailable
+- [X] T034 [US7] Add analytics integration — attempt to fetch trend data from `/analytics/reviews` endpoint, silently degrade if endpoint not available
 
 **Checkpoint**: Provider review dashboard shows full analytics with graceful degradation
 
@@ -155,9 +155,9 @@
 
 **Independent Test**: Reviews in various moderation states display appropriate indicators; restricted info never exposed
 
-- [ ] T035 [P] [US8] Integrate `ModerationBadge` into `ReviewCard` — show moderation state indicator on review cards when backend exposes it
-- [ ] T036 [P] [US8] Implement hidden/removed review handling — display placeholder text ("This review is not available") instead of content for moderated reviews, based on `isApproved` + `isFlagged` backend fields
-- [ ] T037 [US8] Update admin review moderation — integrate existing `ReviewModerator` component from `src/features/support/` with new review module types, ensuring admin can approve/reject/flag reviews
+- [X] T035 [P] [US8] Integrate `ModerationBadge` into `ReviewCard` — show moderation state indicator on review cards when backend exposes it
+- [X] T036 [P] [US8] Implement hidden/removed review handling — display placeholder text ("This review is not available") instead of content for moderated reviews, based on `isApproved` + `isFlagged` backend fields
+- [X] T037 [US8] Update admin review moderation — integrate existing `ReviewModerator` component from `src/features/support/` with new review module types, ensuring admin can approve/reject/flag reviews
 
 **Checkpoint**: All moderation states handled correctly across review displays
 
@@ -167,11 +167,11 @@
 
 **Purpose**: Booking integration, notification wiring, API audit, and cleanup
 
-- [ ] T038 [P] Link completed bookings to review creation — update booking detail views in `src/features/bookings/` to show "Write a Review" button only when booking is completed and no review exists; show "View Review" if review already submitted
-- [ ] T039 [P] Wire review notification events — listen for `review.created`, `review.updated`, `review.moderated` notification types from existing notification WebSocket; invalidate `['reviews', ...]` query cache on receive; display toast for new notifications
-- [ ] T040 [P] Remove any mock review data from components — scan codebase for hardcoded review/rating data in landing page components (`TechniciansSection`, `TechnicianPreview`) and replace with real API calls where possible, or remove if no backend integration exists
-- [ ] T041 Generate API audit document at `docs/reviews-ratings-audit.md` — document all 9 backend review endpoints with frontend coverage status, DTO mismatches, path mismatches, permission mappings, and required fixes
-- [ ] T042 Final validation — run `npm run lint`, `npm run type-check`, `npm test` across all modified files; verify no TypeScript errors, no lint violations, and all existing tests pass
+- [X] T038 [P] Link completed bookings to review creation — update booking detail views in `src/features/bookings/` to show "Write a Review" button only when booking is completed and no review exists; show "View Review" if review already submitted
+- [X] T039 [P] Wire review notification events — listen for `review.created`, `review.updated`, `review.moderated` notification types from existing notification WebSocket; invalidate `['reviews', ...]` query cache on receive; display toast for new notifications
+- [X] T040 [P] Remove any mock review data from components — scan codebase for hardcoded review/rating data in landing page components (`TechniciansSection`, `TechnicianPreview`) and replace with real API calls where possible, or remove if no backend integration exists
+- [X] T041 Generate API audit document at `docs/reviews-ratings-audit.md` — document all 9 backend review endpoints with frontend coverage status, DTO mismatches, path mismatches, permission mappings, and required fixes
+- [X] T042 Final validation — run `npm run lint`, `npm run type-check`, `npm test` across all modified files; verify no TypeScript errors, no lint violations, and all existing tests pass
 
 ---
 

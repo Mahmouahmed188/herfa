@@ -163,6 +163,18 @@ export default function BookingDetailPage() {
           </CardContent>
         </Card>
 
+        {booking.status === 'COMPLETED' && (
+          <Card>
+            <CardContent className="pt-6">
+              <Link href={{ pathname: '/client/reviews/new/[bookingId]', params: { bookingId: id } }}>
+                <Button variant="primary" className="w-full">
+                  Write a Review
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
+
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">

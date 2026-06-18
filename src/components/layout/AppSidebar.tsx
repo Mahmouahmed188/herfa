@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { 
     LayoutDashboard, List, User, Settings, LogOut, 
-    Users, Briefcase, Wallet, MessageCircle, Heart, 
+    Users, Briefcase, Wallet, MessageCircle, Heart, Star,
     ChevronRight, CheckCircle, ShieldCheck, PanelLeftClose, PanelLeftOpen,
     FileText, Bell, BarChart3, Activity
 } from 'lucide-react';
@@ -27,6 +27,7 @@ const clientItems: SidebarItem[] = [
     { name: 'Dashboard', href: '/client/dashboard', icon: LayoutDashboard },
     { name: 'Create Job', href: '/client/create-job', icon: Briefcase },
     { name: 'My Jobs', href: '/client/jobs', icon: List },
+    { name: 'My Reviews', href: '/client/reviews', icon: Star },
     { name: 'Saved', href: '/client/saved', icon: Heart },
     { name: 'Wallet', href: '/client/wallet', icon: Wallet },
     { name: 'Notifications', href: '/client/notifications', icon: Bell },
@@ -38,6 +39,7 @@ const technicianItems: SidebarItem[] = [
     { name: 'Onboarding', href: '/technician/onboarding-home', icon: CheckCircle },
     { name: 'Requests', href: '/technician/requests', icon: Activity },
     { name: 'My Jobs', href: '/technician/jobs', icon: List },
+    { name: 'Reviews', href: '/technician/reviews', icon: Star },
     { name: 'Offers', href: '/technician/offers', icon: Briefcase },
     { name: 'Messages', href: '/technician/messages', icon: MessageCircle },
     { name: 'Earnings', href: '/technician/earnings', icon: Wallet },

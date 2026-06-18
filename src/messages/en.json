@@ -252,5 +252,69 @@
         "referralTitle": "Refer a friend & get $50",
         "referralDesc": "Share your unique code and earn rewards for every signup.",
         "shareCode": "Share Code"
+    },
+    "Reviews": {
+        "title": "Reviews",
+        "writeReview": "Write a Review",
+        "editReview": "Edit Review",
+        "myReviews": "My Reviews",
+        "rating": "Rating",
+        "comment": "Comment",
+        "commentPlaceholder": "Share your experience...",
+        "submitReview": "Submit Review",
+        "updatingReview": "Updating Review...",
+        "submittingReview": "Submitting Review...",
+        "reviewSubmitted": "Review submitted successfully",
+        "reviewUpdated": "Review updated successfully",
+        "reviewDeleted": "Review deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this review?",
+        "noReviews": "No reviews yet",
+        "noReviewsDesc": "You haven't written any reviews yet.",
+        "noProviderReviews": "No reviews received yet",
+        "noProviderReviewsDesc": "Reviews from customers will appear here once approved.",
+        "averageRating": "Average Rating",
+        "totalReviews": "{count} reviews",
+        "ratingDistribution": "Rating Distribution",
+        "reviewFor": "Review for {provider}",
+        "byCustomer": "by {customer}",
+        "createdAt": "Reviewed on {date}",
+        "updatedAt": "Updated on {date}",
+        "moderation": {
+            "approved": "Approved",
+            "pending": "Pending Moderation",
+            "flagged": "Flagged",
+            "rejected": "Removed"
+        },
+        "errors": {
+            "loadFailed": "Failed to load reviews",
+            "submitFailed": "Failed to submit review",
+            "updateFailed": "Failed to update review",
+            "deleteFailed": "Failed to delete review",
+            "notFound": "Review not found",
+            "notOwner": "You can only edit your own reviews",
+            "duplicate": "You have already reviewed this booking"
+        },
+        "empty": {
+            "title": "No reviews yet",
+            "action": "Be the first to review"
+        },
+        "dashboard": {
+            "title": "Reviews Dashboard",
+            "totalReviews": "Total Reviews",
+            "averageRating": "Average Rating",
+            "recentReviews": "Recent Reviews",
+            "ratingTrend": "Rating Trend",
+            "viewAll": "View All Reviews"
+        },
+        "flagReview": "Flag as inappropriate",
+        "reviewFlagged": "Review flagged for moderation",
+        "flagFailed": "Failed to flag review",
+        "viewDetails": "View Details",
+        "sortBy": "Sort by",
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "highestRating": "Highest Rating",
+        "lowestRating": "Lowest Rating",
+        "hiddenReview": "This review is not available"
     }
 }
