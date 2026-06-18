@@ -137,5 +137,78 @@
     "Common": {
         "loading": "جاري التحميل...",
         "error": "حدث خطأ ما"
+    },
+    "Address": {
+        "title": "عناويني",
+        "addAddress": "إضافة عنوان",
+        "editAddress": "تعديل العنوان",
+        "deleteAddress": "حذف العنوان",
+        "form": {
+            "label": "التسمية",
+            "street": "الشارع",
+            "building": "المبنى / الشقة",
+            "city": "المدينة",
+            "area": "المنطقة",
+            "phone": "الهاتف",
+            "default": "تعيين كعنوان افتراضي",
+            "instructions": "تعليمات إضافية",
+            "save": "حفظ العنوان"
+        },
+        "empty": "لا توجد عناوين محفوظة بعد",
+        "emptyAction": "أضف عنوانك الأول",
+        "deleted": "تم حذف العنوان بنجاح"
+    },
+    "Notifications": {
+        "title": "الإشعارات",
+        "unread": "غير مقروء",
+        "markAsRead": "تحديد كمقروء",
+        "noNotifications": "لا توجد إشعارات بعد",
+        "viewAll": "عرض الكل"
+    },
+    "Bookings": {
+        "title": "طلباتي",
+        "newJob": "طلب جديد",
+        "activeOrders": "الطلبات النشطة",
+        "completedJobs": "الطلبات المكتملة",
+        "pendingOrders": "الطلبات المعلقة",
+        "noJobs": "لا توجد طلبات بعد",
+        "noJobsDesc": "لم تقم بنشر أي طلبات بعد. قم بإنشاء طلبك الأول الآن!",
+        "createJob": "إنشاء طلب",
+        "viewDetails": "عرض التفاصيل",
+        "cancelJob": "إلغاء الطلب",
+        "filterAll": "الكل",
+        "filterPending": "معلق",
+        "filterActive": "نشط",
+        "filterCompleted": "مكتمل",
+        "sortNewest": "الأحدث أولاً",
+        "sortOldest": "الأقدم أولاً",
+        "detail": {
+            "title": "تفاصيل الحجز",
+            "provider": "مقدم الخدمة",
+            "payment": "الدفع",
+            "tracking": "التتبع",
+            "timeline": "الجدول الزمني",
+            "noProvider": "لم يتم تعيين مقدم خدمة بعد",
+            "noPayment": "تفاصيل الدفع غير متوفرة",
+            "trackingUnavailable": "التتبع غير متاح",
+            "eta": "الوقت المقدر للوصول"
+        }
+    },
+    "Dashboard": {
+        "title": "لوحة التحكم",
+        "welcome": "مرحباً بعودتك، {name}",
+        "activeOrders": "الطلبات النشطة",
+        "completedJobs": "الطلبات المكتملة",
+        "pendingOrders": "الطلبات المعلقة",
+        "inProgress": "قيد التنفيذ حالياً",
+        "lifetimeTotal": "الإجمالي الكلي",
+        "currentActiveOrders": "الطلبات النشطة الحالية",
+        "viewAll": "عرض الكل",
+        "notifications": "الإشعارات",
+        "noActiveOrders": "لا توجد طلبات نشطة.",
+        "createNewJob": "إنشاء طلب جديد",
+        "referralTitle": "قم بدعوة صديق واحصل على $50",
+        "referralDesc": "شارك رمزك الفريد واكسب مكافآت عن كل تسجيل.",
+        "shareCode": "مشاركة الرمز"
     }
 }

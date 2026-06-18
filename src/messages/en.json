@@ -137,5 +137,78 @@
     "Common": {
         "loading": "Loading...",
         "error": "Something went wrong"
+    },
+    "Address": {
+        "title": "My Addresses",
+        "addAddress": "Add Address",
+        "editAddress": "Edit Address",
+        "deleteAddress": "Delete Address",
+        "form": {
+            "label": "Label",
+            "street": "Street",
+            "building": "Building / Apartment",
+            "city": "City",
+            "area": "Area",
+            "phone": "Phone",
+            "default": "Set as default address",
+            "instructions": "Additional instructions",
+            "save": "Save Address"
+        },
+        "empty": "No addresses saved yet",
+        "emptyAction": "Add your first address",
+        "deleted": "Address deleted successfully"
+    },
+    "Notifications": {
+        "title": "Notifications",
+        "unread": "Unread",
+        "markAsRead": "Mark as read",
+        "noNotifications": "No notifications yet",
+        "viewAll": "View All"
+    },
+    "Bookings": {
+        "title": "My Orders",
+        "newJob": "New Job",
+        "activeOrders": "Active Orders",
+        "completedJobs": "Completed Jobs",
+        "pendingOrders": "Pending Orders",
+        "noJobs": "No jobs yet",
+        "noJobsDesc": "You haven't posted any jobs. Create your first job request now!",
+        "createJob": "Create a Job",
+        "viewDetails": "View Details",
+        "cancelJob": "Cancel Job",
+        "filterAll": "All",
+        "filterPending": "Pending",
+        "filterActive": "Active",
+        "filterCompleted": "Completed",
+        "sortNewest": "Newest First",
+        "sortOldest": "Oldest First",
+        "detail": {
+            "title": "Booking Details",
+            "provider": "Service Provider",
+            "payment": "Payment",
+            "tracking": "Tracking",
+            "timeline": "Timeline",
+            "noProvider": "No provider assigned yet",
+            "noPayment": "Payment details not available",
+            "trackingUnavailable": "Tracking not available",
+            "eta": "Estimated arrival"
+        }
+    },
+    "Dashboard": {
+        "title": "Dashboard",
+        "welcome": "Welcome back, {name}",
+        "activeOrders": "Active Orders",
+        "completedJobs": "Completed Jobs",
+        "pendingOrders": "Pending Orders",
+        "inProgress": "Currently in progress",
+        "lifetimeTotal": "Lifetime total",
+        "currentActiveOrders": "Current Active Orders",
+        "viewAll": "View All",
+        "notifications": "Notifications",
+        "noActiveOrders": "No active orders found.",
+        "createNewJob": "Create a new job",
+        "referralTitle": "Refer a friend & get $50",
+        "referralDesc": "Share your unique code and earn rewards for every signup.",
+        "shareCode": "Share Code"
     }
 }

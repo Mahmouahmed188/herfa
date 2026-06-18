@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios';
-import { PaginatedResponse, ApiResponse, BaseEntity } from '@/types/api';
+import { ApiResponse, BaseEntity } from '@/types/api';
 
 export interface Booking extends BaseEntity {
   id: string;

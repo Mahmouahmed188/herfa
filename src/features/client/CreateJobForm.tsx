@@ -13,12 +13,15 @@ import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { MapPin, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAddresses } from '@/features/addresses/hooks/useAddresses';
+import { Address } from '@/features/addresses/types';
 
 const createJobSchema = z.object({
     categoryId: z.string().min(1, "Please select a service"),
     title: z.string().min(5, "Title must be at least 5 characters"),
     description: z.string().min(10, "Description must be at least 10 characters"),
     address: z.string().optional(),
+    addressId: z.string().optional(),
 });
 
 type CreateJobValues = z.infer<typeof createJobSchema>;
@@ -28,7 +31,7 @@ export function CreateJobForm() {
     const [selectedService, setSelectedService] = React.useState<string | null>(null);
     const [submitError, setSubmitError] = React.useState<string | null>(null);
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<CreateJobValues>({
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<CreateJobValues>({
         resolver: zodResolver(createJobSchema),
     });
 
@@ -37,19 +40,28 @@ export function CreateJobForm() {
         queryFn: () => api.getServices(),
     });
 
+    const { data: addressesData, isLoading: loadingAddresses } = useAddresses();
+    const rawAddr = addressesData as { data?: Address[] } | Address[] | undefined;
+    const addresses: Address[] = Array.isArray(rawAddr) ? rawAddr : rawAddr?.data ?? [];
+
+    const selectedAddressId = watch('addressId');
+    const selectedAddress = addresses.find((a: Address) => a.id === selectedAddressId);
+
     const createJobMutation = useMutation({
         mutationFn: (data: CreateJobValues) => api.createJob({
             title: data.title,
             description: data.description,
             categoryId: data.categoryId,
-            latitude: 0,
-            longitude: 0,
-            address: data.address,
+            latitude: selectedAddress?.latitude ?? 0,
+            longitude: selectedAddress?.longitude ?? 0,
+            address: selectedAddress
+                ? `${selectedAddress.street}, ${selectedAddress.area}, ${selectedAddress.city}`
+                : data.address || '',
         }),
         onSuccess: () => {
             router.push('/client/dashboard');
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
             setSubmitError(error.message || 'Failed to create job');
         }
     });
@@ -64,13 +76,14 @@ export function CreateJobForm() {
         setValue('categoryId', id, { shouldValidate: true });
     }
 
-    const services = Array.isArray(servicesRes) ? servicesRes : (servicesRes?.data || []);
+    const servicesData = servicesRes as { data?: Array<{ id: string; name: string; description?: string }> } | Array<{ id: string; name: string; description?: string }> | undefined;
+    const services = Array.isArray(servicesData) ? servicesData : servicesData?.data ?? [];
 
     return (
         <Card className="max-w-3xl mx-auto">
             <CardHeader>
                 <CardTitle>Post a New Job</CardTitle>
-                <CardDescription>Describe your issue and we'll match you with the best technicians.</CardDescription>
+                <CardDescription>Describe your issue and we&apos;ll match you with the best technicians.</CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -83,7 +96,7 @@ export function CreateJobForm() {
                             </div>
                         ) : (
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {services.map((service: any) => (
+                                {services.map((service) => (
                                     <div
                                         key={service.id}
                                         onClick={() => handleSelectService(service.id)}
@@ -125,19 +138,57 @@ export function CreateJobForm() {
                     </div>
 
                     <div className="space-y-4">
-                        <Label htmlFor="address" className="text-base">4. Location</Label>
-                        <div className="relative">
-                            <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="address" placeholder="Search for your address" className="pl-10" {...register('address')} />
-                        </div>
+                        <Label className="text-base">4. Location</Label>
+                        {loadingAddresses ? (
+                            <div className="flex justify-center p-4">
+                                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                            </div>
+                        ) : addresses.length > 0 ? (
+                            <div className="space-y-2">
+                                {addresses.map((addr: Address) => (
+                                    <label
+                                        key={addr.id}
+                                        className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                                            selectedAddressId === addr.id
+                                                ? 'border-primary bg-primary/5'
+                                                : 'border-slate-200 dark:border-surface-border hover:border-primary/50'
+                                        }`}
+                                    >
+                                        <input
+                                            type="radio"
+                                            {...register('addressId')}
+                                            value={addr.id}
+                                            className="mt-1"
+                                        />
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-semibold text-sm text-slate-900 dark:text-white">{addr.label}</p>
+                                                {addr.isDefault && (
+                                                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full">Default</span>
+                                                )}
+                                            </div>
+                                            <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
+                                                {addr.street}, {addr.area}, {addr.city}
+                                            </p>
+                                        </div>
+                                    </label>
+                                ))}
+                                <div className="relative">
+                                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        placeholder="Or type a new address"
+                                        className="pl-10"
+                                        {...register('address')}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="relative">
+                                <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Input id="address" placeholder="Search for your address" className="pl-10" {...register('address')} />
+                            </div>
+                        )}
                         {errors.address && <p className="text-sm text-destructive">{errors.address.message}</p>}
-
-                        {/* Map Placeholder */}
-                        <div className="w-full h-48 bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-muted mt-2">
-                            <p className="text-muted-foreground flex items-center gap-2">
-                                <MapPin className="h-5 w-5" /> Map View Mockup
-                            </p>
-                        </div>
                     </div>
 
                     {submitError && (

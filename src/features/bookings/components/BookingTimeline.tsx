@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { format } from 'date-fns';
-import { CheckCircle2, Clock, XCircle, AlertTriangle, MessageSquare } from 'lucide-react';
+import { CheckCircle2, Clock, AlertTriangle, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TimelineEvent {
@@ -41,7 +41,7 @@ export function BookingTimeline({ events }: BookingTimelineProps) {
 
   return (
     <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent dark:before:via-slate-700">
-      {events.map((event, index) => {
+      {events.map((event) => {
         const Icon = getIcon(event.type);
         return (
           <div key={event.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">

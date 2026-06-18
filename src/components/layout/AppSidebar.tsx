@@ -7,13 +7,14 @@ import { cn } from '@/lib/utils';
 import { 
     LayoutDashboard, List, User, Settings, LogOut, 
     Users, Briefcase, Wallet, MessageCircle, Heart, 
-    ChevronRight, CheckCircle, ShieldCheck, ChevronLeft, PanelLeftClose, PanelLeftOpen,
-    FileText, Bell, BarChart3, Activity, Shield
+    ChevronRight, CheckCircle, ShieldCheck, PanelLeftClose, PanelLeftOpen,
+    FileText, Bell, BarChart3, Activity
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSidebar } from '@/context/SidebarContext';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { UserRole } from '@/types/api';
+import { useUnreadCount } from '@/features/notifications/hooks/useCustomerNotifications';
 
 interface SidebarItem {
   name: string;
@@ -28,6 +29,7 @@ const clientItems: SidebarItem[] = [
     { name: 'My Jobs', href: '/client/jobs', icon: List },
     { name: 'Saved', href: '/client/saved', icon: Heart },
     { name: 'Wallet', href: '/client/wallet', icon: Wallet },
+    { name: 'Notifications', href: '/client/notifications', icon: Bell },
     { name: 'Profile', href: '/client/profile', icon: User },
 ];
 
@@ -60,9 +62,17 @@ export function AppSidebar({ role }: { role: UserRole }) {
     const pathname = usePathname();
     const { logout, user } = useAuthStore();
     const { isCollapsed, toggleSidebar } = useSidebar();
-
-    const isAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN';
-    const items = role === 'CUSTOMER' ? clientItems : role === 'PROVIDER' ? technicianItems : adminItems;
+    const { data: unreadData } = useUnreadCount();
+    const unreadCount = unreadData && typeof unreadData === 'object' && 'count' in unreadData
+        ? (unreadData as { count: number }).count
+        : 0;
+    const baseItems = role === 'CUSTOMER' ? clientItems : role === 'PROVIDER' ? technicianItems : adminItems;
+    const items = baseItems.map((item) => {
+        if (role === 'CUSTOMER' && item.href === '/client/notifications' && unreadCount > 0) {
+            return { ...item, badge: unreadCount };
+        }
+        return item;
+    });
     const roleLabel = role === 'CUSTOMER' ? 'Customer Portal' : role === 'PROVIDER' ? 'Technician Portal' : 'Admin Panel';
     const userName = user?.firstName ?? 'User';
 
