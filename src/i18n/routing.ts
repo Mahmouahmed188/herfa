@@ -32,6 +32,7 @@ export const routing = defineRouting({
         '/client/settings': '/client/settings',
         '/client/notifications': '/client/notifications',
         '/client/addresses': '/client/addresses',
+        '/client/tracking/[id]': '/client/tracking/[id]',
         '/technician/dashboard': '/technician/dashboard',
         '/technician/onboarding-home': '/technician/onboarding-home',
         '/provider/verification': '/provider/verification',
@@ -39,6 +40,7 @@ export const routing = defineRouting({
         '/provider/verification/history': '/provider/verification/history',
         '/technician/requests': '/technician/requests',
         '/technician/earnings': '/technician/earnings',
+        '/technician/jobs': '/technician/jobs',
         '/technician/profile': '/technician/profile',
         '/admin/dashboard': '/admin/dashboard',
         '/admin/users': '/admin/users',
@@ -54,6 +56,7 @@ export const routing = defineRouting({
         '/admin/analytics': '/admin/analytics',
         '/admin/audit': '/admin/audit',
         '/admin/settings': '/admin/settings',
+        '/booking/[id]': '/booking/[id]',
         '/support': '/support',
     }
 });

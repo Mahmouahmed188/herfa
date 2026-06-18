@@ -1,26 +1,38 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Loader2, ArrowLeft, MapPin, Phone, Star, CreditCard, Clock, Package } from 'lucide-react';
+import { Loader2, ArrowLeft, MapPin, Phone, Star, CreditCard, Clock, Hash, XCircle, Navigation } from 'lucide-react';
 import { Link } from '@/lib/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useBookingDetail } from '@/features/bookings/hooks/useBookingDetail';
+import { useBookingTimeline } from '@/features/bookings/hooks/useBookingTimeline';
 import { BookingTimeline } from '@/features/bookings/components/BookingTimeline';
+import { CancelBookingDialog } from '@/features/bookings/components/CancelBookingDialog';
+import { useTracking } from '@/features/bookings/hooks/useTracking';
+import { TrackingMap } from '@/features/bookings/components/TrackingMap';
 
 const statusStyles: Record<string, string> = {
   PENDING: 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400',
   ACCEPTED: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400',
+  ASSIGNED: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400',
   IN_PROGRESS: 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400',
+  ON_THE_WAY: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-400',
   COMPLETED: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400',
   CANCELLED: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
   DISPUTED: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400',
 };
 
+const cancellableStatuses = ['PENDING', 'ACCEPTED', 'ASSIGNED'];
+const trackableStatuses = ['ON_THE_WAY', 'IN_PROGRESS'];
+
 export default function BookingDetailPage() {
   const params = useParams();
   const id = params.id as string;
+  const [cancelOpen, setCancelOpen] = useState(false);
   const { data: booking, isLoading, isError } = useBookingDetail(id);
+  const { data: timelineEvents = [] } = useBookingTimeline(id);
 
   if (isLoading) {
     return (
@@ -32,7 +44,7 @@ export default function BookingDetailPage() {
 
   if (isError || !booking) {
     return (
-      <div className="space-y-4 max-w-3xl">
+      <div className="space-y-4 max-w-3xl mx-auto">
         <Link href="/client/jobs" className="text-primary text-sm font-semibold hover:underline flex items-center gap-1">
           <ArrowLeft className="w-4 h-4" /> Back to orders
         </Link>
@@ -48,19 +60,21 @@ export default function BookingDetailPage() {
     );
   }
 
+  const canCancel = cancellableStatuses.includes(booking.status);
+
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-3xl mx-auto">
       <Link href="/client/jobs" className="text-primary text-sm font-semibold hover:underline flex items-center gap-1">
         <ArrowLeft className="w-4 h-4" /> Back to orders
       </Link>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             {booking.service?.name || booking.title || 'Service Request'}
           </h1>
           <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
-            Posted on {new Date(booking.createdAt).toLocaleDateString()}
+            Created on {new Date(booking.createdAt).toLocaleDateString()}
           </p>
         </div>
         <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${statusStyles[booking.status] || ''}`}>
@@ -70,16 +84,24 @@ export default function BookingDetailPage() {
 
       <div className="grid gap-6">
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Package className="w-5 h-5 text-primary" /> Service Details
+              <Hash className="w-5 h-5 text-primary" /> Booking Information
             </CardTitle>
+            <span className="text-xs text-slate-400 dark:text-gray-500 font-mono">#{booking.id.slice(0, 8)}</span>
           </CardHeader>
           <CardContent className="space-y-3">
-            {booking.description && (
-              <p className="text-sm text-slate-600 dark:text-gray-400">{booking.description}</p>
+            {booking.notes && (
+              <p className="text-sm text-slate-600 dark:text-gray-400">
+                <span className="font-semibold text-slate-900 dark:text-white">Notes:</span> {booking.notes}
+              </p>
             )}
-            <div className="flex items-center gap-4 text-sm">
+            {booking.description && (
+              <p className="text-sm text-slate-600 dark:text-gray-400">
+                <span className="font-semibold text-slate-900 dark:text-white">Description:</span> {booking.description}
+              </p>
+            )}
+            <div className="flex flex-wrap items-center gap-4 text-sm">
               {booking.address && (
                 <span className="flex items-center gap-1 text-slate-500 dark:text-gray-400">
                   <MapPin className="w-4 h-4" /> {booking.address}
@@ -180,6 +202,10 @@ export default function BookingDetailPage() {
           </CardContent>
         </Card>
 
+        {trackableStatuses.includes(booking.status) && (
+          <LiveTrackingSection bookingId={id} />
+        )}
+
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
@@ -187,7 +213,9 @@ export default function BookingDetailPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {booking.timeline && booking.timeline.length > 0 ? (
+            {timelineEvents.length > 0 ? (
+              <BookingTimeline events={timelineEvents} />
+            ) : booking.timeline && booking.timeline.length > 0 ? (
               <BookingTimeline
                 events={booking.timeline.map((e, i) => ({
                   id: `event-${i}`,
@@ -202,7 +230,60 @@ export default function BookingDetailPage() {
             )}
           </CardContent>
         </Card>
+
+        {canCancel && (
+          <div className="flex justify-end">
+            <Button
+              variant="outline"
+              className="text-red-600 border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950 flex items-center gap-2"
+              onClick={() => setCancelOpen(true)}
+            >
+              <XCircle className="w-4 h-4" /> Cancel Booking
+            </Button>
+          </div>
+        )}
       </div>
+
+      <CancelBookingDialog
+        bookingId={id}
+        open={cancelOpen}
+        onOpenChange={setCancelOpen}
+        onSuccess={() => window.location.reload()}
+      />
     </div>
+  );
+}
+
+function LiveTrackingSection({ bookingId }: { bookingId: string }) {
+  const { session, isLoading } = useTracking(bookingId);
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Navigation className="w-5 h-5 text-primary" /> Live Tracking
+        </CardTitle>
+        <Link
+          href={{ pathname: '/client/tracking/[id]', params: { id: bookingId } }}
+          className="text-xs text-primary font-semibold hover:underline"
+        >
+          Full View
+        </Link>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <TrackingMap
+          latitude={session?.providerLatitude}
+          longitude={session?.providerLongitude}
+        />
+        {session?.eta && (
+          <p className="text-sm text-slate-500 dark:text-gray-400 flex items-center gap-2">
+            <Clock className="w-4 h-4 text-primary" />
+            ETA: {new Date(session.eta).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        )}
+        {!isLoading && !session && (
+          <p className="text-sm text-slate-500 dark:text-gray-400">No active tracking session.</p>
+        )}
+      </CardContent>
+    </Card>
   );
 }

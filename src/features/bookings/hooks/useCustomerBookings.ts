@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import * as api from '@/services/api';
+import { bookingApi } from '../services/api';
 import { BookingFiltersState, CustomerBooking } from '../types';
 
 export function useCustomerBookings(filters: BookingFiltersState) {
@@ -16,13 +16,14 @@ export function useCustomerBookings(filters: BookingFiltersState) {
   return useQuery({
     queryKey: ['bookings', 'customer', filters],
     queryFn: async () => {
-      const response = await api.getMyJobs(params);
-      const jobs = Array.isArray(response) ? response : [];
+      const response = await bookingApi.getMyJobs(params);
+      const meta = (response as any)?.meta;
+      const data = Array.isArray(response?.data ?? response) ? (response?.data ?? response) : [];
       return {
-        data: jobs as CustomerBooking[],
-        total: jobs.length,
-        page: filters.page,
-        limit: filters.limit,
+        data: data as CustomerBooking[],
+        total: meta?.total ?? data.length,
+        page: meta?.page ?? filters.page,
+        limit: meta?.limit ?? filters.limit,
       };
     },
     placeholderData: (previousData) => previousData,

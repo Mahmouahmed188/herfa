@@ -38,7 +38,7 @@ export const customerBookingSchema = z.object({
   id: z.string(),
   title: z.string().optional(),
   description: z.string().optional(),
-  status: z.enum(['PENDING', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'DISPUTED']),
+  status: z.enum(['PENDING', 'ACCEPTED', 'ASSIGNED', 'IN_PROGRESS', 'ON_THE_WAY', 'COMPLETED', 'CANCELLED', 'DISPUTED']),
   service: serviceInfoSchema,
   provider: providerInfoSchema.nullable().optional(),
   address: z.string().optional(),

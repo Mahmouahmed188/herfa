@@ -1,25 +1,39 @@
-import { MapPin, Navigation, Clock, Star } from 'lucide-react';
-import { Link } from '@/lib/navigation';
+import { MapPin, Navigation, Clock, Star, Radio } from 'lucide-react';
+import { Link, useRouter } from '@/lib/navigation';
 import { CustomerBooking } from '../types';
 
 const statusStyles: Record<string, string> = {
   PENDING: 'text-amber-500 bg-amber-500/10',
   ACCEPTED: 'text-blue-500 bg-blue-500/10',
+  ASSIGNED: 'text-indigo-500 bg-indigo-500/10',
   IN_PROGRESS: 'text-purple-500 bg-purple-500/10',
+  ON_THE_WAY: 'text-cyan-500 bg-cyan-500/10',
 };
 
 const statusIcons: Record<string, string> = {
   PENDING: '⏳',
   ACCEPTED: '🗓️',
+  ASSIGNED: '👤',
   IN_PROGRESS: '🔧',
+  ON_THE_WAY: '🚗',
 };
+
+const trackableStatuses = ['ON_THE_WAY', 'IN_PROGRESS'];
 
 interface ActiveBookingCardProps {
   booking: CustomerBooking;
 }
 
 export function ActiveBookingCard({ booking }: ActiveBookingCardProps) {
+  const router = useRouter();
   const hasTracking = booking.tracking?.available;
+  const isTrackable = trackableStatuses.includes(booking.status);
+
+  const handleTrackClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push({ pathname: '/client/tracking/[id]', params: { id: booking.id } });
+  };
 
   return (
     <Link
@@ -59,7 +73,15 @@ export function ActiveBookingCard({ booking }: ActiveBookingCardProps) {
         }`}>
           {booking.status}
         </span>
-        {hasTracking && (
+        {isTrackable && (
+          <button
+            onClick={handleTrackClick}
+            className="flex items-center gap-1 text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1 rounded-full transition-colors"
+          >
+            <Radio className="w-3 h-3" /> Track
+          </button>
+        )}
+        {hasTracking && !isTrackable && (
           <span className="flex items-center gap-1 text-xs text-primary">
             <Clock className="w-3 h-3" /> Live
           </span>

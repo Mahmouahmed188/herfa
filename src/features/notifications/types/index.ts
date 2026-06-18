@@ -1,6 +1,6 @@
 import { BaseEntity } from '@/types/api';
 
-export type CustomerNotificationType = 'BOOKING_UPDATE' | 'ANNOUNCEMENT' | 'PROMO' | 'SYSTEM';
+export type CustomerNotificationType = 'BOOKING_UPDATE' | 'BOOKING_CREATED' | 'BOOKING_ACCEPTED' | 'BOOKING_ASSIGNED' | 'BOOKING_STARTED' | 'BOOKING_COMPLETED' | 'BOOKING_CANCELLED' | 'ANNOUNCEMENT' | 'PROMO' | 'SYSTEM';
 
 export type VerificationNotificationType =
   | 'VERIFICATION_SUBMITTED'

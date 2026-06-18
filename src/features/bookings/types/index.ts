@@ -1,6 +1,6 @@
 import { BaseEntity } from '@/types/api';
 
-export type BookingStatus = 'PENDING' | 'ACCEPTED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'DISPUTED';
+export type BookingStatus = 'PENDING' | 'ACCEPTED' | 'ASSIGNED' | 'IN_PROGRESS' | 'ON_THE_WAY' | 'COMPLETED' | 'CANCELLED' | 'DISPUTED';
 
 export interface ServiceInfo {
   id: string;
@@ -45,6 +45,7 @@ export interface CustomerBooking extends BaseEntity {
   provider?: ProviderInfo | null;
   address?: string;
   scheduledAt?: string;
+  notes?: string;
   amount?: number;
   payment?: PaymentInfo | null;
   tracking?: TrackingInfo | null;

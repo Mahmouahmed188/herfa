@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
+import { z } from 'zod';
 import { Calendar, Clock, MapPin, User, ChevronLeft, Star, ShieldCheck, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { Link, useRouter } from '@/lib/navigation';
 import * as api from '@/services/api';
+import { bookingApi } from '@/features/bookings/services/api';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 interface TechnicianInfo {
@@ -22,6 +24,14 @@ interface TechnicianInfo {
     location?: string;
 }
 
+const bookingFormSchema = z.object({
+  date: z.string().min(1, 'Please select a date'),
+  time: z.string().min(1, 'Please select a time'),
+  address: z.string().min(1, 'Please enter your address'),
+  description: z.string().min(1, 'Please describe what you need'),
+  notes: z.string().optional(),
+});
+
 type BookingStep = 'details' | 'confirm' | 'success';
 
 export default function BookingPage() {
@@ -29,7 +39,7 @@ export default function BookingPage() {
     const locale = useLocale();
     const isRtl = locale === 'ar';
     const router = useRouter();
-    const { user, isAuthenticated } = useAuthStore();
+    const { isAuthenticated } = useAuthStore();
 
     const [step, setStep] = useState<BookingStep>('details');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,19 +82,18 @@ export default function BookingPage() {
 
     const validate = () => {
         const errors: Record<string, string> = {};
-        if (!form.date) errors.date = 'Please select a date';
-        if (!form.time) errors.time = 'Please select a time';
-        if (!form.address.trim()) errors.address = 'Please enter your address';
-        if (!form.description.trim()) errors.description = 'Please describe what you need';
-
-        // Check date is in the future
+        const result = bookingFormSchema.safeParse(form);
+        if (!result.success) {
+            for (const issue of result.error.issues) {
+                errors[issue.path[0] as string] = issue.message;
+            }
+        }
         if (form.date) {
             const selected = new Date(form.date);
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             if (selected < today) errors.date = 'Please select a future date';
         }
-
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -104,7 +113,7 @@ export default function BookingPage() {
         setIsSubmitting(true);
         setError('');
         try {
-            const result = await api.createBooking({
+            const result = await bookingApi.createBooking({
                 serviceListingId: technician?.id || id as string,
                 providerId: technician?.id || id as string,
                 scheduledDate: form.date ? new Date(form.date).toISOString() : new Date().toISOString(),
@@ -115,7 +124,9 @@ export default function BookingPage() {
                     longitude: 0,
                 },
             });
-            setBookingId(result?.id || 'HERFA-' + Date.now().toString(36).toUpperCase());
+            if (result?.data?.id) {
+                setBookingId(result.data.id);
+            }
             setStep('success');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (err: any) {

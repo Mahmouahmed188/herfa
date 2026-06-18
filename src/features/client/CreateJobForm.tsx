@@ -7,6 +7,7 @@ import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import * as api from '@/services/api';
+import { bookingApi } from '@/features/bookings/services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -48,7 +49,7 @@ export function CreateJobForm() {
     const selectedAddress = addresses.find((a: Address) => a.id === selectedAddressId);
 
     const createJobMutation = useMutation({
-        mutationFn: (data: CreateJobValues) => api.createJob({
+        mutationFn: (data: CreateJobValues) => bookingApi.createJob({
             title: data.title,
             description: data.description,
             categoryId: data.categoryId,

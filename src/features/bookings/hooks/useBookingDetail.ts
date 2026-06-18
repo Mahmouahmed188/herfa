@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import * as api from '@/services/api';
+import { bookingApi } from '../services/api';
 import { CustomerBooking } from '../types';
 
 export function useBookingDetail(id: string) {
   return useQuery({
     queryKey: ['bookings', 'detail', id],
     queryFn: async () => {
-      const response = await api.getJobById(id);
-      return response as CustomerBooking;
+      const response = await bookingApi.getJobById(id);
+      return (response?.data ?? response) as CustomerBooking;
     },
     enabled: !!id,
   });

@@ -1,8 +1,25 @@
-import { Bell, BookOpen, Megaphone, Tag, ShieldCheck, Clock, XCircle, FileText } from 'lucide-react';
-import { CustomerNotification, NotificationType } from '../types';
+import { Bell, BookOpen, Megaphone, Tag, ShieldCheck, Clock, XCircle, FileText, CheckCircle, UserCheck, UserPlus, Play, Flag } from 'lucide-react';
+import { useRouter } from '@/lib/navigation';
+import { CustomerNotification } from '../types';
+
+const BOOKING_NOTIFICATION_TYPES = new Set([
+  'BOOKING_CREATED',
+  'BOOKING_ACCEPTED',
+  'BOOKING_ASSIGNED',
+  'BOOKING_STARTED',
+  'BOOKING_COMPLETED',
+  'BOOKING_CANCELLED',
+  'BOOKING_UPDATE',
+]);
 
 const typeIcons: Record<string, typeof Bell> = {
   BOOKING_UPDATE: BookOpen,
+  BOOKING_CREATED: CheckCircle,
+  BOOKING_ACCEPTED: UserCheck,
+  BOOKING_ASSIGNED: UserPlus,
+  BOOKING_STARTED: Play,
+  BOOKING_COMPLETED: Flag,
+  BOOKING_CANCELLED: XCircle,
   ANNOUNCEMENT: Megaphone,
   PROMO: Tag,
   SYSTEM: Bell,
@@ -15,6 +32,12 @@ const typeIcons: Record<string, typeof Bell> = {
 
 const typeColors: Record<string, string> = {
   BOOKING_UPDATE: 'text-blue-500 bg-blue-500/10',
+  BOOKING_CREATED: 'text-blue-500 bg-blue-500/10',
+  BOOKING_ACCEPTED: 'text-green-500 bg-green-500/10',
+  BOOKING_ASSIGNED: 'text-purple-500 bg-purple-500/10',
+  BOOKING_STARTED: 'text-orange-500 bg-orange-500/10',
+  BOOKING_COMPLETED: 'text-teal-500 bg-teal-500/10',
+  BOOKING_CANCELLED: 'text-red-500 bg-red-500/10',
   ANNOUNCEMENT: 'text-purple-500 bg-purple-500/10',
   PROMO: 'text-amber-500 bg-amber-500/10',
   SYSTEM: 'text-slate-500 bg-slate-500/10',
@@ -31,11 +54,27 @@ interface NotificationCardProps {
 }
 
 export function NotificationCard({ notification, onMarkAsRead }: NotificationCardProps) {
+  const router = useRouter();
   const Icon = typeIcons[notification.type] || Bell;
+  const isBookingNotification = BOOKING_NOTIFICATION_TYPES.has(notification.type);
+
+  const handleClick = () => {
+    if (isBookingNotification && notification.metadata?.bookingId) {
+      router.push({ pathname: '/client/jobs/[id]', params: { id: notification.metadata.bookingId } });
+    }
+  };
+
+  const handleMarkAsRead = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onMarkAsRead(notification.id);
+  };
 
   return (
     <div
-      className={`flex items-start gap-4 p-4 rounded-xl transition-colors ${
+      onClick={handleClick}
+      className={`flex items-start gap-4 p-4 rounded-xl transition-colors cursor-pointer ${
+        isBookingNotification ? 'hover:bg-slate-50 dark:hover:bg-slate-900/50' : ''
+      } ${
         notification.isRead
           ? 'bg-white dark:bg-surface-dark'
           : 'bg-primary/5 dark:bg-primary/10 border border-primary/20'
@@ -54,7 +93,7 @@ export function NotificationCard({ notification, onMarkAsRead }: NotificationCar
           </div>
           {!notification.isRead && (
             <button
-              onClick={() => onMarkAsRead(notification.id)}
+              onClick={handleMarkAsRead}
               className="shrink-0 px-2.5 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
             >
               Mark read
