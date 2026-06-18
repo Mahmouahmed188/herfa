@@ -1,33 +1,38 @@
 <!-- SPECKIT START -->
 ---
 
-**Current feature**: [AI Chat Assistant](specs/013-ai-chat-assistant/plan.md)
+**Current feature**: [Admin Dashboard Integration](specs/014-admin-dashboard-integration/plan.md)
 
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the implementation plan
-at specs/013-ai-chat-assistant/plan.md
+at specs/014-admin-dashboard-integration/plan.md
 
 Generated artifacts:
-- [research.md](specs/013-ai-chat-assistant/research.md)
-- [data-model.md](specs/013-ai-chat-assistant/data-model.md)
-- [contracts/](specs/013-ai-chat-assistant/contracts/api-contracts.md)
-- [contracts/](specs/013-ai-chat-assistant/contracts/websocket-events.md)
-- [quickstart.md](specs/013-ai-chat-assistant/quickstart.md)
-- [spec.md](specs/013-ai-chat-assistant/spec.md)
+- [research.md](specs/014-admin-dashboard-integration/research.md)
+- [data-model.md](specs/014-admin-dashboard-integration/data-model.md)
+- [contracts/](specs/014-admin-dashboard-integration/contracts/admin-api-contracts.md)
+- [contracts/](specs/014-admin-dashboard-integration/contracts/analytics-api-contracts.md)
+- [contracts/](specs/014-admin-dashboard-integration/contracts/additional-api-contracts.md)
+- [quickstart.md](specs/014-admin-dashboard-integration/quickstart.md)
+- [spec.md](specs/014-admin-dashboard-integration/spec.md)
 
-## AI Chat Assistant
+## Admin Dashboard Integration
 
-Complete the AI Chat Assistant feature and fully integrate it with the backend AI Gateway and AI Service. Implement AI chat screen with real-time messaging, conversation management, backend AI integration, authentication, error handling, loading states, mobile responsiveness, and WebSocket support.
+Complete the Admin Dashboard and fully integrate it with all available backend Admin, Analytics, User Management, Provider Management, Payment, Support, Review, and Verification APIs. The Admin Dashboard must become the central operational panel for managing the entire Herfa platform.
 
 ### Implementation Order
 
-1. **Backend Foundation** — Implement AI Gateway Module with chat endpoints, AI Client Service, circuit breaker, rate limiting, and request logging
-2. **Frontend Chat Interface** — Create ChatContainer, MessageList, MessageBubble, ChatInput components with proper styling and responsive design
-3. **API Integration** — Implement AI Chat Service with TanStack Query hooks, authentication, and error handling
-4. **Real-time Features** — Add WebSocket support for live chat, typing indicators, and message streaming
-5. **Conversation Management** — Implement conversation history, persistence, and state management
-6. **Enhanced Features** — Add file upload, rich text support, AI response formatting, and performance optimization
-7. **Monitoring & Analytics** — Implement comprehensive logging, health monitoring, and admin dashboard
+1. **Backend API Integration** — Connect all admin APIs with proper authentication, authorization, and data validation
+2. **Dashboard Foundation** — Create main dashboard layout, navigation, and KPI components
+3. **User Management** — Implement user list, details, and management actions with proper permissions
+4. **Provider Management** — Create provider verification workflow and management interface
+5. **Analytics Module** — Build comprehensive analytics dashboards with real-time data visualization
+6. **Support & Disputes** — Implement ticket management, conversation tracking, and dispute resolution
+7. **Financial Operations** — Create payment and refund management with transaction tracking
+8. **Review Moderation** — Build review management interface with moderation actions
+9. **Activity Logs** — Implement comprehensive audit logging and monitoring
+10. **Notifications Center** — Create admin notifications and announcements system
+11. **Reports & Export** — Build comprehensive reporting and export functionality
 
 ### Running Checks
 
@@ -37,11 +42,11 @@ npm run type-check
 npm test
 ```
 
-See full spec: [specs/013-ai-chat-assistant/spec.md](specs/013-ai-chat-assistant/spec.md)
+See full spec: [specs/014-admin-dashboard-integration/spec.md](specs/014-admin-dashboard-integration/spec.md)
 
 ---
 
-**Previous feature**: [Notifications Center](specs/012-notifications-center/plan.md)
+**Previous feature**: [AI Chat Assistant](specs/013-ai-chat-assistant/plan.md)
 
-Also referenced: specs/011-reviews-ratings-system/plan.md, specs/009-booking-lifecycle-completion/plan.md
+Also referenced: specs/012-notifications-center/plan.md, specs/011-reviews-ratings-system/plan.md, specs/009-booking-lifecycle-completion/plan.md
 <!-- SPECKIT END -->
