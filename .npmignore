@@ -1,0 +1,66 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build outputs
+.next
+out
+build
+dist
+*.min.js
+
+# Testing
+coverage
+.nyc_output
+*.test.js
+*.spec.js
+tests/
+__tests__/
+
+# Development tools
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment files
+.env*
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Git
+.git/
+.gitignore
+
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+*.orig
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Deployment
+.vercel
+netlify.toml
