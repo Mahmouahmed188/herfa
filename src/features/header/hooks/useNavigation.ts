@@ -13,15 +13,20 @@ export function useNavigation(pathname: string): UseNavigationReturn {
   const items = useMemo<NavigationItem[]>(() => {
     const allItems = navigationConfig.items;
 
+    // If not authenticated or no role, show only public items (no roles required)
     if (!isAuthenticated || !role) {
       return allItems
-        .filter((item) => !item.roles)
+        .filter((item) => !item.roles || (item.roles.length === 0))
         .sort((a, b) => a.order - b.order);
     }
 
+    // If authenticated with role, show items that include this role
     return allItems
       .filter((item) => {
-        if (!item.roles) return false;
+        // Items without roles are shown to everyone (public items)
+        if (!item.roles || item.roles.length === 0) return true;
+        
+        // Items with roles are shown only if user has one of those roles
         return item.roles.includes(role);
       })
       .sort((a, b) => a.order - b.order);
