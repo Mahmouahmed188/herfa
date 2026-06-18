@@ -32,9 +32,9 @@ description: "Task list for Real-Time Tracking System implementation"
 
 **Purpose**: Feature initialization — install map dependencies, create new directories
 
-- [ ] T001 Install leaflet and react-leaflet npm packages in package.json
-- [ ] T002 [P] Create directory `src/components/map/` for shared map components
-- [ ] T003 [P] Create directory `src/app/[locale]/client/tracking/history/` for tracking history page route
+- [X] T001 Install leaflet and react-leaflet npm packages in package.json
+- [X] T002 [P] Create directory `src/components/map/` for shared map components
+- [X] T003 [P] Create directory `src/app/[locale]/client/tracking/history/` for tracking history page route
 
 ---
 
@@ -42,10 +42,10 @@ description: "Task list for Real-Time Tracking System implementation"
 
 **Purpose**: Core logic and API integration that MUST be complete before ANY UI work. These tasks enable all user stories.
 
-- [ ] T004 Add `getTrackingSession` and `getTrackingEvents` API methods to `src/features/bookings/services/api.ts`
-- [ ] T005 [P] Add Zod schema for tracking session validation in `src/features/bookings/schemas/validation.ts`
-- [ ] T006 [P] Implement WebSocket `onmessage` handler in `src/features/bookings/hooks/useTracking.ts` to process `LOCATION_UPDATE`, `STATUS_CHANGE`, `ETA_UPDATE`, and `ERROR` messages
-- [ ] T007 [P] Add `NEXT_PUBLIC_WS_URL=ws://localhost:3001/ws` to `.env.local`
+- [X] T004 Add `getTrackingSession` and `getTrackingEvents` API methods to `src/features/bookings/services/api.ts`
+- [X] T005 [P] Add Zod schema for tracking session validation in `src/features/bookings/schemas/validation.ts`
+- [X] T006 [P] Implement WebSocket `onmessage` handler in `src/features/bookings/hooks/useTracking.ts` to process `LOCATION_UPDATE`, `STATUS_CHANGE`, `ETA_UPDATE`, and `ERROR` messages
+- [X] T007 [P] Add `NEXT_PUBLIC_WS_URL=ws://localhost:3001/ws` to `.env.local`
 
 **Checkpoint**: Foundation ready — tracking API connected, WebSocket messages flowing. UI implementation can now begin in parallel.
 
@@ -59,10 +59,10 @@ description: "Task list for Real-Time Tracking System implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T008 [P] [US1] Create `TrackingMapView` reusable map component at `src/components/map/TrackingMapView.tsx` with Leaflet/OpenStreetMap, dynamic SSR import, provider marker, destination marker, route polyline, status banner, ETA display, and last-updated timestamp
-- [ ] T009 [P] [US1] Replace Google Maps deep-link placeholder in `src/features/bookings/components/TrackingMap.tsx` with real `TrackingMapView`, preserving existing prop interface
-- [ ] T010 [US1] Update tracking page `src/app/[locale]/client/tracking/[id]/page.tsx` to render real Leaflet map via `TrackingMap` with booking coordinates as destination
-- [ ] T011 [US1] Add provider offline/online state display to `src/features/bookings/components/BookingTracking.tsx` based on WebSocket connection status and lastUpdated recency
+- [X] T008 [P] [US1] Create `TrackingMapView` reusable map component at `src/components/map/TrackingMapView.tsx` with Leaflet/OpenStreetMap, dynamic SSR import, provider marker, destination marker, route polyline, status banner, ETA display, and last-updated timestamp
+- [X] T009 [P] [US1] Replace Google Maps deep-link placeholder in `src/features/bookings/components/TrackingMap.tsx` with real `TrackingMapView`, preserving existing prop interface
+- [X] T010 [US1] Update tracking page `src/app/[locale]/client/tracking/[id]/page.tsx` to render real Leaflet map via `TrackingMap` with booking coordinates as destination
+- [X] T011 [US1] Add provider offline/online state display to `src/features/bookings/components/BookingTracking.tsx` based on WebSocket connection status and lastUpdated recency
 
 **Checkpoint**: At this point, User Story 1 should be fully functional — customer sees live tracking on a real map.
 
@@ -76,9 +76,9 @@ description: "Task list for Real-Time Tracking System implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T012 [P] [US2] Add WebSocket connection status indicator (Live/Polling/Disconnected) to `src/features/bookings/components/BookingTracking.tsx` with visual states
-- [ ] T013 [US2] Improve WebSocket reconnection resilience in `src/features/bookings/hooks/useTracking.ts` — add exponential backoff (5s → 10s → 20s, max 30s) and max retry limit
-- [ ] T014 [US2] Display last known provider location in `src/features/bookings/components/TrackingMap.tsx` when provider is offline or connection is lost, per FR-012
+- [X] T012 [P] [US2] Add WebSocket connection status indicator (Live/Polling/Disconnected) to `src/features/bookings/components/BookingTracking.tsx` with visual states
+- [X] T013 [US2] Improve WebSocket reconnection resilience in `src/features/bookings/hooks/useTracking.ts` — add exponential backoff (5s → 10s → 20s, max 30s) and max retry limit
+- [X] T014 [US2] Display last known provider location in `src/features/bookings/components/TrackingMap.tsx` when provider is offline or connection is lost, per FR-012
 
 **Checkpoint**: Provider location updates flow through WebSocket; reconnection is automatic; offline state shows last known location.
 
@@ -92,9 +92,9 @@ description: "Task list for Real-Time Tracking System implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T015 [P] [US3] Create `TrackingTimeline` component at `src/features/bookings/components/TrackingTimeline.tsx` displaying chronological tracking events (status changes, location updates, pause/resume, completion) with timestamps
-- [ ] T016 [US3] Add session duration display to `src/features/bookings/components/BookingTracking.tsx` calculated from `startedAt` to current time (or `endedAt` if completed)
-- [ ] T017 [US3] Add pause and resume event display in `BookingTracking.tsx` timeline section with visual indicators
+- [X] T015 [P] [US3] Create `TrackingTimeline` component at `src/features/bookings/components/TrackingTimeline.tsx` displaying chronological tracking events (status changes, location updates, pause/resume, completion) with timestamps
+- [X] T016 [US3] Add session duration display to `src/features/bookings/components/BookingTracking.tsx` calculated from `startedAt` to current time (or `endedAt` if completed)
+- [X] T017 [US3] Add pause and resume event display in `BookingTracking.tsx` timeline section with visual indicators
 
 **Checkpoint**: Users see complete session lifecycle with timeline, duration, and event history.
 
@@ -108,10 +108,10 @@ description: "Task list for Real-Time Tracking System implementation"
 
 ### Implementation for User Story 5
 
-- [ ] T018 [P] [US5] Add tracking notification types (`TRACKING_STARTED`, `TRACKING_PAUSED`, `TRACKING_RESUMED`, `TRACKING_ARRIVED`) to `CustomerNotificationType` union in `src/features/notifications/types/index.ts`
-- [ ] T019 [P] [US5] Update booking notification filter list in `src/features/notifications/hooks/useBookingNotifications.ts` to include tracking notification types
-- [ ] T020 [US5] Add tracking notification navigation logic in `src/features/notifications/hooks/useBookingNotifications.ts` — tracking types link to `/client/tracking/:bookingId`, booking types link to `/client/jobs/:bookingId`
-- [ ] T021 [US5] Add tracking notification icon/color mapping in notification components (map `TRACKING_STARTED`→ Navigation icon, `TRACKING_PAUSED` → PauseCircle, `TRACKING_RESUMED` → PlayCircle, `TRACKING_ARRIVED` → MapPin)
+- [X] T018 [P] [US5] Add tracking notification types (`TRACKING_STARTED`, `TRACKING_PAUSED`, `TRACKING_RESUMED`, `TRACKING_ARRIVED`) to `CustomerNotificationType` union in `src/features/notifications/types/index.ts`
+- [X] T019 [P] [US5] Update booking notification filter list in `src/features/notifications/hooks/useBookingNotifications.ts` to include tracking notification types
+- [X] T020 [US5] Add tracking notification navigation logic in `src/features/notifications/hooks/useBookingNotifications.ts` — tracking types link to `/client/tracking/:bookingId`, booking types link to `/client/jobs/:bookingId`
+- [X] T021 [US5] Add tracking notification icon/color mapping in notification components (map `TRACKING_STARTED`→ Navigation icon, `TRACKING_PAUSED` → PauseCircle, `TRACKING_RESUMED` → PlayCircle, `TRACKING_ARRIVED` → MapPin)
 
 **Checkpoint**: Tracking notifications are delivered with correct content, icons, and navigation links.
 
@@ -125,9 +125,9 @@ description: "Task list for Real-Time Tracking System implementation"
 
 ### Implementation for User Story 4
 
-- [ ] T022 [P] [US4] Create tracking history page at `src/app/[locale]/client/tracking/history/page.tsx` with paginated list of past tracking sessions
-- [ ] T023 [US4] Implement session detail expandable view showing status changes, duration, start/end times, and route summary if available
-- [ ] T024 [US4] Add filtering (by date range, status) to the tracking history page, reusing `BookingFilters` patterns
+- [X] T022 [P] [US4] Create tracking history page at `src/app/[locale]/client/tracking/history/page.tsx` with paginated list of past tracking sessions
+- [X] T023 [US4] Implement session detail expandable view showing status changes, duration, start/end times, and route summary if available
+- [X] T024 [US4] Add filtering (by date range, status) to the tracking history page, reusing `BookingFilters` patterns
 
 **Checkpoint**: Tracking history page is fully functional with pagination, filtering, and session details.
 
@@ -137,12 +137,12 @@ description: "Task list for Real-Time Tracking System implementation"
 
 **Purpose**: Wire tracking into existing pages, update provider views, remove mock data.
 
-- [ ] T025 [P] Update booking detail page `src/app/[locale]/client/jobs/[id]/page.tsx` to show tracking status badge and live map embed when status is `ON_THE_WAY` or `IN_PROGRESS`
-- [ ] T026 [P] Update `ActiveBookingCard` in `src/features/bookings/components/ActiveBookingCard.tsx` to show live ETA and tracking availability using real backend data (remove mock `tracking` fallback)
-- [ ] T027 Update provider job management page `src/app/[locale]/technician/jobs/page.tsx` to display tracking status badge for assigned jobs with active tracking sessions
-- [ ] T028 Audit and remove all mock/fallback tracking data across `src/features/bookings/`, `src/app/[locale]/client/`, and `src/app/[locale]/technician/` — replace with conditional rendering for empty/loading states
-- [ ] T029 [P] Add loading skeleton and error state with retry to `TrackingMapView` component at `src/components/map/TrackingMapView.tsx`
-- [ ] T030 [P] Verify `npm run lint` and `npm run type-check` pass with all tracking changes
+- [X] T025 [P] Update booking detail page `src/app/[locale]/client/jobs/[id]/page.tsx` to show tracking status badge and live map embed when status is `ON_THE_WAY` or `IN_PROGRESS`
+- [X] T026 [P] Update `ActiveBookingCard` in `src/features/bookings/components/ActiveBookingCard.tsx` to show live ETA and tracking availability using real backend data (remove mock `tracking` fallback)
+- [X] T027 Update provider job management page `src/app/[locale]/technician/jobs/page.tsx` to display tracking status badge for assigned jobs with active tracking sessions
+- [X] T028 Audit and remove all mock/fallback tracking data across `src/features/bookings/`, `src/app/[locale]/client/`, and `src/app/[locale]/technician/` — replace with conditional rendering for empty/loading states
+- [X] T029 [P] Add loading skeleton and error state with retry to `TrackingMapView` component at `src/components/map/TrackingMapView.tsx`
+- [X] T030 [P] Verify `npm run lint` and `npm run type-check` pass with all tracking changes
 
 **Checkpoint**: All tracking features integrated across booking detail, dashboard, provider pages. No mock tracking data remains.
 

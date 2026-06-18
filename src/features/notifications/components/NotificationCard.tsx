@@ -1,4 +1,4 @@
-import { Bell, BookOpen, Megaphone, Tag, ShieldCheck, Clock, XCircle, FileText, CheckCircle, UserCheck, UserPlus, Play, Flag } from 'lucide-react';
+import { Bell, BookOpen, Megaphone, Tag, ShieldCheck, Clock, XCircle, FileText, CheckCircle, UserCheck, UserPlus, Play, Flag, Navigation, PauseCircle, PlayCircle, MapPin } from 'lucide-react';
 import { useRouter } from '@/lib/navigation';
 import { CustomerNotification } from '../types';
 
@@ -12,6 +12,13 @@ const BOOKING_NOTIFICATION_TYPES = new Set([
   'BOOKING_UPDATE',
 ]);
 
+const TRACKING_NOTIFICATION_TYPES = new Set([
+  'TRACKING_STARTED',
+  'TRACKING_PAUSED',
+  'TRACKING_RESUMED',
+  'TRACKING_ARRIVED',
+]);
+
 const typeIcons: Record<string, typeof Bell> = {
   BOOKING_UPDATE: BookOpen,
   BOOKING_CREATED: CheckCircle,
@@ -20,6 +27,10 @@ const typeIcons: Record<string, typeof Bell> = {
   BOOKING_STARTED: Play,
   BOOKING_COMPLETED: Flag,
   BOOKING_CANCELLED: XCircle,
+  TRACKING_STARTED: Navigation,
+  TRACKING_PAUSED: PauseCircle,
+  TRACKING_RESUMED: PlayCircle,
+  TRACKING_ARRIVED: MapPin,
   ANNOUNCEMENT: Megaphone,
   PROMO: Tag,
   SYSTEM: Bell,
@@ -38,6 +49,10 @@ const typeColors: Record<string, string> = {
   BOOKING_STARTED: 'text-orange-500 bg-orange-500/10',
   BOOKING_COMPLETED: 'text-teal-500 bg-teal-500/10',
   BOOKING_CANCELLED: 'text-red-500 bg-red-500/10',
+  TRACKING_STARTED: 'text-blue-500 bg-blue-500/10',
+  TRACKING_PAUSED: 'text-amber-500 bg-amber-500/10',
+  TRACKING_RESUMED: 'text-green-500 bg-green-500/10',
+  TRACKING_ARRIVED: 'text-purple-500 bg-purple-500/10',
   ANNOUNCEMENT: 'text-purple-500 bg-purple-500/10',
   PROMO: 'text-amber-500 bg-amber-500/10',
   SYSTEM: 'text-slate-500 bg-slate-500/10',
@@ -56,10 +71,13 @@ interface NotificationCardProps {
 export function NotificationCard({ notification, onMarkAsRead }: NotificationCardProps) {
   const router = useRouter();
   const Icon = typeIcons[notification.type] || Bell;
-  const isBookingNotification = BOOKING_NOTIFICATION_TYPES.has(notification.type);
+  const isClickable = BOOKING_NOTIFICATION_TYPES.has(notification.type) || TRACKING_NOTIFICATION_TYPES.has(notification.type);
 
   const handleClick = () => {
-    if (isBookingNotification && notification.metadata?.bookingId) {
+    if (!isClickable || !notification.metadata?.bookingId) return;
+    if (TRACKING_NOTIFICATION_TYPES.has(notification.type)) {
+      router.push({ pathname: '/client/tracking/[id]', params: { id: notification.metadata.bookingId } });
+    } else {
       router.push({ pathname: '/client/jobs/[id]', params: { id: notification.metadata.bookingId } });
     }
   };
@@ -73,7 +91,7 @@ export function NotificationCard({ notification, onMarkAsRead }: NotificationCar
     <div
       onClick={handleClick}
       className={`flex items-start gap-4 p-4 rounded-xl transition-colors cursor-pointer ${
-        isBookingNotification ? 'hover:bg-slate-50 dark:hover:bg-slate-900/50' : ''
+        isClickable ? 'hover:bg-slate-50 dark:hover:bg-slate-900/50' : ''
       } ${
         notification.isRead
           ? 'bg-white dark:bg-surface-dark'

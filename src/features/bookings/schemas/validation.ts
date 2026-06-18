@@ -28,6 +28,18 @@ export const trackingInfoSchema = z.object({
   lastUpdated: z.string().optional(),
 });
 
+export const trackingSessionSchema = z.object({
+  id: z.string().uuid(),
+  bookingId: z.string().uuid(),
+  status: z.enum(['ACTIVE', 'PAUSED', 'COMPLETED', 'NOT_STARTED']),
+  providerLatitude: z.number().min(-90).max(90).nullable().optional(),
+  providerLongitude: z.number().min(-180).max(180).nullable().optional(),
+  eta: z.string().datetime().nullable().optional(),
+  lastUpdated: z.string().datetime().nullable().optional(),
+  startedAt: z.string().datetime().nullable().optional(),
+  endedAt: z.string().datetime().nullable().optional(),
+});
+
 export const timelineEventSchema = z.object({
   status: z.string(),
   timestamp: z.string(),

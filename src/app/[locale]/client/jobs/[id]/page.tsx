@@ -11,7 +11,8 @@ import { useBookingTimeline } from '@/features/bookings/hooks/useBookingTimeline
 import { BookingTimeline } from '@/features/bookings/components/BookingTimeline';
 import { CancelBookingDialog } from '@/features/bookings/components/CancelBookingDialog';
 import { useTracking } from '@/features/bookings/hooks/useTracking';
-import { TrackingMap } from '@/features/bookings/components/TrackingMap';
+import { Badge } from '@/components/ui/badge';
+import { TrackingMapView } from '@/components/map/TrackingMapView';
 
 const statusStyles: Record<string, string> = {
   PENDING: 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400',
@@ -255,31 +256,42 @@ export default function BookingDetailPage() {
 }
 
 function LiveTrackingSection({ bookingId }: { bookingId: string }) {
-  const { session, isLoading } = useTracking(bookingId);
+  const { session, isLoading, error } = useTracking(bookingId);
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg flex items-center gap-2">
           <Navigation className="w-5 h-5 text-primary" /> Live Tracking
         </CardTitle>
-        <Link
-          href={{ pathname: '/client/tracking/[id]', params: { id: bookingId } }}
-          className="text-xs text-primary font-semibold hover:underline"
-        >
-          Full View
-        </Link>
+        <div className="flex items-center gap-2">
+          {session && (
+            <Badge variant="outline" className={
+              session.status === 'ACTIVE' ? 'text-green-600 border-green-200' :
+              session.status === 'PAUSED' ? 'text-amber-600 border-amber-200' :
+              'text-slate-600 border-slate-200'
+            }>
+              {session.status}
+            </Badge>
+          )}
+          <Link
+            href={{ pathname: '/client/tracking/[id]', params: { id: bookingId } }}
+            className="text-xs text-primary font-semibold hover:underline"
+          >
+            Full View
+          </Link>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <TrackingMap
-          latitude={session?.providerLatitude}
-          longitude={session?.providerLongitude}
+        <TrackingMapView
+          providerLatitude={session?.providerLatitude}
+          providerLongitude={session?.providerLongitude}
+          providerName="Provider"
+          status={session?.status}
+          eta={session?.eta}
+          lastUpdated={session?.lastUpdated}
+          isLoading={isLoading}
+          error={error}
         />
-        {session?.eta && (
-          <p className="text-sm text-slate-500 dark:text-gray-400 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-primary" />
-            ETA: {new Date(session.eta).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </p>
-        )}
         {!isLoading && !session && (
           <p className="text-sm text-slate-500 dark:text-gray-400">No active tracking session.</p>
         )}

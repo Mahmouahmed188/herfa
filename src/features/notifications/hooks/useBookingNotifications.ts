@@ -9,7 +9,18 @@ const BOOKING_NOTIFICATION_TYPES = [
   'BOOKING_COMPLETED',
   'BOOKING_CANCELLED',
   'BOOKING_UPDATE',
+  'TRACKING_STARTED',
+  'TRACKING_PAUSED',
+  'TRACKING_RESUMED',
+  'TRACKING_ARRIVED',
 ] as const;
+
+const TRACKING_NOTIFICATION_TYPES = new Set([
+  'TRACKING_STARTED',
+  'TRACKING_PAUSED',
+  'TRACKING_RESUMED',
+  'TRACKING_ARRIVED',
+]);
 
 export function useBookingNotifications(notifications: CustomerNotification[]) {
   return useMemo(() => {
@@ -22,8 +33,11 @@ export function useBookingNotifications(notifications: CustomerNotification[]) {
       count: bookingNotifications.length,
       getBookingLink: (notification: CustomerNotification): string => {
         const bookingId = notification.metadata?.bookingId;
-        if (bookingId) return `/client/jobs/${bookingId}`;
-        return '/client/jobs';
+        if (!bookingId) return '/client/jobs';
+        if (TRACKING_NOTIFICATION_TYPES.has(notification.type as string)) {
+          return `/client/tracking/${bookingId}`;
+        }
+        return `/client/jobs/${bookingId}`;
       },
     };
   }, [notifications]);

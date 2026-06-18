@@ -146,4 +146,39 @@ export const bookingApi = {
     const response = await api.post<ApiResponse<any>>(`/jobs/${id}/status`, payload);
     return response.data;
   },
+
+  getTrackingSession: async (bookingId: string) => {
+    const response = await api.get<ApiResponse<TrackingSession>>(`/tracking/${bookingId}`);
+    return response.data;
+  },
+
+  getTrackingEvents: async (bookingId: string, since?: string) => {
+    const response = await api.get<ApiResponse<TrackingEvent[]>>(`/tracking/${bookingId}/events`, { params: { since } });
+    return response.data;
+  },
 };
+
+export interface TrackingSession {
+  id: string;
+  bookingId: string;
+  status: 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'NOT_STARTED';
+  providerLatitude?: number | null;
+  providerLongitude?: number | null;
+  eta?: string | null;
+  lastUpdated?: string | null;
+  startedAt?: string | null;
+  endedAt?: string | null;
+}
+
+export interface TrackingEvent {
+  id: string;
+  type: 'STATUS_CHANGE' | 'LOCATION_UPDATE' | 'MILESTONE' | 'ETA_UPDATE';
+  title: string;
+  description: string;
+  timestamp: string;
+  metadata?: {
+    latitude?: number;
+    longitude?: number;
+    eta?: string;
+  };
+}

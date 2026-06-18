@@ -4,7 +4,7 @@ import React from 'react';
 import { 
     MapPin, Briefcase, 
     Loader2, MessageCircle, Phone,
-    Calendar
+    Calendar, Radio
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { bookingApi } from '@/features/bookings/services/api';
@@ -64,6 +64,11 @@ export default function TechnicianJobsPage() {
                                                     }`}>
                                                         {job.status}
                                                     </span>
+                                                    {(job.status === 'ON_THE_WAY' || job.status === 'IN_PROGRESS') && (
+                                                        <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-green-500/10 text-green-500 flex items-center gap-1">
+                                                            <Radio className="w-3 h-3" /> Live
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <p className="text-gray-400 text-sm flex items-center gap-2">
                                                     <MapPin className="w-4 h-4 text-primary" /> {job.address}

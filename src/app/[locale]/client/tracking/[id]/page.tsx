@@ -6,7 +6,7 @@ import { Link } from '@/lib/navigation';
 import { useBookingDetail } from '@/features/bookings/hooks/useBookingDetail';
 import { useTracking } from '@/features/bookings/hooks/useTracking';
 import { BookingTracking } from '@/features/bookings/components/BookingTracking';
-import { TrackingMap } from '@/features/bookings/components/TrackingMap';
+import { TrackingMapView } from '@/components/map/TrackingMapView';
 
 export default function TrackingPage() {
   const params = useParams();
@@ -46,10 +46,13 @@ export default function TrackingPage() {
         wsConnected={wsConnected}
       />
 
-      <TrackingMap
-        latitude={session?.providerLatitude}
-        longitude={session?.providerLongitude}
+      <TrackingMapView
+        providerLatitude={session?.providerLatitude}
+        providerLongitude={session?.providerLongitude}
         providerName={booking?.provider?.name}
+        status={session?.status}
+        eta={session?.eta}
+        lastUpdated={session?.lastUpdated}
       />
     </div>
   );
