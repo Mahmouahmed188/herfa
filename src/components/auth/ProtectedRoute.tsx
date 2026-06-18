@@ -12,11 +12,14 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, isInitializing, user } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
+    // Don't make any redirect decision until the auth refresh attempt is complete.
+    if (isInitializing) return;
+
     if (!isAuthenticated) {
       router.push('/login');
       return;
@@ -28,12 +31,15 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
     }
 
     if (user?.role === 'PROVIDER' && user?.status !== 'ACTIVE') {
-        const isPublicOnboarding = pathname.includes('/technician/onboarding-home');
-        if (!isPublicOnboarding) {
-            router.push('/technician/onboarding-home');
-        }
+      const isPublicOnboarding = pathname.includes('/technician/onboarding-home');
+      if (!isPublicOnboarding) {
+        router.push('/technician/onboarding-home');
+      }
     }
-  }, [isAuthenticated, user, router, pathname, allowedRoles]);
+  }, [isAuthenticated, isInitializing, user, router, pathname, allowedRoles]);
+
+  // Render nothing while session is being restored to avoid a flash redirect.
+  if (isInitializing) return null;
 
   return <>{children}</>;
 }

@@ -65,10 +65,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T014 [P] [US2] Create `PaymentDetailsCard` component in `src/features/finance/components/PaymentDetailsCard.tsx`
-- [ ] T015 [P] [US2] Create `StatusTimeline` component in `src/features/finance/components/StatusTimeline.tsx`
-- [ ] T016 [US2] Implement Payment Details page in `src/app/[locale]/(dashboard)/finance/[id]/page.tsx`
-- [ ] T017 [US2] Add "View Payment Details" link to existing Booking Details page in `src/app/[locale]/booking/[id]/page.tsx`
+- [x] T014 [P] [US2] Create `PaymentDetailsCard` component in `src/features/finance/components/PaymentDetailsCard.tsx`
+- [x] T015 [P] [US2] Create `StatusTimeline` component in `src/features/finance/components/StatusTimeline.tsx`
+- [x] T016 [US2] Implement Payment Details page in `src/app/[locale]/(dashboard)/finance/[id]/page.tsx`
+- [x] T017 [US2] Add "View Payment Details" link to existing Booking Details page in `src/app/[locale]/booking/[id]/page.tsx`
 
 **Checkpoint**: User Story 2 is complete. Users can now navigate from lists to detailed timelines.
 
@@ -82,10 +82,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [P] [US3] Create `RefundRequestForm` component in `src/features/finance/components/RefundRequestForm.tsx` (connect to Dispute API)
-- [ ] T019 [P] [US3] Create `RefundTrackingList` component in `src/features/finance/components/RefundTrackingList.tsx`
-- [ ] T020 [US3] Implement Refund Tracking page in `src/app/[locale]/(dashboard)/finance/refunds/page.tsx`
-- [ ] T021 [US3] Add "Request Refund" button to `DisputePanel.tsx` in `src/features/bookings/components/DisputePanel.tsx`
+- [x] T018 [P] [US3] Create `RefundRequestForm` component in `src/features/finance/components/RefundRequestForm.tsx` (connect to Dispute API)
+- [x] T019 [P] [US3] Create `RefundTrackingList` component in `src/features/finance/components/RefundTrackingList.tsx`
+- [x] T020 [US3] Implement Refund Tracking page in `src/app/[locale]/(dashboard)/finance/refunds/page.tsx`
+- [x] T021 [US3] Add "Request Refund" button to `DisputePanel.tsx` in `src/features/bookings/components/DisputePanel.tsx`
 
 **Checkpoint**: User Story 3 is complete. The full refund lifecycle is now manageable from the frontend.
 
@@ -99,10 +99,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T022 [P] [US4] Create `EarningsKpiCards` component in `src/features/finance/components/EarningsKpiCards.tsx`
-- [ ] T023 [P] [US4] Create `RecentTransactionsList` component in `src/features/finance/components/RecentTransactionsList.tsx`
-- [ ] T024 [US4] Implement Provider Earnings Dashboard in `src/app/[locale]/(provider)/earnings/page.tsx`
-- [ ] T025 [US4] Update `ProviderDashboard` overview to include high-level earnings summary in `src/app/[locale]/(provider)/dashboard/page.tsx`
+- [x] T022 [P] [US4] Create `EarningsKpiCards` component in `src/features/finance/components/EarningsKpiCards.tsx`
+- [x] T023 [P] [US4] Create `RecentTransactionsList` component in `src/features/finance/components/RecentTransactionsList.tsx`
+- [x] T024 [US4] Implement Provider Earnings Dashboard in `src/app/[locale]/(provider)/earnings/page.tsx`
+- [x] T025 [US4] Update `ProviderDashboard` overview to include high-level earnings summary in `src/app/[locale]/technician/dashboard/page.tsx`
 
 **Checkpoint**: All core user stories are complete.
 
@@ -112,11 +112,11 @@
 
 **Purpose**: Integration with notifications and final refinements.
 
-- [ ] T026 [P] Integrate Payment/Refund notifications in `src/features/notifications/components/NotificationList.tsx`
-- [ ] T027 [P] Implement TanStack Query cache invalidation for finance queries upon receiving WebSocket notifications
-- [ ] T028 [P] Perform final API Audit and update `docs/payments-refunds-audit.md` as required by the feature objective
-- [ ] T029 [P] Run cross-browser and RTL parity checks on all new finance pages
-- [ ] T030 Final code cleanup, removal of any remaining mock data, and documentation update in `PROJECT_API_DOCUMENTATION.md` if necessary
+- [x] T026 [P] Integrate Payment/Refund notifications in `src/features/notifications/components/NotificationList.tsx`
+- [x] T027 [P] Implement TanStack Query cache invalidation for finance queries upon receiving WebSocket notifications
+- [x] T028 [P] Perform final API Audit and update `docs/payments-refunds-audit.md` as required by the feature objective
+- [x] T029 [P] Run cross-browser and RTL parity checks on all new finance pages
+- [x] T030 Final code cleanup, removal of any remaining mock data, and documentation update in `PROJECT_API_DOCUMENTATION.md` if necessary
 
 ---
 

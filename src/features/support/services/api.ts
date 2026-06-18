@@ -41,6 +41,15 @@ export interface ContentReport extends BaseEntity {
   resolution?: string;
 }
 
+export interface CreateSupportTicketInput {
+  subject: string;
+  description: string;
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+  category: 'TECHNICAL' | 'BILLING' | 'ACCOUNT' | 'GENERAL' | 'DISPUTE';
+  relatedBookingId?: string;
+  relatedPaymentId?: string;
+}
+
 export const supportApi = {
   getTickets: async (params?: { page?: number; limit?: number; status?: string; priority?: string }) => {
     const response = await api.get<PaginatedResponse<SupportTicket>>('/support/tickets', { params });
@@ -49,6 +58,11 @@ export const supportApi = {
 
   getTicketDetails: async (id: string) => {
     const response = await api.get<ApiResponse<SupportTicket>>(`/support/tickets/${id}`);
+    return response.data;
+  },
+
+  createTicket: async (data: CreateSupportTicketInput) => {
+    const response = await api.post<ApiResponse<SupportTicket>>('/support/tickets', data);
     return response.data;
   },
 

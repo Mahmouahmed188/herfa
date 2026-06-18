@@ -7,11 +7,11 @@ export function useRefunds(params?: {
   page?: number;
   limit?: number;
   status?: string;
+  paymentId?: string;
 }) {
-  // Assuming a generic getRefunds exists in financeApi or derived from payments
   return useQuery({
     queryKey: ['finance', 'refunds', params],
-    queryFn: () => financeApi.getPayments({ ...params, status: 'REFUNDED' }), // Fallback for list
+    queryFn: () => financeApi.getRefunds(params),
   });
 }
 

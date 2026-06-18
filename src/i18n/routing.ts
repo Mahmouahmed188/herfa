@@ -65,5 +65,8 @@ export const routing = defineRouting({
         '/admin/settings': '/admin/settings',
         '/booking/[id]': '/booking/[id]',
         '/support': '/support',
+        '/finance/history': '/finance/history',
+        '/finance/[id]': '/finance/[id]',
+        '/finance/refunds': '/finance/refunds',
     }
 });

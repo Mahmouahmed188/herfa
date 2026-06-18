@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supportApi } from '../services/api';
+import { supportApi, CreateSupportTicketInput } from '../services/api';
 import { toast } from 'sonner';
 
 export function useTickets(params?: { page?: number; status?: string; priority?: string }) {
@@ -14,6 +14,17 @@ export function useTicketDetails(id: string) {
     queryKey: ['support', 'tickets', id],
     queryFn: () => supportApi.getTicketDetails(id),
     enabled: !!id,
+  });
+}
+
+export function useCreateTicket() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateSupportTicketInput) => supportApi.createTicket(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['support', 'tickets'] });
+      toast.success('Request submitted');
+    },
   });
 }
 

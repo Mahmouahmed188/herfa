@@ -20,10 +20,11 @@ type ResolveDisputeInput = z.infer<typeof resolveDisputeSchema>;
 interface DisputePanelProps {
   bookingId: string;
   onResolve: (data: ResolveDisputeInput) => void;
+  onRequestRefund?: () => void;
   isSubmitting?: boolean;
 }
 
-export function DisputePanel({ bookingId, onResolve, isSubmitting }: DisputePanelProps) {
+export function DisputePanel({ bookingId, onResolve, onRequestRefund, isSubmitting }: DisputePanelProps) {
   const methods = useForm<ResolveDisputeInput>({
     resolver: zodResolver(resolveDisputeSchema),
     defaultValues: {
@@ -49,6 +50,16 @@ export function DisputePanel({ bookingId, onResolve, isSubmitting }: DisputePane
         </FormProvider>
       </CardContent>
       <CardFooter className="flex justify-end gap-3">
+        {onRequestRefund && (
+          <Button
+            variant="ghost"
+            className="mr-auto"
+            onClick={onRequestRefund}
+            disabled={isSubmitting}
+          >
+            Request Refund
+          </Button>
+        )}
         <Button
           variant="outline"
           className="gap-2"

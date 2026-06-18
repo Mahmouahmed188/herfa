@@ -7,11 +7,13 @@ interface AuthState {
   isAuthenticated: boolean;
   token: string | null;
   refreshTokenExists: boolean;
+  isInitializing: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
   updateUser: (user: Partial<User>) => void;
   setToken: (token: string | null) => void;
   setRefreshTokenExists: (exists: boolean) => void;
+  setInitializing: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -20,6 +22,7 @@ export const useAuthStore = create<AuthState>()(
     isAuthenticated: false,
     token: null,
     refreshTokenExists: false,
+    isInitializing: true, // true until useInitializeAuth resolves
     login: (user, token) => {
       sessionService.setTokenCookie(token);
       set({ user, token, isAuthenticated: true });
@@ -41,5 +44,6 @@ export const useAuthStore = create<AuthState>()(
       set({ token });
     },
     setRefreshTokenExists: (exists) => set({ refreshTokenExists: exists }),
+    setInitializing: (value) => set({ isInitializing: value }),
   })
 );

@@ -65,6 +65,16 @@ export const financeApi = {
     return response.data;
   },
 
+  getRefunds: async (params?: {
+    page?: number;
+    limit?: number;
+    status?: string;
+    paymentId?: string;
+  }) => {
+    const response = await api.get<PaginatedResponse<Refund>>('/refunds', { params });
+    return response.data;
+  },
+
   // Process Payment
   processPayment: async (id: string, data: ProcessPaymentInput) => {
     const response = await api.post<ApiResponse<{ status: string; transactionId: string }>>(

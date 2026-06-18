@@ -6,6 +6,11 @@ export function useBroadcasts(params?: { page?: number; limit?: number }) {
   return useQuery({
     queryKey: ['notifications', 'broadcasts', params],
     queryFn: () => notificationsApi.getBroadcasts(params),
+    // The announcements endpoint may not be implemented on the backend yet.
+    // Disable retries so a 404 doesn't flood the console.
+    retry: false,
+    // Don't refetch on window focus to avoid repeated 404 noise.
+    refetchOnWindowFocus: false,
   });
 }
 

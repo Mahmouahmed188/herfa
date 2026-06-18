@@ -14,6 +14,7 @@ const getAuthHeaders = () => {
 async function fetchWithAuth(url: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${url}`, {
     ...options,
+    credentials: 'include', // required to send httpOnly refresh token cookie cross-origin
     headers: {
       ...getAuthHeaders(),
       ...options.headers,

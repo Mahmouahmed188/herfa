@@ -2,49 +2,71 @@ import { io, Socket } from 'socket.io-client';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { CustomerNotification } from '../types';
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:3001';
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:3001';
+
+function createSocketOptions(token: string) {
+  return {
+    // Send the token both ways — NestJS guards vary between expecting
+    // a raw JWT and a "Bearer <jwt>" string. Sending both covers both patterns.
+    auth: { token },
+    // Also include in extraHeaders in case the guard reads from Authorization header.
+    extraHeaders: { Authorization: `Bearer ${token}` },
+    withCredentials: true, // send cookies alongside the connection
+    transports: ['websocket', 'polling'] as ('websocket' | 'polling')[],
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 2000,
+    reconnectionDelayMax: 15000,
+  };
+}
+
+function attachBaseListeners(socket: Socket) {
+  socket.on('connect', () => {
+    console.log('Connected to notifications socket');
+  });
+
+  socket.on('connect_error', (error) => {
+    console.error('WebSocket connection failed:', error.message);
+  });
+
+  socket.on('disconnect', (reason) => {
+    console.log('Disconnected from notifications socket:', reason);
+    // DO NOT manually reconnect here.
+    // 'io server disconnect' = server intentionally kicked this client
+    // (most likely invalid/expired token). Reconnecting with the same
+    // stale token will get kicked again — infinite loop.
+    // useNotificationSocket handles reconnection via token rotation.
+  });
+}
 
 class NotificationSocketService {
   private socket: Socket | null = null;
-  private reconnectionAttempts = 0;
-  private maxReconnectionAttempts = 10;
 
   connect() {
     if (typeof window === 'undefined') return;
     if (this.socket?.connected) return;
+    // Socket exists but disconnected — a server-side kick while mid-reconnect.
+    // Don't stack another instance on top; caller must call disconnect() first.
+    if (this.socket) return;
 
     const token = useAuthStore.getState().token;
     if (!token) return;
 
-    this.socket = io(`${SOCKET_URL}/notifications`, {
-      auth: { token: `Bearer ${token}` },
-      transports: ['websocket', 'polling'],
-      reconnection: true,
-      reconnectionAttempts: this.maxReconnectionAttempts,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 10000,
-    });
+    this.socket = io(`${SOCKET_URL}/notifications`, createSocketOptions(token));
+    attachBaseListeners(this.socket);
+  }
 
-    this.socket.on('connect', () => {
-      console.log('Connected to notifications socket');
-      this.reconnectionAttempts = 0;
-    });
-
-    this.socket.on('connect_error', (error) => {
-      console.error('WebSocket connection failed:', error.message);
-      this.reconnectionAttempts++;
-    });
-
-    this.socket.on('disconnect', (reason) => {
-      console.log('Disconnected from notifications socket:', reason);
-      if (reason === 'io server disconnect') {
-        this.socket?.connect();
-      }
-    });
+  reconnectWithToken(token: string) {
+    this.disconnect();
+    if (!token) return;
+    this.socket = io(`${SOCKET_URL}/notifications`, createSocketOptions(token));
+    attachBaseListeners(this.socket);
   }
 
   disconnect() {
     if (this.socket) {
+      this.socket.removeAllListeners();
       this.socket.disconnect();
       this.socket = null;
     }
@@ -75,7 +97,7 @@ class NotificationSocketService {
   }
 
   get isConnected() {
-    return this.socket?.connected || false;
+    return this.socket?.connected ?? false;
   }
 }
 

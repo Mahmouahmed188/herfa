@@ -11,10 +11,17 @@ import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 import * as api from '@/services/api';
 import { useCustomerNotifications, useUnreadCount, useMarkAsRead } from '@/features/notifications/hooks/useCustomerNotifications';
+import { useProviderEarnings } from '@/features/finance/hooks/usePayments';
 import { NotificationCard } from '@/features/notifications/components/NotificationCard';
 
 export default function TechnicianDashboard() {
     const { user } = useAuthStore();
+
+    const { data: earningsData } = useProviderEarnings();
+    const earningsSummary = earningsData?.data ?? null;
+    const totalEarnings = earningsSummary
+        ? Intl.NumberFormat(undefined, { style: 'currency', currency: 'SAR', maximumFractionDigits: 2 }).format(earningsSummary.totalEarnings)
+        : '$0';
 
     // Fetch stats and recent items
     const { data: requests = [] } = useQuery({
@@ -48,7 +55,7 @@ export default function TechnicianDashboard() {
     const stats = [
         { label: 'Pending Offers', value: offers.filter((o: any) => o.status === 'pending').length, icon: Briefcase, color: 'text-amber-500', bg: 'bg-amber-500/10' },
         { label: 'Active Jobs', value: activeJobs.length, icon: CheckCircle, color: 'text-primary', bg: 'bg-primary/10' },
-        { label: 'Total Earnings', value: '$0', icon: Wallet, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+        { label: 'Total Earnings', value: totalEarnings, icon: Wallet, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
         { label: 'Rating', value: '5.0', icon: Star, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
     ];
 

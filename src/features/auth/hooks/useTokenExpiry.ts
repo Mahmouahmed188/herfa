@@ -18,8 +18,13 @@ export function useTokenExpiry() {
         if (result?.accessToken) {
           store.setToken(result.accessToken);
         }
-      } catch {
-        store.logout();
+      } catch (err: any) {
+        // Only log out on definitive auth failures (401/403), not transient network errors.
+        // A network blip should not kill the user's session.
+        const status = err?.response?.status ?? err?.status;
+        if (status === 401 || status === 403) {
+          store.logout();
+        }
       }
     }, CHECK_INTERVAL_MS);
 

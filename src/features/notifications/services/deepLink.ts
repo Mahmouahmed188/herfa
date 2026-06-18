@@ -14,6 +14,14 @@ const PAYMENT_TYPES = new Set([
   'REFUND_CREATED', 'REFUND_APPROVED', 'REFUND_REJECTED',
 ]);
 
+const FINANCE_TYPES = new Set([
+  'PAYMENT_CREATED',
+  'PAYMENT_CONFIRMED',
+  'REFUND_CREATED',
+  'REFUND_APPROVED',
+  'REFUND_REJECTED',
+]);
+
 const REVIEW_TYPES = new Set([
   'REVIEW_CREATED', 'REVIEW_UPDATED', 'REVIEW_MODERATED',
 ]);
@@ -37,8 +45,8 @@ export function getDeepLinkPath(type: NotificationType, data?: NotificationPaylo
     return `/client/tracking/${data.trackingId}`;
   }
 
-  if (PAYMENT_TYPES.has(type)) {
-    return '/client/wallet';
+  if (FINANCE_TYPES.has(type)) {
+    return data?.paymentId ? `/finance/${data.paymentId}` : '/client/wallet';
   }
 
   if (REVIEW_TYPES.has(type) && data?.bookingId) {

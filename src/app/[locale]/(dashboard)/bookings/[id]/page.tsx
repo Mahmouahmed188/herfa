@@ -11,6 +11,7 @@ import { BookingTimeline } from '@/features/bookings/components/BookingTimeline'
 import { useBookingTimeline } from '@/features/bookings/hooks/useBookingTimeline';
 import { DisputePanel } from '@/features/bookings/components/DisputePanel';
 import { toast } from 'sonner';
+import { Link, useRouter } from '@/lib/navigation';
 
 const statusVariant: Record<string, 'default' | 'destructive' | 'secondary' | 'outline'> = {
   PENDING: 'secondary',
@@ -27,6 +28,7 @@ export default function BookingDetailsPage() {
   const params = useParams();
   const id = params.id as string;
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data: bookingData, isLoading: isBookingLoading } = useQuery({
     queryKey: ['bookings', id],
@@ -91,6 +93,12 @@ export default function BookingDetailsPage() {
                 <span className="text-muted-foreground">Scheduled:</span>
                 <span className="font-medium">{new Date(booking.scheduledAt).toLocaleDateString()}</span>
               </div>
+              <Link
+                href={{ pathname: '/finance/[id]', params: { id: booking.id } }}
+                className="inline-flex text-primary text-sm font-semibold hover:underline"
+              >
+                View Payment Details
+              </Link>
             </CardContent>
           </Card>
 
@@ -98,6 +106,7 @@ export default function BookingDetailsPage() {
             <DisputePanel
               bookingId={booking.id}
               onResolve={(data) => resolveMutation.mutate(data)}
+              onRequestRefund={() => router.push({ pathname: '/finance/refunds', query: { bookingId: booking.id } })}
               isSubmitting={resolveMutation.isPending}
             />
           )}

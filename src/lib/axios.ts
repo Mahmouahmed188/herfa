@@ -35,6 +35,7 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // required to send httpOnly refresh token cookie cross-origin
 });
 
 api.interceptors.request.use(
@@ -73,9 +74,13 @@ api.interceptors.response.use(
         processQueue(null, newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return api(originalRequest);
-      } catch (refreshError) {
+      } catch (refreshError: any) {
         processQueue(refreshError, null);
-        useAuthStore.getState().logout();
+        // Only clear session on definitive auth failures, not transient errors
+        const status = refreshError?.response?.status ?? refreshError?.status;
+        if (status === 401 || status === 403) {
+          useAuthStore.getState().logout();
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
