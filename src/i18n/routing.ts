@@ -42,6 +42,7 @@ export const routing = defineRouting({
         '/provider/verification': '/provider/verification',
         '/provider/verification/submit': '/provider/verification/submit',
         '/provider/verification/history': '/provider/verification/history',
+        '/technician/notifications': '/technician/notifications',
         '/technician/requests': '/technician/requests',
         '/technician/reviews': '/technician/reviews',
         '/technician/reviews/[reviewId]': '/technician/reviews/[reviewId]',

@@ -6,14 +6,13 @@ import { Link } from '@/lib/navigation';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCustomerNotifications, useUnreadCount, useMarkAsRead } from '@/features/notifications/hooks/useCustomerNotifications';
 import * as api from '@/services/api';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 export function HeaderActions() {
   const t = useTranslations('Navbar');
-  const queryClient = useQueryClient();
   const { isAuthenticated, user } = useAuthStore();
 
   const [showNotifications, setShowNotifications] = React.useState(false);
@@ -32,26 +31,9 @@ export function HeaderActions() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const { data: notifications } = useQuery({
-    queryKey: ['notifications'],
-    queryFn: () => api.getNotifications(),
-    enabled: isAuthenticated,
-  });
-
-  const { data: unreadCount } = useQuery({
-    queryKey: ['unreadNotificationsCount'],
-    queryFn: () => api.getUnreadNotificationsCount(),
-    enabled: isAuthenticated,
-    refetchInterval: 30000,
-  });
-
-  const markReadMutation = useMutation({
-    mutationFn: (ids: string[]) => api.markNotificationsAsRead(ids),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notifications'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationsCount'] });
-    }
-  });
+  const { data: notifications } = useCustomerNotifications(1, 5);
+  const { data: unreadData } = useUnreadCount();
+  const markReadMutation = useMarkAsRead();
 
   const getDashboardPath = () => {
     if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') return '/admin/dashboard' as const;
@@ -83,7 +65,7 @@ export function HeaderActions() {
           aria-label="Notifications"
         >
           <Bell className="w-5 h-5" />
-          {unreadCount?.count > 0 && (
+          {unreadData && typeof unreadData === 'object' && 'count' in unreadData && (unreadData as { count: number }).count > 0 && (
             <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-background-dark" />
           )}
         </button>
@@ -98,7 +80,7 @@ export function HeaderActions() {
             >
               <div className="p-4 border-b border-surface-border flex items-center justify-between">
                 <h3 className="text-white font-bold">Notifications</h3>
-                {unreadCount?.count > 0 && (
+                {unreadData && typeof unreadData === 'object' && 'count' in unreadData && (unreadData as { count: number }).count > 0 && (
                   <button
                     onClick={() => markReadMutation.mutate(notifications?.map((n: any) => n.id))}
                     className="text-[10px] uppercase font-bold text-primary hover:underline"
@@ -117,10 +99,10 @@ export function HeaderActions() {
                         </div>
                         <div>
                           <p className="text-xs text-white font-medium mb-1">{n.title}</p>
-                          <p className="text-[11px] text-gray-500 line-clamp-2">{n.message}</p>
+                          <p className="text-[11px] text-gray-500 line-clamp-2">{n.body}</p>
                           <p className="text-[9px] text-gray-600 mt-2">{new Date(n.createdAt).toLocaleDateString()}</p>
                         </div>
-                        {!n.read && <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />}
+                        {!n.isRead && <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />}
                       </div>
                     </div>
                   ))

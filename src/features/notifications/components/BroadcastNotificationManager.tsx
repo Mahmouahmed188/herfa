@@ -5,7 +5,7 @@ import { useBroadcasts, useSendBroadcast } from '../hooks/useNotifications';
 import { DataTable } from '@/components/ui/data-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Send, Plus, History } from 'lucide-react';
+import { Send, Plus } from 'lucide-react';
 import { BroadcastNotification } from '../services/api';
 import { Dialog } from '@/components/ui/feedback/Dialog';
 import { FormField } from '@/components/ui/forms/FormField';
@@ -41,7 +41,7 @@ export function BroadcastNotificationManager() {
   });
 
   const onSubmit = (values: BroadcastInput) => {
-    sendMutation.mutate(values as any, {
+    sendMutation.mutate(values, {
       onSuccess: () => {
         setIsDialogOpen(false);
         methods.reset();

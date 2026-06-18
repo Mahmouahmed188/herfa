@@ -43,6 +43,7 @@ const technicianItems: SidebarItem[] = [
     { name: 'Offers', href: '/technician/offers', icon: Briefcase },
     { name: 'Messages', href: '/technician/messages', icon: MessageCircle },
     { name: 'Earnings', href: '/technician/earnings', icon: Wallet },
+    { name: 'Notifications', href: '/technician/notifications', icon: Bell },
     { name: 'Profile', href: '/technician/profile', icon: User },
 ];
 
@@ -70,7 +71,7 @@ export function AppSidebar({ role }: { role: UserRole }) {
         : 0;
     const baseItems = role === 'CUSTOMER' ? clientItems : role === 'PROVIDER' ? technicianItems : adminItems;
     const items = baseItems.map((item) => {
-        if (role === 'CUSTOMER' && item.href === '/client/notifications' && unreadCount > 0) {
+        if ((role === 'CUSTOMER' && item.href === '/client/notifications' || role === 'PROVIDER' && item.href === '/technician/notifications') && unreadCount > 0) {
             return { ...item, badge: unreadCount };
         }
         return item;

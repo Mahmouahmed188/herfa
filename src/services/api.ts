@@ -404,17 +404,38 @@ export async function getAllJobs(params?: Record<string, string>) {
 
 // --- NOTIFICATIONS ---
 
-export async function getNotifications(page = 1, limit = 10) {
-  return fetchWithAuth(`/notifications?page=${page}&limit=${limit}`, { method: 'GET' });
+export async function getNotifications(page = 1, limit = 10, filters?: { isRead?: boolean; type?: string }) {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (filters?.isRead !== undefined) params.set('isRead', String(filters.isRead));
+  if (filters?.type) params.set('type', filters.type);
+  return fetchWithAuth(`/notifications?${params.toString()}`, { method: 'GET' });
 }
 
 export async function getUnreadNotificationsCount() {
   return fetchWithAuth('/notifications/unread-count', { method: 'GET' });
 }
 
+export async function markNotificationAsRead(id: string) {
+  return fetchWithAuth(`/notifications/${id}/read`, {
+    method: 'PATCH',
+  });
+}
+
+export async function markAllNotificationsAsRead() {
+  return fetchWithAuth('/notifications/read-all', {
+    method: 'PATCH',
+  });
+}
+
 export async function markNotificationsAsRead(notificationIds: string[]) {
   return fetchWithAuth('/notifications/mark-read', {
     method: 'POST',
     body: JSON.stringify({ notificationIds }),
+  });
+}
+
+export async function deleteNotification(id: string) {
+  return fetchWithAuth(`/notifications/${id}`, {
+    method: 'DELETE',
   });
 }

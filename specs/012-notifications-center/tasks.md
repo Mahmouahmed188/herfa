@@ -36,9 +36,9 @@ description: "Task list for Notifications Center feature implementation"
 
 **Purpose**: Feature initialization and basic structure
 
-- [ ] T001 Create provider notifications page directory at `src/app/[locale]/(provider)/notifications/`
-- [ ] T002 [P] Extend `notificationTypeSchema` in `src/features/notifications/schemas/validation.ts` to include all notification types (booking, tracking, payment, review, verification, support)
-- [ ] T003 [P] Add `PaymentNotificationType`, `ReviewNotificationType`, `SupportNotificationType` unions to `src/features/notifications/types/index.ts`
+- [X] T001 Create provider notifications page directory at `src/app/[locale]/(provider)/notifications/`
+- [X] T002 [P] Extend `notificationTypeSchema` in `src/features/notifications/schemas/validation.ts` to include all notification types (booking, tracking, payment, review, verification, support)
+- [X] T003 [P] Add `PaymentNotificationType`, `ReviewNotificationType`, `SupportNotificationType` unions to `src/features/notifications/types/index.ts`
 
 ---
 
@@ -46,12 +46,12 @@ description: "Task list for Notifications Center feature implementation"
 
 **Purpose**: Core logic and API integration that MUST be complete before ANY UI work
 
-- [ ] T004 Align mark-read API calls in `src/services/api.ts`: change `POST /notifications/mark-read` to `PATCH /notifications/:id/read` (single) and `PATCH /notifications/read-all` (bulk) per backend spec
-- [ ] T005 [P] Add `markNotificationAsRead(id)` function to `src/services/api.ts` for single notification read
-- [ ] T006 [P] Add `markAllNotificationsAsRead()` function to `src/services/api.ts` for bulk read-all
-- [ ] T007 [P] Update `useMarkAsRead()` mutation hook in `src/features/notifications/hooks/useCustomerNotifications.ts` to use new single + bulk endpoints and properly invalidate `['notifications']` and `['notifications', 'unread-count']` caches
-- [ ] T008 Consolidate duplicate notification hooks from `src/components/layout/HeaderActions.tsx` into `src/features/notifications/hooks/useCustomerNotifications.ts` and import shared hooks
-- [ ] T009 Configure localized notification messages in `src/messages/ar.json` and `src/messages/en.json` for all notification-related UI text
+- [X] T004 Align mark-read API calls in `src/services/api.ts`: change `POST /notifications/mark-read` to `PATCH /notifications/:id/read` (single) and `PATCH /notifications/read-all` (bulk) per backend spec
+- [X] T005 [P] Add `markNotificationAsRead(id)` function to `src/services/api.ts` for single notification read
+- [X] T006 [P] Add `markAllNotificationsAsRead()` function to `src/services/api.ts` for bulk read-all
+- [X] T007 [P] Update `useMarkAsRead()` mutation hook in `src/features/notifications/hooks/useCustomerNotifications.ts` to use new single + bulk endpoints and properly invalidate `['notifications']` and `['notifications', 'unread-count']` caches
+- [X] T008 Consolidate duplicate notification hooks from `src/components/layout/HeaderActions.tsx` into `src/features/notifications/hooks/useCustomerNotifications.ts` and import shared hooks
+- [X] T009 Configure localized notification messages in `src/messages/ar.json` and `src/messages/en.json` for all notification-related UI text
 
 **Checkpoint**: Foundation ready — UI implementation can now begin in parallel
 
@@ -65,12 +65,12 @@ description: "Task list for Notifications Center feature implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] Enhance `NotificationCard` in `src/features/notifications/components/NotificationCard.tsx` to handle deep link routing for all notification types from data-model.md routing map
-- [ ] T011 [US1] Add page-based pagination controls to `CustomerNotificationList` in `src/features/notifications/components/CustomerNotificationList.tsx` with Previous/Next buttons and page indicator
-- [ ] T012 [P] [US1] Add filter dropdown (All / Read / Unread) to customer notifications page at `src/app/[locale]/client/notifications/page.tsx`
-- [ ] T013 [US1] Wire filter state and pagination to `useCustomerNotifications(page, limit, filters)` query hook in `src/features/notifications/hooks/useCustomerNotifications.ts`
-- [ ] T014 [US1] Add empty state ("No notifications" with bell icon) and error state (retry button) to `CustomerNotificationList`
-- [ ] T015 [US1] Create provider notifications page at `src/app/[locale]/(provider)/notifications/page.tsx` reusing `CustomerNotificationList` with provider-appropriate header and navigation
+- [X] T010 [P] [US1] Enhance `NotificationCard` in `src/features/notifications/components/NotificationCard.tsx` to handle deep link routing for all notification types from data-model.md routing map
+- [X] T011 [US1] Add page-based pagination controls to `CustomerNotificationList` in `src/features/notifications/components/CustomerNotificationList.tsx` with Previous/Next buttons and page indicator
+- [X] T012 [P] [US1] Add filter dropdown (All / Read / Unread) to customer notifications page at `src/app/[locale]/client/notifications/page.tsx`
+- [X] T013 [US1] Wire filter state and pagination to `useCustomerNotifications(page, limit, filters)` query hook in `src/features/notifications/hooks/useCustomerNotifications.ts`
+- [X] T014 [US1] Add empty state ("No notifications" with bell icon) and error state (retry button) to `CustomerNotificationList`
+- [X] T015 [US1] Create provider notifications page at `src/app/[locale]/(provider)/notifications/page.tsx` reusing `CustomerNotificationList` with provider-appropriate header and navigation
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -84,10 +84,10 @@ description: "Task list for Notifications Center feature implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T016 [P] [US2] Add "Mark All as Read" button to customer notifications page at `src/app/[locale]/client/notifications/page.tsx` wired to `useMarkAsRead()` with all notification IDs
-- [ ] T017 [P] [US2] Add "Mark All as Read" button to provider notifications page at `src/app/[locale]/(provider)/notifications/page.tsx` using shared mutation hook
-- [ ] T018 [US2] Add unread count badge to provider sidebar in `src/components/layout/AppSidebar.tsx` using `useUnreadCount()` hook
-- [ ] T019 [US2] Ensure automatic unread counter refresh after mark-read mutations by adding `refetchInterval: 30000` to `useUnreadCount()` and invalidating on mutation success
+- [X] T016 [P] [US2] Add "Mark All as Read" button to customer notifications page at `src/app/[locale]/client/notifications/page.tsx` wired to `useMarkAllAsRead()` 
+- [X] T017 [P] [US2] Add "Mark All as Read" button to provider notifications page at `src/app/[locale]/(provider)/notifications/page.tsx` using shared mutation hook
+- [X] T018 [US2] Add unread count badge to provider sidebar in `src/components/layout/AppSidebar.tsx` using `useUnreadCount()` hook
+- [X] T019 [US2] Ensure automatic unread counter refresh after mark-read mutations by adding `refetchInterval: 30000` to `useUnreadCount()` and invalidating on mutation success
 
 **Checkpoint**: User Stories 1 AND 2 should both work independently
 
@@ -101,13 +101,13 @@ description: "Task list for Notifications Center feature implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T020 [P] [US3] Create `AnnouncementCard` component in `src/features/notifications/components/AnnouncementCard.tsx` displaying title, body, publication date, and status badge
-- [ ] T021 [P] [US3] Create `AnnouncementBanner` component in `src/features/notifications/components/AnnouncementBanner.tsx` fetching active announcements and showing a dismissible banner for important ones
-- [ ] T022 [P] [US3] Create announcements list page at `src/app/[locale]/announcements/page.tsx` with active/archived filter and paginated list of `AnnouncementCard` components
-- [ ] T023 [P] [US3] Create announcement detail page at `src/app/[locale]/announcements/[id]/page.tsx` showing full announcement content
-- [ ] T024 [US3] Add `AnnouncementBanner` to root layout at `src/app/[locale]/layout.tsx` to display globally
-- [ ] T025 [US3] Implement announcement dismissal (store dismissed IDs in localStorage) in `AnnouncementBanner` at `src/features/notifications/components/AnnouncementBanner.tsx`
-- [ ] T026 [US3] Add active/archived filter to announcements page data fetching at `src/features/notifications/hooks/useNotifications.ts` (extend `useBroadcasts` with status filter)
+- [X] T020 [P] [US3] Create `AnnouncementCard` component in `src/features/notifications/components/AnnouncementCard.tsx` displaying title, body, publication date, and status badge
+- [X] T021 [P] [US3] Create `AnnouncementBanner` component in `src/features/notifications/components/AnnouncementBanner.tsx` fetching active announcements and showing a dismissible banner for important ones
+- [X] T022 [P] [US3] Create announcements list page at `src/app/[locale]/announcements/page.tsx` with active/archived filter and paginated list of `AnnouncementCard` components
+- [X] T023 [P] [US3] Create announcement detail page at `src/app/[locale]/announcements/[id]/page.tsx` showing full announcement content
+- [X] T024 [US3] Add `AnnouncementBanner` to root layout via `ConditionalLayout.tsx` to display globally
+- [X] T025 [US3] Implement announcement dismissal (store dismissed IDs in localStorage) in `AnnouncementBanner` at `src/features/notifications/components/AnnouncementBanner.tsx`
+- [X] T026 [US3] Add active/archived filter to announcements page data fetching at `src/app/[locale]/announcements/page.tsx` (status filter integrated directly)
 
 **Checkpoint**: User Stories 1–3 should all work independently
 
@@ -121,14 +121,14 @@ description: "Task list for Notifications Center feature implementation"
 
 ### Implementation for User Story 4
 
-- [ ] T027 [US4] Create `NotificationDetail` component in `src/features/notifications/components/NotificationDetail.tsx` displaying full notification content with action buttons (mark read, navigate)
-- [ ] T028 [US4] Build deep link routing service in `src/features/notifications/services/deepLink.ts` mapping notification type + payload data to route paths per data-model.md routing table
-- [ ] T029 [US4] Implement deep link navigation for booking notification types in `src/features/notifications/components/NotificationCard.tsx` using the new deep link service
-- [ ] T030 [P] [US4] Implement deep link navigation for payment notification types in `src/features/notifications/components/NotificationCard.tsx`
-- [ ] T031 [P] [US4] Implement deep link navigation for review notification types in `src/features/notifications/components/NotificationCard.tsx`
-- [ ] T032 [P] [US4] Implement deep link navigation for verification notification types in `src/features/notifications/components/NotificationCard.tsx`
-- [ ] T033 [P] [US4] Implement deep link navigation for support/dispute notification types in `src/features/notifications/components/NotificationCard.tsx`
-- [ ] T034 [US4] Create notification detail page at `src/app/[locale]/notifications/[id]/page.tsx` as fallback when no deep link payload exists, using `NotificationDetail` component
+- [X] T027 [US4] Create `NotificationDetail` component in `src/features/notifications/components/NotificationDetail.tsx` displaying full notification content with action buttons (mark read, navigate)
+- [X] T028 [US4] Build deep link routing service in `src/features/notifications/services/deepLink.ts` mapping notification type + payload data to route paths per data-model.md routing table
+- [X] T029 [US4] Implement deep link navigation for booking notification types in `src/features/notifications/components/NotificationCard.tsx` using the new deep link service
+- [X] T030 [P] [US4] Implement deep link navigation for payment notification types in `src/features/notifications/components/NotificationCard.tsx`
+- [X] T031 [P] [US4] Implement deep link navigation for review notification types in `src/features/notifications/components/NotificationCard.tsx`
+- [X] T032 [P] [US4] Implement deep link navigation for verification notification types in `src/features/notifications/components/NotificationCard.tsx`
+- [X] T033 [P] [US4] Implement deep link navigation for support/dispute notification types in `src/features/notifications/components/NotificationCard.tsx`
+- [X] T034 [US4] Create notification detail page at `src/app/[locale]/notifications/[id]/page.tsx` as fallback when no deep link payload exists, using `NotificationDetail` component
 
 **Checkpoint**: User Stories 1–4 should all work independently
 
@@ -142,8 +142,8 @@ description: "Task list for Notifications Center feature implementation"
 
 ### Implementation for User Story 5
 
-- [ ] T035 [US5] Add notification widget to provider dashboard at `src/app/[locale]/(provider)/dashboard/page.tsx` showing recent notifications list and unread count badge with "View all" link
-- [ ] T036 [US5] Enhance existing customer dashboard notification card at `src/app/[locale]/(customer)/dashboard/page.tsx` — ensure it uses shared `useUnreadCount()` hook and shows last 3 notifications
+- [X] T035 [US5] Add notification widget to provider dashboard at `src/app/[locale]/(provider)/dashboard/page.tsx` showing recent notifications list and unread count badge with "View all" link
+- [X] T036 [US5] Enhance existing customer dashboard notification card at `src/app/[locale]/(customer)/dashboard/page.tsx` — ensure it uses shared `useUnreadCount()` hook and shows last 3 notifications
 
 **Checkpoint**: User Stories 1–5 should all work independently
 
@@ -157,11 +157,11 @@ description: "Task list for Notifications Center feature implementation"
 
 ### Implementation for User Story 6
 
-- [ ] T037 [US6] Install and configure Socket.io client (`socket.io-client`) in the project at `package.json`
-- [ ] T038 [P] [US6] Create Socket.io service in `src/features/notifications/services/socket.ts` connecting to `/notifications` namespace with JWT auth and configured reconnection strategy
-- [ ] T039 [US6] Wire `notification` WebSocket event to TanStack Query cache invalidation: invalidate `['notifications']` and `['notifications', 'unread-count']` on new notification in `src/features/notifications/hooks/useCustomerNotifications.ts`
-- [ ] T040 [US6] Wire `unread-count` WebSocket event to optimistic cache update in `useUnreadCount()` hook — set query data directly instead of refetching
-- [ ] T041 [US6] Implement reconnection strategy (exponential backoff, max 10 attempts) and graceful fallback to 30s polling on connection failure in socket service
+- [X] T037 [US6] Install and configure Socket.io client (`socket.io-client`) in the project at `package.json`
+- [X] T038 [P] [US6] Create Socket.io service in `src/features/notifications/services/socket.ts` connecting to `/notifications` namespace with JWT auth and configured reconnection strategy
+- [X] T039 [US6] Wire `notification` WebSocket event to TanStack Query cache invalidation: invalidate `['notifications']` and `['notifications', 'unread-count']` on new notification in `src/features/notifications/hooks/useCustomerNotifications.ts`
+- [X] T040 [US6] Wire `unread-count` WebSocket event to optimistic cache update in `useUnreadCount()` hook — set query data directly instead of refetching
+- [X] T041 [US6] Implement reconnection strategy (exponential backoff, max 10 attempts) and graceful fallback to 30s polling on connection failure in socket service
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -171,10 +171,10 @@ description: "Task list for Notifications Center feature implementation"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T042 Generate `docs/notifications-center-audit.md` documenting endpoint coverage, API mismatches, DTO mismatches, event mismatches, missing components, and required fixes
-- [ ] T043 Run `npm run lint` and `npm run type-check` — fix all issues across notification-related files
-- [ ] T044 Verify all notification types from data-model.md are handled in `NotificationCard` icon/color mapping at `src/features/notifications/components/NotificationCard.tsx`
-- [ ] T045 Run quickstart.md validation — verify all acceptance criteria from spec.md are met
+- [X] T042 Generate `docs/notifications-center-audit.md` documenting endpoint coverage, API mismatches, DTO mismatches, event mismatches, missing components, and required fixes
+- [X] T043 Run `npm run lint` and `npm run type-check` — fix all issues across notification-related files
+- [X] T044 Verify all notification types from data-model.md are handled in `NotificationCard` icon/color mapping at `src/features/notifications/components/NotificationCard.tsx`
+- [X] T045 Run quickstart.md validation — verify all acceptance criteria from spec.md are met
 
 ---
 

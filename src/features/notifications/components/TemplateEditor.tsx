@@ -53,11 +53,11 @@ export function TemplateEditor() {
   const onSubmit = (values: TemplateInput) => {
     if (editingTemplate) {
       updateMutation.mutate(
-        { id: editingTemplate.id, data: values as any },
+        { id: editingTemplate.id, data: values },
         { onSuccess: () => setIsDialogOpen(false) }
       );
     } else {
-      createMutation.mutate(values as any, {
+      createMutation.mutate(values, {
         onSuccess: () => { setIsDialogOpen(false); methods.reset(); },
       });
     }
@@ -86,7 +86,13 @@ export function TemplateEditor() {
       cell: (row: Template) => (
         <Button variant="ghost" size="icon" onClick={() => {
           setEditingTemplate(row);
-          methods.reset(row as any);
+          methods.reset({
+            name: row.name,
+            subject: row.subject,
+            body: row.body,
+            channel: row.channel,
+            placeholders: row.placeholders,
+          });
           setIsDialogOpen(true);
         }}>
           <Edit2 className="w-4 h-4" />

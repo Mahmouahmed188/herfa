@@ -7,7 +7,8 @@ import {
 import { Link } from "@/lib/navigation";
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useDashboardStats } from '@/features/client/hooks/useDashboardStats';
-import { useUnreadCount } from '@/features/notifications/hooks/useCustomerNotifications';
+import { useCustomerNotifications, useUnreadCount, useMarkAsRead } from '@/features/notifications/hooks/useCustomerNotifications';
+import { NotificationCard } from '@/features/notifications/components/NotificationCard';
 import { ProfileSummary } from '@/features/client/components/ProfileSummary';
 import { ActiveBookingList } from '@/features/bookings/components/ActiveBookingList';
 import { useActiveBookings } from '@/features/bookings/hooks/useActiveBookings';
@@ -29,11 +30,18 @@ export default function ClientDashboard() {
   const { user } = useAuthStore();
   const { data: stats, isLoading: statsLoading } = useDashboardStats();
   const { data: unreadData } = useUnreadCount();
+  const { data: notificationsData } = useCustomerNotifications(1, 3);
+  const { mutate: markAsRead } = useMarkAsRead();
   const { data: activeBookings, isLoading: activeLoading } = useActiveBookings();
 
   const unreadCount = unreadData && typeof unreadData === 'object' && 'count' in unreadData
     ? (unreadData as { count: number }).count
     : 0;
+
+  const rawNotifications = notificationsData as { data?: any[]; total?: number } | any[] | undefined;
+  const notificationsList = Array.isArray(rawNotifications)
+    ? rawNotifications
+    : rawNotifications?.data ?? [];
 
   return (
     <div className="space-y-6 max-w-5xl">
@@ -143,13 +151,18 @@ export default function ClientDashboard() {
                 </span>
               )}
             </div>
-            {unreadCount > 0 ? (
-              <p className="text-sm text-slate-500 dark:text-gray-400">
-                You have {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}.
-              </p>
-            ) : (
-              <p className="text-sm text-slate-500 dark:text-gray-400">No unread notifications.</p>
-            )}
+            <div className="space-y-3 mb-4">
+              {notificationsList.map((notification: any) => (
+                <NotificationCard
+                  key={notification.id}
+                  notification={notification}
+                  onMarkAsRead={(id) => markAsRead([id])}
+                />
+              ))}
+              {notificationsList.length === 0 && (
+                <p className="text-sm text-slate-500 dark:text-gray-400">No recent notifications.</p>
+              )}
+            </div>
             <Link href="/client/notifications" className="text-primary text-sm font-semibold hover:underline mt-3 inline-block">
               View all notifications
             </Link>

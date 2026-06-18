@@ -1,15 +1,17 @@
 'use client';
 
 import React from 'react';
-import { 
+import {
     LayoutDashboard, List, Briefcase, CheckCircle, 
     MessageCircle, TrendingUp, Wallet, Clock, 
-    ArrowRight, Star, AlertCircle
+    ArrowRight, Star, AlertCircle, Bell
 } from 'lucide-react';
 import { Link } from "@/lib/navigation";
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 import * as api from '@/services/api';
+import { useCustomerNotifications, useUnreadCount, useMarkAsRead } from '@/features/notifications/hooks/useCustomerNotifications';
+import { NotificationCard } from '@/features/notifications/components/NotificationCard';
 
 export default function TechnicianDashboard() {
     const { user } = useAuthStore();
@@ -29,6 +31,19 @@ export default function TechnicianDashboard() {
         queryKey: ['activeJobs'],
         queryFn: () => api.getAssignedJobs({ status: 'IN_PROGRESS' }),
     });
+
+    const { data: notificationsData } = useCustomerNotifications(1, 3);
+    const { data: unreadData } = useUnreadCount();
+    const { mutate: markAsRead } = useMarkAsRead();
+
+    const unreadCount = unreadData && typeof unreadData === 'object' && 'count' in unreadData
+        ? (unreadData as { count: number }).count
+        : 0;
+
+    const rawNotifications = notificationsData as { data?: any[]; total?: number } | any[] | undefined;
+    const notificationsList = Array.isArray(rawNotifications)
+        ? rawNotifications
+        : rawNotifications?.data ?? [];
 
     const stats = [
         { label: 'Pending Offers', value: offers.filter((o: any) => o.status === 'pending').length, icon: Briefcase, color: 'text-amber-500', bg: 'bg-amber-500/10' },
@@ -142,6 +157,37 @@ export default function TechnicianDashboard() {
                                 <p className="text-xs text-gray-500">No active jobs.</p>
                             </div>
                         )}
+                    </div>
+
+                    {/* Recent Notifications */}
+                    <div className="mt-8 space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                Notifications
+                                {unreadCount > 0 && (
+                                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                                        {unreadCount}
+                                    </span>
+                                )}
+                            </h2>
+                            <Link href="/technician/notifications" className="text-primary text-sm font-semibold hover:underline flex items-center gap-1">
+                                View All <ArrowRight className="w-3 h-3" />
+                            </Link>
+                        </div>
+                        <div className="space-y-3">
+                            {notificationsList.map((notification: any) => (
+                                <NotificationCard
+                                    key={notification.id}
+                                    notification={notification}
+                                    onMarkAsRead={(id) => markAsRead([id])}
+                                />
+                            ))}
+                            {notificationsList.length === 0 && (
+                                <div className="p-8 text-center border border-surface-border rounded-[20px]">
+                                    <p className="text-xs text-gray-500">No recent notifications.</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {/* Messages Summary */}

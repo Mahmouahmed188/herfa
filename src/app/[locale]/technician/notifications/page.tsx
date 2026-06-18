@@ -6,10 +6,9 @@ import { useCustomerNotifications, useMarkAsRead, useMarkAllAsRead } from '@/fea
 import { CustomerNotificationList } from '@/features/notifications/components/CustomerNotificationList';
 import { CustomerNotification } from '@/features/notifications/types';
 
-export default function NotificationsPage() {
+export default function ProviderNotificationsPage() {
   const [page, setPage] = React.useState(1);
-  const [filter, setFilter] = React.useState<'all' | 'unread' | 'read'>('all');
-  const { data, isLoading, isError, refetch } = useCustomerNotifications(page, 20, filter !== 'all' ? { isRead: filter === 'read' } : undefined);
+  const { data, isLoading, isError, refetch } = useCustomerNotifications(page, 20);
   const markAsRead = useMarkAsRead();
   const markAllAsRead = useMarkAllAsRead();
 
@@ -40,22 +39,6 @@ export default function NotificationsPage() {
             Mark all as read
           </button>
         )}
-      </div>
-
-      <div className="flex gap-2">
-        {(['all', 'unread', 'read'] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => { setFilter(f); setPage(1); }}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
-              filter === f
-                ? 'bg-primary text-white'
-                : 'bg-slate-100 dark:bg-surface-border text-slate-600 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            {f.charAt(0).toUpperCase() + f.slice(1)}
-          </button>
-        ))}
       </div>
 
       <CustomerNotificationList

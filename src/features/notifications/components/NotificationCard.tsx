@@ -1,23 +1,7 @@
-import { Bell, BookOpen, Megaphone, Tag, ShieldCheck, Clock, XCircle, FileText, CheckCircle, UserCheck, UserPlus, Play, Flag, Navigation, PauseCircle, PlayCircle, MapPin } from 'lucide-react';
+import { Bell, BookOpen, Megaphone, Tag, ShieldCheck, Clock, XCircle, FileText, CheckCircle, UserCheck, UserPlus, Play, Flag, Navigation, PauseCircle, PlayCircle, MapPin, CreditCard, MessageCircle, AlertTriangle } from 'lucide-react';
 import { useRouter } from '@/lib/navigation';
 import { CustomerNotification } from '../types';
-
-const BOOKING_NOTIFICATION_TYPES = new Set([
-  'BOOKING_CREATED',
-  'BOOKING_ACCEPTED',
-  'BOOKING_ASSIGNED',
-  'BOOKING_STARTED',
-  'BOOKING_COMPLETED',
-  'BOOKING_CANCELLED',
-  'BOOKING_UPDATE',
-]);
-
-const TRACKING_NOTIFICATION_TYPES = new Set([
-  'TRACKING_STARTED',
-  'TRACKING_PAUSED',
-  'TRACKING_RESUMED',
-  'TRACKING_ARRIVED',
-]);
+import { getDeepLinkPath, isClickableNotification } from '../services/deepLink';
 
 const typeIcons: Record<string, typeof Bell> = {
   BOOKING_UPDATE: BookOpen,
@@ -39,6 +23,20 @@ const typeIcons: Record<string, typeof Bell> = {
   VERIFICATION_REJECTED: XCircle,
   VERIFICATION_SUSPENDED: Bell,
   DOCUMENTS_REQUESTED: FileText,
+  PAYMENT_CREATED: CreditCard,
+  PAYMENT_CONFIRMED: CreditCard,
+  REFUND_CREATED: CreditCard,
+  REFUND_APPROVED: CheckCircle,
+  REFUND_REJECTED: XCircle,
+  REVIEW_CREATED: Bell,
+  REVIEW_UPDATED: Bell,
+  REVIEW_MODERATED: ShieldCheck,
+  TICKET_CREATED: MessageCircle,
+  TICKET_UPDATED: MessageCircle,
+  NEW_REPLY: MessageCircle,
+  TICKET_RESOLVED: CheckCircle,
+  DISPUTE_UPDATED: AlertTriangle,
+  DISPUTE_RESOLVED: CheckCircle,
 };
 
 const typeColors: Record<string, string> = {
@@ -61,6 +59,20 @@ const typeColors: Record<string, string> = {
   VERIFICATION_REJECTED: 'text-red-500 bg-red-500/10',
   VERIFICATION_SUSPENDED: 'text-gray-500 bg-gray-500/10',
   DOCUMENTS_REQUESTED: 'text-blue-500 bg-blue-500/10',
+  PAYMENT_CREATED: 'text-emerald-500 bg-emerald-500/10',
+  PAYMENT_CONFIRMED: 'text-emerald-500 bg-emerald-500/10',
+  REFUND_CREATED: 'text-amber-500 bg-amber-500/10',
+  REFUND_APPROVED: 'text-green-500 bg-green-500/10',
+  REFUND_REJECTED: 'text-red-500 bg-red-500/10',
+  REVIEW_CREATED: 'text-pink-500 bg-pink-500/10',
+  REVIEW_UPDATED: 'text-pink-500 bg-pink-500/10',
+  REVIEW_MODERATED: 'text-yellow-500 bg-yellow-500/10',
+  TICKET_CREATED: 'text-orange-500 bg-orange-500/10',
+  TICKET_UPDATED: 'text-orange-500 bg-orange-500/10',
+  NEW_REPLY: 'text-blue-500 bg-blue-500/10',
+  TICKET_RESOLVED: 'text-green-500 bg-green-500/10',
+  DISPUTE_UPDATED: 'text-red-500 bg-red-500/10',
+  DISPUTE_RESOLVED: 'text-green-500 bg-green-500/10',
 };
 
 interface NotificationCardProps {
@@ -71,14 +83,12 @@ interface NotificationCardProps {
 export function NotificationCard({ notification, onMarkAsRead }: NotificationCardProps) {
   const router = useRouter();
   const Icon = typeIcons[notification.type] || Bell;
-  const isClickable = BOOKING_NOTIFICATION_TYPES.has(notification.type) || TRACKING_NOTIFICATION_TYPES.has(notification.type);
+  const clickable = isClickableNotification(notification.type);
 
   const handleClick = () => {
-    if (!isClickable || !notification.metadata?.bookingId) return;
-    if (TRACKING_NOTIFICATION_TYPES.has(notification.type)) {
-      router.push({ pathname: '/client/tracking/[id]', params: { id: notification.metadata.bookingId } });
-    } else {
-      router.push({ pathname: '/client/jobs/[id]', params: { id: notification.metadata.bookingId } });
+    const path = getDeepLinkPath(notification.type, notification.data);
+    if (path) {
+      router.push(path as Parameters<typeof router.push>[0]);
     }
   };
 
@@ -90,8 +100,8 @@ export function NotificationCard({ notification, onMarkAsRead }: NotificationCar
   return (
     <div
       onClick={handleClick}
-      className={`flex items-start gap-4 p-4 rounded-xl transition-colors cursor-pointer ${
-        isClickable ? 'hover:bg-slate-50 dark:hover:bg-slate-900/50' : ''
+      className={`flex items-start gap-4 p-4 rounded-xl transition-colors ${
+        clickable ? 'cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/50' : ''
       } ${
         notification.isRead
           ? 'bg-white dark:bg-surface-dark'
