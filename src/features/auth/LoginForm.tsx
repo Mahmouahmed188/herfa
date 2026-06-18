@@ -9,7 +9,6 @@ import { Link } from '@/lib/navigation';
 import { useAuthStore } from './stores/useAuthStore';
 import { login as apiLogin } from '@/services/api';
 import { loginSchema, LoginValues } from './schemas/validation';
-import { getDashboardRoute } from './services/redirect';
 
 export function LoginForm() {
   const router = useRouter();
@@ -48,8 +47,7 @@ export function LoginForm() {
 
         login(storeUser, result.accessToken);
 
-        const dashboardRoute = getDashboardRoute(storeUser.role);
-        router.push(dashboardRoute);
+        router.push('/');
       } else {
         setError('Invalid email or password. Please try again.');
       }

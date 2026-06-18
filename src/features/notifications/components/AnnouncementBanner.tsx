@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Megaphone, X } from 'lucide-react';
 import { useBroadcasts } from '../hooks/useNotifications';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 const DISMISSED_KEY = 'herfa_dismissed_announcements';
 
@@ -23,7 +24,7 @@ function addDismissedId(id: string) {
   }
 }
 
-export function AnnouncementBanner() {
+function AnnouncementBannerInner() {
   const [dismissed, setDismissed] = React.useState<string[]>([]);
   const { data } = useBroadcasts({ limit: 5 });
 
@@ -31,7 +32,9 @@ export function AnnouncementBanner() {
     setDismissed(getDismissedIds());
   }, []);
 
-  const rawData = data as { data?: { id: string; title: string; body: string; status: string }[] } | undefined;
+  const rawData = data as
+    | { data?: { id: string; title: string; body: string; status: string }[] }
+    | undefined;
   const announcements = rawData?.data ?? [];
 
   const activeAnnouncements = announcements.filter(
@@ -48,7 +51,9 @@ export function AnnouncementBanner() {
         <Megaphone className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-slate-900 dark:text-white">{banner.title}</p>
-          <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5 line-clamp-2">{banner.body}</p>
+          <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+            {banner.body}
+          </p>
         </div>
         <button
           onClick={() => {
@@ -63,4 +68,10 @@ export function AnnouncementBanner() {
       </div>
     </div>
   );
+}
+
+export function AnnouncementBanner() {
+  const { isAuthenticated } = useAuthStore();
+  if (!isAuthenticated) return null;
+  return <AnnouncementBannerInner />;
 }

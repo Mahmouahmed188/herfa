@@ -4,11 +4,14 @@ import { toast } from 'sonner';
 import { useEffect } from 'react';
 import { notificationSocketService } from '../services/socket';
 import { CustomerNotification } from '../types';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 export function useCustomerNotifications(page = 1, limit = 20, filters?: { isRead?: boolean; type?: string }) {
   const queryClient = useQueryClient();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     notificationSocketService.connect();
 
     const handleNotification = (_notification: CustomerNotification) => {
@@ -21,18 +24,21 @@ export function useCustomerNotifications(page = 1, limit = 20, filters?: { isRea
     return () => {
       notificationSocketService.offNotification(handleNotification);
     };
-  }, [queryClient]);
+  }, [queryClient, isAuthenticated]);
 
   return useQuery({
     queryKey: ['notifications', 'customer', { page, limit, filters }],
     queryFn: () => api.getNotifications(page, limit, filters),
+    enabled: isAuthenticated,
   });
 }
 
 export function useUnreadCount() {
   const queryClient = useQueryClient();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     notificationSocketService.connect();
 
     const handleUnreadCount = (data: { count: number }) => {
@@ -44,12 +50,13 @@ export function useUnreadCount() {
     return () => {
       notificationSocketService.offUnreadCount(handleUnreadCount);
     };
-  }, [queryClient]);
+  }, [queryClient, isAuthenticated]);
 
   return useQuery({
     queryKey: ['notifications', 'unread-count'],
     queryFn: () => api.getUnreadNotificationsCount(),
-    refetchInterval: 30000,
+    refetchInterval: isAuthenticated ? 30000 : false,
+    enabled: isAuthenticated,
   });
 }
 

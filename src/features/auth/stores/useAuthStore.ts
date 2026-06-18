@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { User } from '@/types/api';
+import { sessionService } from '../services/session';
 
 interface AuthState {
   user: User | null;
@@ -20,16 +21,25 @@ export const useAuthStore = create<AuthState>()(
     token: null,
     refreshTokenExists: false,
     login: (user, token) => {
+      sessionService.setTokenCookie(token);
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
+      sessionService.removeTokenCookie();
       set({ user: null, token: null, isAuthenticated: false, refreshTokenExists: false });
     },
     updateUser: (updatedUser) =>
       set((state) => ({
         user: state.user ? { ...state.user, ...updatedUser } : null,
       })),
-    setToken: (token) => set({ token }),
+    setToken: (token) => {
+      if (token) {
+        sessionService.setTokenCookie(token);
+      } else {
+        sessionService.removeTokenCookie();
+      }
+      set({ token });
+    },
     setRefreshTokenExists: (exists) => set({ refreshTokenExists: exists }),
   })
 );

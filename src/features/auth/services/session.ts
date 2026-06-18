@@ -9,7 +9,8 @@ const TOKEN_KEY = 'herfa_token';
 export const sessionService = {
   setTokenCookie(token: string) {
     if (typeof window === 'undefined') return;
-    document.cookie = `${TOKEN_KEY}=${token}; path=/; max-age=1800; SameSite=Lax; Secure`;
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${TOKEN_KEY}=${token}; path=/; max-age=1800; SameSite=Lax${secure}`;
   },
 
   removeTokenCookie() {
