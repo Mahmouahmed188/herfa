@@ -127,7 +127,7 @@ export const useDashboardTemplates = () => {
 };
 
 // Dashboard Mutations
-export const const const updateDashboardWidgets = () => {
+export const updateDashboardWidgets = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
@@ -138,7 +138,7 @@ export const const const updateDashboardWidgets = () => {
   });
 };
 
-export const const const saveDashboardLayout = () => {
+export const saveDashboardLayout = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
@@ -149,7 +149,7 @@ export const const const saveDashboardLayout = () => {
   });
 };
 
-export const const const createDashboardTemplate = () => {
+export const createDashboardTemplate = () => {
   return useMutation({
     mutationFn: (template: {
       name: string;
@@ -161,7 +161,7 @@ export const const const createDashboardTemplate = () => {
 };
 
 // Dashboard Export Hook
-export const const useExportDashboard = () => {
+export const useExportDashboard = () => {
   return useMutation({
     mutationFn: ({ format, options }: { format: 'csv' | 'pdf' | 'excel'; options?: any }) => 
       dashboardApi.exportDashboard(format, options),
@@ -169,7 +169,7 @@ export const const useExportDashboard = () => {
 };
 
 // Dashboard Notifications Hook
-export const const useDashboardNotifications = () => {
+export const useDashboardNotifications = () => {
   return useQuery({
     queryKey: ['dashboard', 'notifications'],
     queryFn: () => dashboardApi.getDashboardNotifications(),
@@ -179,7 +179,7 @@ export const const useDashboardNotifications = () => {
   });
 };
 
-export const const const markNotificationsRead = () => {
+export const markNotificationsRead = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
@@ -192,7 +192,7 @@ export const const const markNotificationsRead = () => {
 };
 
 // Dashboard Performance Hook
-export const const useDashboardPerformance = () => {
+export const useDashboardPerformance = () => {
   return useQuery({
     queryKey: ['dashboard', 'performance'],
     queryFn: () => dashboardApi.getDashboardPerformance(),
@@ -203,7 +203,7 @@ export const const useDashboardPerformance = () => {
 };
 
 // Dashboard Error Logs Hook
-export const const useDashboardErrors = (page = 1, limit = 20) => {
+export const useDashboardErrors = (page = 1, limit = 20) => {
   return useQuery({
     queryKey: ['dashboard', 'errors', page, limit],
     queryFn: () => dashboardApi.getDashboardErrors(page, limit),
@@ -214,7 +214,7 @@ export const const useDashboardErrors = (page = 1, limit = 20) => {
 };
 
 // Domain-specific Dashboard Hooks
-export const const const useUserEngagement = (period = '30d') => {
+export const useUserEngagement = (period = '30d') => {
   return useQuery({
     queryKey: ['dashboard', 'user-engagement', period],
     queryFn: () => dashboardApi.getUserEngagement(period),
@@ -224,7 +224,7 @@ export const const const useUserEngagement = (period = '30d') => {
   });
 };
 
-export const const const useProviderPerformance = (period = '30d') => {
+export const useProviderPerformance = (period = '30d') => {
   return useQuery({
     queryKey: ['dashboard', 'provider-performance', period],
     queryFn: () => dashboardApi.getProviderPerformance(period),
@@ -234,7 +234,7 @@ export const const const useProviderPerformance = (period = '30d') => {
   });
 };
 
-export const const const useBookingAnalytics = (period = '30d') => {
+export const useBookingAnalytics = (period = '30d') => {
   return useQuery({
     queryKey: ['dashboard', 'booking-analytics', period],
     queryFn: () => dashboardApi.getBookingAnalytics(period),
@@ -244,7 +244,7 @@ export const const const useBookingAnalytics = (period = '30d') => {
   });
 };
 
-export const const const useRevenueAnalytics = (period = '30d') => {
+export const useRevenueAnalytics = (period = '30d') => {
   return useQuery({
     queryKey: ['dashboard', 'revenue-analytics', period],
     queryFn: () => dashboardApi.getRevenueAnalytics(period),
@@ -254,7 +254,7 @@ export const const const useRevenueAnalytics = (period = '30d') => {
   });
 };
 
-export const const const useSupportAnalytics = (period = '30d') => {
+export const useSupportAnalytics = (period = '30d') => {
   return useQuery({
     queryKey: ['dashboard', 'support-analytics', period],
     queryFn: () => dashboardApi.getSupportAnalytics(period),
@@ -265,7 +265,7 @@ export const const const useSupportAnalytics = (period = '30d') => {
 };
 
 // System Alerts Hook
-export const const useSystemAlerts = () => {
+export const useSystemAlerts = () => {
   return useQuery({
     queryKey: ['dashboard', 'system-alerts'],
     queryFn: () => dashboardApi.getSystemAlerts(),
@@ -275,7 +275,7 @@ export const const useSystemAlerts = () => {
   });
 };
 
-export const const const acknowledgeAlert = () => {
+export const acknowledgeAlert = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
