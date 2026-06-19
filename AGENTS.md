@@ -1,38 +1,32 @@
 <!-- SPECKIT START -->
 ---
 
-**Current feature**: [Admin Dashboard Integration](specs/014-admin-dashboard-integration/plan.md)
+**Current feature**: [Navigation & Role-Based Header Completion](specs/015-navigation-role-header/plan.md)
 
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the implementation plan
-at specs/014-admin-dashboard-integration/plan.md
+at specs/015-navigation-role-header/plan.md
 
 Generated artifacts:
-- [research.md](specs/014-admin-dashboard-integration/research.md)
-- [data-model.md](specs/014-admin-dashboard-integration/data-model.md)
-- [contracts/](specs/014-admin-dashboard-integration/contracts/admin-api-contracts.md)
-- [contracts/](specs/014-admin-dashboard-integration/contracts/analytics-api-contracts.md)
-- [contracts/](specs/014-admin-dashboard-integration/contracts/additional-api-contracts.md)
-- [quickstart.md](specs/014-admin-dashboard-integration/quickstart.md)
-- [spec.md](specs/014-admin-dashboard-integration/spec.md)
+- [research.md](specs/015-navigation-role-header/research.md)
+- [data-model.md](specs/015-navigation-role-header/data-model.md)
+- [contracts/](specs/015-navigation-role-header/contracts/navigation-api-contracts.md)
+- [quickstart.md](specs/015-navigation-role-header/quickstart.md)
+- [spec.md](specs/015-navigation-role-header/spec.md)
 
-## Admin Dashboard Integration
+## Navigation & Role-Based Header Completion
 
-Complete the Admin Dashboard and fully integrate it with all available backend Admin, Analytics, User Management, Provider Management, Payment, Support, Review, and Verification APIs. The Admin Dashboard must become the central operational panel for managing the entire Herfa platform.
+Complete the Header Navigation system and ensure navigation items are displayed according to the authenticated user's role. Guest users see public items (Services, AI Diagnosis, Technicians, About). Customer users see Dashboard, My Bookings, Profile. Provider users see Dashboard, My Jobs, Earnings, Schedule. Admin users see Dashboard, Users, Providers, Bookings, Finance, Analytics, CMS, Notifications, Audit, Settings. Navigation must work identically on mobile and desktop.
 
 ### Implementation Order
 
-1. **Backend API Integration** — Connect all admin APIs with proper authentication, authorization, and data validation
-2. **Dashboard Foundation** — Create main dashboard layout, navigation, and KPI components
-3. **User Management** — Implement user list, details, and management actions with proper permissions
-4. **Provider Management** — Create provider verification workflow and management interface
-5. **Analytics Module** — Build comprehensive analytics dashboards with real-time data visualization
-6. **Support & Disputes** — Implement ticket management, conversation tracking, and dispute resolution
-7. **Financial Operations** — Create payment and refund management with transaction tracking
-8. **Review Moderation** — Build review management interface with moderation actions
-9. **Activity Logs** — Implement comprehensive audit logging and monitoring
-10. **Notifications Center** — Create admin notifications and announcements system
-11. **Reports & Export** — Build comprehensive reporting and export functionality
+1. **Audit Authentication State** — Verify useAuthStore provides correct role, isAuthenticated, and hydration flow
+2. **Fix Navigation Filtering Logic** — Ensure useNavigation correctly filters items by role
+3. **Create Missing Pages** — Create placeholder pages for /client/my-bookings, /technician/my-jobs, /technician/schedule, /admin/bookings, /admin/cms
+4. **Verify Translation Keys** — Confirm all 16 Header.nav.* keys exist in en.json and ar.json
+5. **Sync Mobile Navigation** — Confirm HeaderNav and HeaderMobileNav render identical filtered items
+6. **Test Active Route Detection** — Verify pathname-based highlighting works for all role-specific routes
+7. **Role Switching Validation** — Test login as CUSTOMER, PROVIDER, ADMIN and verify correct menu
 
 ### Running Checks
 
@@ -42,7 +36,7 @@ npm run type-check
 npm test
 ```
 
-See full spec: [specs/014-admin-dashboard-integration/spec.md](specs/014-admin-dashboard-integration/spec.md)
+See full spec: [specs/015-navigation-role-header/spec.md](specs/015-navigation-role-header/spec.md)
 
 ---
 
