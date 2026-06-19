@@ -112,7 +112,7 @@ export function AppSidebar({ role }: { role: UserRole }) {
       initial={false}
       animate={{ width: isCollapsed ? 80 : 260 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="hidden md:flex flex-col h-screen fixed left-0 top-0 bg-background-dark border-r border-surface-border overflow-hidden z-30"
+      className="hidden md:flex flex-col h-[calc(100vh-80px)] fixed left-0 top-20 bg-background-dark border-r border-surface-border overflow-hidden z-30"
     >
       {/* Logo Section */}
       <div className="flex items-center justify-between px-5 py-5 border-b border-surface-border overflow-hidden">

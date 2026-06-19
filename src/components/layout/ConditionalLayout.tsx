@@ -12,18 +12,15 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     const strippedPath = pathname.replace(/^\/[a-z]{2}/, '') || '/';
 
     const isFullScreenRoute = FULL_SCREEN_ROUTES.some(route => strippedPath === route);
-    const isAuthenticatedRoute = strippedPath.startsWith('/admin') || 
-                                strippedPath.startsWith('/client') || 
-                                strippedPath.startsWith('/technician');
 
     return (
         <div className="flex flex-col min-h-screen">
-            {!isFullScreenRoute && !isAuthenticatedRoute && <Header />}
-            {!isFullScreenRoute && !isAuthenticatedRoute && <AnnouncementBanner />}
+            {!isFullScreenRoute && <Header />}
+            {!isFullScreenRoute && <AnnouncementBanner />}
             <main className="flex-1 flex flex-col">
                 {children}
             </main>
-            {!isFullScreenRoute && !isAuthenticatedRoute && <Footer />}
+            <Footer />
         </div>
     );
 }
