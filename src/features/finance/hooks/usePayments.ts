@@ -42,3 +42,23 @@ export const usePaymentStats = () => {
     gcTime: 10 * 60 * 1000,
   });
 };
+
+export const useProviderEarnings = () => {
+  return useQuery({
+    queryKey: ['provider', 'earnings'],
+    queryFn: () => financeApi.getProviderEarnings(),
+    select: (response) => response.data,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+};
+
+export const useProviderPayments = (query: { page?: number; limit?: number; status?: string } = {}) => {
+  return useQuery({
+    queryKey: ['provider', 'payments', query.page, query.limit, query.status],
+    queryFn: () => financeApi.getProviderPayments(query),
+    select: (response) => response.data,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+};

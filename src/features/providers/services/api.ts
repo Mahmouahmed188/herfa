@@ -11,6 +11,16 @@ import type {
   TopProvider 
 } from '../types';
 
+// Types for provider api
+export interface SubmitVerificationData {
+  documents: Array<{ type: string; file: File | string }>;
+  notes?: string;
+}
+
+export interface UploadProgressCallback {
+  onProgress?: (percent: number) => void;
+}
+
 export const providersApi = {
   /**
    * Get paginated list of providers
@@ -134,6 +144,22 @@ export const providersApi = {
     const response = await api.get('/admin/providers/export', { params });
     return response.data;
   },
+
+  /**
+   * Update provider status (generic)
+   */
+  updateProviderStatus: async (providerId: string, data: ProviderStatusUpdate) => {
+    const response = await api.patch(`/admin/providers/${providerId}/status`, data);
+    return response.data;
+  },
+
+  /**
+   * Bulk update providers
+   */
+  bulkUpdateProviders: async (updates: Array<{ providerId: string; action: 'verify' | 'reject' | 'suspend'; reason?: string }>) => {
+    const response = await api.post('/admin/providers/bulk-update', { updates });
+    return response.data;
+  },
 };
 
 // Verification API
@@ -198,4 +224,65 @@ export const verificationApi = {
     const response = await api.post('/admin/verification/bulk', { verifications });
     return response.data;
   },
+
+  /**
+   * Submit verification documents (provider-facing)
+   */
+  submitVerification: async (data: { providerId?: string; documents: Array<{ type: string; file: string }> }) => {
+    const response = await api.post('/admin/verification/submit', data);
+    return response.data;
+  },
+
+  /**
+   * Get current verification status
+   */
+  getVerificationStatus: async () => {
+    const response = await api.get('/admin/verification/status');
+    return response.data;
+  },
+
+  /**
+   * Get verification history
+   */
+  getVerificationHistory: async () => {
+    const response = await api.get('/admin/verification/history');
+    return response.data;
+  },
+
+  /**
+   * Upload a file with progress tracking
+   */
+  uploadFile: async (file: File, onProgress?: (percent: number) => void) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post('/admin/verification/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (progressEvent) => {
+        if (onProgress && progressEvent.total) {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          onProgress(percent);
+        }
+      },
+    });
+    return response.data;
+  },
+};
+
+/**
+ * Unified provider API combining providers and verification endpoints.
+ * This is the primary import target for most provider-related hooks.
+ */
+export const providerApi = {
+  ...providersApi,
+  ...verificationApi,
+
+  // Explicit overrides and aliases for hook compatibility
+  submitVerification: verificationApi.submitVerification,
+  getVerificationStatus: verificationApi.getVerificationStatus,
+  getVerificationHistory: verificationApi.getVerificationHistory,
+  uploadFile: verificationApi.uploadFile,
+  getVerificationQueue: verificationApi.getPendingVerifications,
+  getVerificationDetails: verificationApi.getVerificationDetail,
+  rejectProvider: verificationApi.rejectVerification,
+  updateProviderStatus: providersApi.updateProviderStatus,
 };

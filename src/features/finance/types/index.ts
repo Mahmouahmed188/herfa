@@ -253,6 +253,14 @@ export interface RecentTransaction {
   createdAt: string;
 }
 
+// Provider-specific Types
+export interface FinancialSummary {
+  totalEarnings: number;
+  pendingEarnings: number;
+  totalRefunds: number;
+  transactionCount: number;
+}
+
 // Form Types
 export interface PaymentFormData {
   bookingId: string;

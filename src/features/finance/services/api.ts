@@ -223,6 +223,31 @@ export const financeApi = {
   },
 
   // Financial Dashboard
+  // Provider-specific Endpoints
+  /**
+   * Get provider earnings summary
+   */
+  getProviderEarnings: async (providerId?: string) => {
+    const url = providerId ? `/admin/providers/${providerId}/earnings` : '/providers/me/earnings';
+    const response = await api.get(url);
+    return response.data;
+  },
+
+  /**
+   * Get provider payments
+   */
+  getProviderPayments: async (query: { page?: number; limit?: number; status?: string; providerId?: string }) => {
+    const { providerId, ...rest } = query;
+    const params = {
+      page: rest.page ?? 1,
+      limit: rest.limit ?? 20,
+      ...(rest.status && { status: rest.status }),
+    };
+    const url = providerId ? `/admin/providers/${providerId}/payments` : '/providers/me/payments';
+    const response = await api.get(url, { params });
+    return response.data;
+  },
+
   /**
    * Get financial dashboard data
    */
