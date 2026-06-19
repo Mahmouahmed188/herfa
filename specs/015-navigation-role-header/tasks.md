@@ -29,10 +29,10 @@
 
 **Purpose**: Verify that the authentication store, navigation configuration, and role types are correctly set up before making changes.
 
-- [ ] T001 Read and document the auth store structure in `src/features/auth/stores/useAuthStore.ts` — verify `isAuthenticated` becomes `true` after login, `user` object exists, `user.role` is populated with expected `UserRole` values
-- [ ] T002 [P] Read and document the navigation config in `src/features/header/config/navigation.ts` — verify `roles` arrays use correct `UserRole` enum values (`CUSTOMER`, `PROVIDER`, `ADMIN`)
-- [ ] T003 [P] Read and document the `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — verify filtering logic: public items (no roles) always shown, authenticated items filtered by `item.roles.includes(user.role)`, items sorted by `order`
-- [ ] T004 [P] Read and document the `UserRole` type in `src/types/api.d.ts` — verify it defines `'CUSTOMER' | 'PROVIDER' | 'ADMIN' | 'SUPER_ADMIN'` and matches navigation config values
+- [X] T001 Read and document the auth store structure in `src/features/auth/stores/useAuthStore.ts` — verify `isAuthenticated` becomes `true` after login, `user` object exists, `user.role` is populated with expected `UserRole` values
+- [X] T002 [P] Read and document the navigation config in `src/features/header/config/navigation.ts` — verify `roles` arrays use correct `UserRole` enum values (`CUSTOMER`, `PROVIDER`, `ADMIN`)
+- [X] T003 [P] Read and document the `useNavigation` hook in `src/features/header/hooks/useNavigation.ts` — verify filtering logic: public items (no roles) always shown, authenticated items filtered by `item.roles.includes(user.role)`, items sorted by `order`
+- [X] T004 [P] Read and document the `UserRole` type in `src/types/api.d.ts` — verify it defines `'CUSTOMER' | 'PROVIDER' | 'ADMIN' | 'SUPER_ADMIN'` and matches navigation config values
 
 **Checkpoint**: Auth store, navigation config, and role types audited — no role mapping needed, filtering logic is correct.
 
@@ -42,8 +42,8 @@
 
 **Purpose**: Ensure auth hydration state is handled correctly so navigation doesn't flash guest items before auth resolves.
 
-- [ ] T005 Audit `src/features/auth/stores/useAuthStore.ts` — verify `isInitializing` is set to `true` on mount and transitions to `false` after hydration completes in `useInitializeAuth`
-- [ ] T006 Audit `src/components/layout/Header.tsx` — verify `isInitializing` is used to prevent rendering authenticated-specific content until hydration completes; add guard if missing
+- [X] T005 Audit `src/features/auth/stores/useAuthStore.ts` — verify `isInitializing` is set to `true` on mount and transitions to `false` after hydration completes in `useInitializeAuth`
+- [X] T006 Audit `src/components/layout/Header.tsx` — verify `isInitializing` is used to prevent rendering authenticated-specific content until hydration completes; add guard if missing
 
 **Checkpoint**: Auth hydration state correctly prevents transient guest item flash.
 
@@ -57,10 +57,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Verify guest navigation items in `src/features/header/config/navigation.ts` — confirm `services`, `aiDiagnosis`, `technicians`, `about` items have no `roles` field (public by default)
-- [ ] T008 [P] [US1] Verify `Header.tsx` in `src/components/layout/Header.tsx` uses `useNavigation(pathname)` and passes filtered `items` to both `HeaderNav` and `HeaderMobileNav`
-- [ ] T009 [P] [US1] Verify `HeaderNav.tsx` in `src/components/layout/HeaderNav.tsx` renders guest items with correct translations and links
-- [ ] T010 [P] [US1] Verify `HeaderMobileNav.tsx` in `src/components/layout/HeaderMobileNav.tsx` renders same guest items as desktop
+- [X] T007 [P] [US1] Verify guest navigation items in `src/features/header/config/navigation.ts` — confirm `services`, `aiDiagnosis`, `technicians`, `about` items have no `roles` field (public by default)
+- [X] T008 [P] [US1] Verify `Header.tsx` in `src/components/layout/Header.tsx` uses `useNavigation(pathname)` and passes filtered `items` to both `HeaderNav` and `HeaderMobileNav`
+- [X] T009 [P] [US1] Verify `HeaderNav.tsx` in `src/components/layout/HeaderNav.tsx` renders guest items with correct translations and links
+- [X] T010 [P] [US1] Verify `HeaderMobileNav.tsx` in `src/components/layout/HeaderMobileNav.tsx` renders same guest items as desktop
 
 **Checkpoint**: Guest navigation works identically on desktop and mobile — MVP ready.
 
@@ -74,9 +74,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T011 [P] [US2] Verify customer navigation items in `src/features/header/config/navigation.ts` — confirm `dashboard`, `myBookings`, `profile` have `roles: ['CUSTOMER']`
-- [ ] T012 [P] [US2] Create customer My Bookings placeholder page at `src/app/[locale]/client/my-bookings/page.tsx` — export default component with page title and metadata
-- [ ] T013 [US2] Verify `/client/my-bookings` route renders without 404 and the navigation highlights the "My Bookings" item as active
+- [X] T011 [P] [US2] Verify customer navigation items in `src/features/header/config/navigation.ts` — confirm `dashboard`, `myBookings`, `profile` have `roles: ['CUSTOMER']`
+- [X] T012 [P] [US2] Create customer My Bookings placeholder page at `src/app/[locale]/client/my-bookings/page.tsx` — export default component with page title and metadata
+- [X] T013 [US2] Verify `/client/my-bookings` route renders without 404 and the navigation highlights the "My Bookings" item as active
 
 **Checkpoint**: Customer navigation works on desktop and mobile — all three customer routes resolve.
 
@@ -90,10 +90,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T014 [P] [US3] Verify provider navigation items in `src/features/header/config/navigation.ts` — confirm `myJobs`, `earnings`, `schedule`, `dashboard` have `roles: ['PROVIDER']`
-- [ ] T015 [P] [US3] Create provider My Jobs placeholder page at `src/app/[locale]/technician/my-jobs/page.tsx` — export default component with page title and metadata (or fix nav route to `/technician/jobs` if preferred)
-- [ ] T016 [P] [US3] Create provider Schedule placeholder page at `src/app/[locale]/technician/schedule/page.tsx` — export default component with page title and metadata
-- [ ] T017 [US3] Verify `/technician/my-jobs` and `/technician/schedule` routes render without 404; navigation highlights correct items as active
+- [X] T014 [P] [US3] Verify provider navigation items in `src/features/header/config/navigation.ts` — confirm `myJobs`, `earnings`, `schedule`, `dashboard` have `roles: ['PROVIDER']`
+- [X] T015 [P] [US3] Create provider My Jobs placeholder page at `src/app/[locale]/technician/my-jobs/page.tsx` — export default component with page title and metadata (or fix nav route to `/technician/jobs` if preferred)
+- [X] T016 [P] [US3] Create provider Schedule placeholder page at `src/app/[locale]/technician/schedule/page.tsx` — export default component with page title and metadata
+- [X] T017 [US3] Verify `/technician/my-jobs` and `/technician/schedule` routes render without 404; navigation highlights correct items as active
 
 **Checkpoint**: Provider navigation works on desktop and mobile — all four provider routes resolve.
 
@@ -107,10 +107,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T018 [P] [US4] Verify admin navigation items in `src/features/header/config/navigation.ts` — confirm all ten admin items have `roles: ['ADMIN']`
-- [ ] T019 [P] [US4] Create admin Bookings placeholder page at `src/app/[locale]/(admin)/admin/bookings/page.tsx` — export default component with page title and metadata
-- [ ] T020 [P] [US4] Create admin CMS placeholder page at `src/app/[locale]/(admin)/admin/cms/page.tsx` — export default component with page title and metadata
-- [ ] T021 [US4] Verify `/admin/bookings` and `/admin/cms` routes render without 404; navigation highlights correct items as active
+- [X] T018 [P] [US4] Verify admin navigation items in `src/features/header/config/navigation.ts` — confirm all ten admin items have `roles: ['ADMIN']`
+- [X] T019 [P] [US4] Create admin Bookings placeholder page at `src/app/[locale]/(admin)/admin/bookings/page.tsx` — export default component with page title and metadata
+- [X] T020 [P] [US4] Create admin CMS placeholder page at `src/app/[locale]/(admin)/admin/cms/page.tsx` — export default component with page title and metadata
+- [X] T021 [US4] Verify `/admin/bookings` and `/admin/cms` routes render without 404; navigation highlights correct items as active
 
 **Checkpoint**: Admin navigation works on desktop and mobile — all ten admin routes resolve.
 
@@ -124,9 +124,9 @@
 
 ### Implementation for User Story 5
 
-- [ ] T022 [P] [US5] Verify active route detection in `src/components/layout/Header.tsx` — confirm `isActive(href)` uses `pathname.startsWith(href)` for all role-prefixed routes (`/client/*`, `/technician/*`, `/admin/*`)
-- [ ] T023 [P] [US5] Verify active state rendering in `HeaderNav.tsx` at `src/components/layout/HeaderNav.tsx` — confirm highlighted item uses primary color and animated background
-- [ ] T024 [P] [US5] Verify active state rendering in `HeaderMobileNav.tsx` at `src/components/layout/HeaderMobileNav.tsx` — confirm same highlighting logic as desktop
+- [X] T022 [P] [US5] Verify active route detection in `src/components/layout/Header.tsx` — confirm `isActive(href)` uses `pathname.startsWith(href)` for all role-prefixed routes (`/client/*`, `/technician/*`, `/admin/*`)
+- [X] T023 [P] [US5] Verify active state rendering in `HeaderNav.tsx` at `src/components/layout/HeaderNav.tsx` — confirm highlighted item uses primary color and animated background
+- [X] T024 [P] [US5] Verify active state rendering in `HeaderMobileNav.tsx` at `src/components/layout/HeaderMobileNav.tsx` — confirm same highlighting logic as desktop
 
 **Checkpoint**: Active route highlighting works for all roles on desktop and mobile.
 
@@ -140,10 +140,10 @@
 
 ### Implementation for User Story 6
 
-- [ ] T025 [P] [US6] Verify all `Header.nav.*` translation keys exist in `src/messages/en.json` — confirm keys: `dashboard`, `profile`, `myBookings`, `myJobs`, `earnings`, `schedule`, `adminDashboard`, `users`, `providers`, `bookings`, `finance`, `analytics`, `cms`, `notifications`, `audit`, `settings`
-- [ ] T026 [P] [US6] Verify all `Header.nav.*` translation keys exist in `src/messages/ar.json` — confirm same 16 keys with Arabic translations
-- [ ] T027 [P] [US6] Verify all `Navbar.*` translation keys exist in both locale files — confirm `services`, `aiDiagnosis`, `technicians`, `about` keys
-- [ ] T028 [US6] Verify navigation components use `t(item.labelKey)` from `next-intl` for translated labels in `HeaderNav.tsx` and `HeaderMobileNav.tsx`
+- [X] T025 [P] [US6] Verify all `Header.nav.*` translation keys exist in `src/messages/en.json` — confirm keys: `dashboard`, `profile`, `myBookings`, `myJobs`, `earnings`, `schedule`, `adminDashboard`, `users`, `providers`, `bookings`, `finance`, `analytics`, `cms`, `notifications`, `audit`, `settings`
+- [X] T026 [P] [US6] Verify all `Header.nav.*` translation keys exist in `src/messages/ar.json` — confirm same 16 keys with Arabic translations
+- [X] T027 [P] [US6] Verify all `Navbar.*` translation keys exist in both locale files — confirm `services`, `aiDiagnosis`, `technicians`, `about` keys
+- [X] T028 [US6] Verify navigation components use `t(item.labelKey)` from `next-intl` for translated labels in `HeaderNav.tsx` and `HeaderMobileNav.tsx`
 
 **Checkpoint**: All navigation items render with correct translations in both English and Arabic.
 
@@ -153,12 +153,12 @@
 
 **Purpose**: Role switching validation, final verification, and edge case handling.
 
-- [ ] T029 [P] Perform role switching validation — login as CUSTOMER (verify 3 items), PROVIDER (verify 4 items), ADMIN (verify 10 items), logout (verify 4 guest items)
-- [ ] T030 [P] Verify mobile responsiveness — resize browser to <768px and confirm same navigation items appear with correct active states
-- [ ] T031 [P] Verify edge case: role is `null` or `undefined` — confirm navigation falls back to guest items
-- [ ] T032 [P] Verify edge case: role is `SUPER_ADMIN` — confirm admin navigation items are visible (SUPER_ADMIN has admin permissions)
-- [ ] T033 Run lint and type-check: `npm run lint` and `npm run type-check`
-- [ ] T034 Run validation per quickstart.md in `specs/015-navigation-role-header/quickstart.md`
+- [X] T029 [P] Perform role switching validation — login as CUSTOMER (verify 3 items), PROVIDER (verify 4 items), ADMIN (verify 10 items), logout (verify 4 guest items)
+- [X] T030 [P] Verify mobile responsiveness — resize browser to <768px and confirm same navigation items appear with correct active states
+- [X] T031 [P] Verify edge case: role is `null` or `undefined` — confirm navigation falls back to guest items
+- [X] T032 [P] Verify edge case: role is `SUPER_ADMIN` — confirm admin navigation items are visible (SUPER_ADMIN has admin permissions)
+- [X] T033 Run lint and type-check: `npm run lint` and `npm run type-check`
+- [X] T034 Run validation per quickstart.md in `specs/015-navigation-role-header/quickstart.md`
 
 **Checkpoint**: All roles verified; edge cases handled; lint/type checks pass.
 

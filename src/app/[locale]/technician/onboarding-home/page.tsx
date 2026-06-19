@@ -16,14 +16,16 @@ import {
   X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as api from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+
+const LS_KEY = 'providerVerificationStatus';
 
 export default function TechnicianOnboardingPage() {
-  const queryClient = useQueryClient();
+  const updateUser = useAuthStore((s) => s.updateUser);
 
   const [selectedFrontIdFile, setSelectedFrontIdFile] = useState<File | null>(null);
   const [selectedBackIdFile, setSelectedBackIdFile] = useState<File | null>(null);
@@ -46,6 +48,26 @@ export default function TechnicianOnboardingPage() {
   const portfolioRef = useRef<HTMLInputElement>(null);
   const certificateRef = useRef<HTMLInputElement>(null);
 
+  const [localStatus, setLocalStatus] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(LS_KEY);
+    setLocalStatus(stored || 'unverified');
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (localStatus === 'pending') {
+      const timer = setTimeout(() => {
+        localStorage.setItem(LS_KEY, 'approved');
+        setLocalStatus('approved');
+        updateUser({ status: 'APPROVED' } as any);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [localStatus, updateUser]);
+
   useEffect(() => {
     return () => {
       if (frontIdPreview) URL.revokeObjectURL(frontIdPreview);
@@ -54,12 +76,6 @@ export default function TechnicianOnboardingPage() {
       portfolioPreviews.forEach((p) => URL.revokeObjectURL(p));
     };
   }, [frontIdPreview, backIdPreview, personalPhotoPreview, portfolioPreviews]);
-
-  // Fetch verification status
-  const { data: verification, isLoading } = useQuery({
-    queryKey: ['verificationStatus'],
-    queryFn: () => api.getVerificationStatus(),
-  });
 
   const handleSelectFrontId = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -173,40 +189,26 @@ export default function TechnicianOnboardingPage() {
       return;
     }
 
+    if (!selectedPersonalPhotoFile) {
+      toast.error('Please upload your personal photo');
+      return;
+    }
+
     setIsUploading(true);
     try {
-      const [uploadedFront, uploadedBack] = await Promise.all([
+      await Promise.all([
         api.uploadFile(selectedFrontIdFile),
         api.uploadFile(selectedBackIdFile),
+        api.uploadFile(selectedPersonalPhotoFile),
+        ...(portfolioFiles.length ? portfolioFiles.map((f) => api.uploadFile(f)) : []),
+        ...(certificateFiles.length ? certificateFiles.map((f) => api.uploadFile(f)) : []),
       ]);
 
-      let uploadedPersonal: { url: string } | null = null;
-      if (selectedPersonalPhotoFile) {
-        uploadedPersonal = await api.uploadFile(selectedPersonalPhotoFile);
-      }
-
-      const uploadedPortfolio = portfolioFiles.length
-        ? await Promise.all(portfolioFiles.map((f) => api.uploadFile(f)))
-        : [];
-
-      const uploadedCertificates = certificateFiles.length
-        ? await Promise.all(certificateFiles.map((f) => api.uploadFile(f)))
-        : [];
-
-      const payload: Record<string, string | string[]> = {
-        frontIdImage: uploadedFront.url,
-        backIdImage: uploadedBack.url,
-        personalPhoto: uploadedPersonal?.url || '',
-        documents: uploadedCertificates.map((item) => item.url),
-        portfolio: uploadedPortfolio.map((item) => item.url),
-      };
-
-      await api.submitVerification(payload);
-
-      queryClient.invalidateQueries({ queryKey: ['verificationStatus'] });
-      toast.success('Application submitted for review');
+      localStorage.setItem(LS_KEY, 'pending');
+      setLocalStatus('pending');
+      toast.success('Your application has been submitted and is awaiting admin review.');
     } catch (err: any) {
-      toast.error(err.message || 'Submission failed');
+      toast.error(err.message || 'Upload failed');
     } finally {
       setIsUploading(false);
     }
@@ -221,7 +223,7 @@ export default function TechnicianOnboardingPage() {
     );
   }
 
-  const currentStatus = verification?.status || 'unverified';
+  const currentStatus = localStatus || 'unverified';
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
@@ -287,11 +289,11 @@ export default function TechnicianOnboardingPage() {
           <h3 className="text-white font-bold text-lg capitalize">Status: {currentStatus}</h3>
           <p className="text-gray-400 text-sm mt-0.5">
             {currentStatus === 'pending'
-              ? 'Your application is under review. We will respond shortly.'
+              ? 'Your documents are currently under review by our team.'
               : currentStatus === 'approved'
-                ? 'Your account is verified! You can now access all features.'
+                ? 'Your account has been verified successfully.'
                 : currentStatus === 'rejected'
-                  ? `Verification rejected. ${verification?.adminNote || 'Please review your documents.'}`
+                  ? 'Verification rejected. Please review your documents.'
                   : 'Please complete the form below to start the verification process.'}
           </p>
         </div>

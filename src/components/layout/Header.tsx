@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
-import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useNavigation } from '@/features/header/hooks/useNavigation';
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderNav } from './HeaderNav';
@@ -13,7 +12,7 @@ import { HeaderThemeToggle } from './HeaderThemeToggle';
 
 export function Header() {
   const pathname = usePathname();
-  const { items, isActive, isAuthenticated } = useNavigation(pathname);
+  const { items, isActive } = useNavigation(pathname);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-surface-border bg-background-dark/80 backdrop-blur-md min-h-[80px]">
