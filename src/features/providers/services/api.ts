@@ -228,8 +228,14 @@ export const verificationApi = {
   /**
    * Submit verification documents (provider-facing)
    */
-  submitVerification: async (data: { providerId?: string; documents: Array<{ type: string; file: string }> }) => {
-    const response = await api.post('/admin/verification/submit', data);
+  submitVerification: async (data: {
+    frontIdImage: string;
+    backIdImage: string;
+    personalPhoto: string;
+    documents?: string[];
+    portfolio?: string[];
+  }) => {
+    const response = await api.post('/verification/submit', data);
     return response.data;
   },
 
@@ -237,7 +243,7 @@ export const verificationApi = {
    * Get current verification status
    */
   getVerificationStatus: async () => {
-    const response = await api.get('/admin/verification/status');
+    const response = await api.get('/verification/status');
     return response.data;
   },
 
@@ -245,7 +251,7 @@ export const verificationApi = {
    * Get verification history
    */
   getVerificationHistory: async () => {
-    const response = await api.get('/admin/verification/history');
+    const response = await api.get('/provider-verification/history');
     return response.data;
   },
 
@@ -255,7 +261,7 @@ export const verificationApi = {
   uploadFile: async (file: File, onProgress?: (percent: number) => void) => {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await api.post('/admin/verification/upload', formData, {
+    const response = await api.post('/uploads', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (progressEvent) => {
         if (onProgress && progressEvent.total) {

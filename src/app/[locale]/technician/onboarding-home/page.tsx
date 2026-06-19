@@ -16,7 +16,6 @@ import {
   X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as api from '@/services/api';
 import { Button } from '@/components/ui/button';
@@ -24,7 +23,6 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 export default function TechnicianOnboardingPage() {
-  const { user, updateUser } = useAuthStore();
   const queryClient = useQueryClient();
 
   const [selectedFrontIdFile, setSelectedFrontIdFile] = useState<File | null>(null);
@@ -206,7 +204,6 @@ export default function TechnicianOnboardingPage() {
       await api.submitVerification(payload);
 
       queryClient.invalidateQueries({ queryKey: ['verificationStatus'] });
-      updateUser({ status: 'PENDING' });
       toast.success('Application submitted for review');
     } catch (err: any) {
       toast.error(err.message || 'Submission failed');
