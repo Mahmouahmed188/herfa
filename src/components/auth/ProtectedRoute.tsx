@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { sessionService } from '@/features/auth/services/session';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

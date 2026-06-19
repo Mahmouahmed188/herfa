@@ -1,16 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { dashboardApi } from '../services/api';
-import type { 
-  DashboardOverview, 
-  SystemHealth, 
-  RecentActivity, 
-  PlatformOverview, 
-  BusinessMetrics,
-  GrowthMetrics,
-  ActivityMetrics,
-  AnalyticsQuery,
-  ChartQuery 
-} from '../types';
+import type { AnalyticsQuery } from '../types';
 
 // Dashboard Overview Hooks
 export const useDashboardOverview = (query?: AnalyticsQuery) => {
@@ -127,35 +117,35 @@ export const useDashboardTemplates = () => {
 };
 
 // Dashboard Mutations
-export const updateDashboardWidgets = () => {
+export const useUpdateDashboardWidgets = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (widgets: any[]) => dashboardApi.updateDashboardWidgets(widgets),
+    mutationFn: (widgets: Record<string, unknown>[]) => dashboardApi.updateDashboardWidgets(widgets),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard', 'widgets'] });
     },
   });
 };
 
-export const saveDashboardLayout = () => {
+export const useSaveDashboardLayout = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (layout: any) => dashboardApi.saveDashboardLayout(layout),
+    mutationFn: (layout: Record<string, unknown>) => dashboardApi.saveDashboardLayout(layout),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard', 'layout'] });
     },
   });
 };
 
-export const createDashboardTemplate = () => {
+export const useCreateDashboardTemplate = () => {
   return useMutation({
     mutationFn: (template: {
       name: string;
       description: string;
-      layout: any;
-      widgets: any[];
+      layout: Record<string, unknown>;
+      widgets: Record<string, unknown>[];
     }) => dashboardApi.createDashboardTemplate(template),
   });
 };
@@ -163,7 +153,7 @@ export const createDashboardTemplate = () => {
 // Dashboard Export Hook
 export const useExportDashboard = () => {
   return useMutation({
-    mutationFn: ({ format, options }: { format: 'csv' | 'pdf' | 'excel'; options?: any }) => 
+    mutationFn: ({ format, options }: { format: 'csv' | 'pdf' | 'excel'; options?: Record<string, unknown> }) => 
       dashboardApi.exportDashboard(format, options),
   });
 };
@@ -179,7 +169,7 @@ export const useDashboardNotifications = () => {
   });
 };
 
-export const markNotificationsRead = () => {
+export const useMarkNotificationsRead = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
@@ -275,7 +265,7 @@ export const useSystemAlerts = () => {
   });
 };
 
-export const acknowledgeAlert = () => {
+export const useAcknowledgeAlert = () => {
   const queryClient = useQueryClient();
   
   return useMutation({

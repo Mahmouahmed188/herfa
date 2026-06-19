@@ -1,56 +1,44 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { financeApi } from '../services/api';
-import { toast } from 'sonner';
-import { ProcessPaymentInput } from '../schemas/payments';
+import type { PaymentQuery } from '../types';
 
-export function usePayments(params?: {
-  page?: number;
-  limit?: number;
-  status?: string;
-  dateFrom?: string;
-  dateTo?: string;
-}) {
+export const usePayments = (query: PaymentQuery) => {
   return useQuery({
-    queryKey: ['finance', 'payments', 'customer', params],
-    queryFn: () => financeApi.getPayments(params),
+    queryKey: ['payments', query.page, query.limit, query.status, query.method],
+    queryFn: () => financeApi.getPayments(query),
+    select: (response) => response.data,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
-}
+};
 
-export function useProviderPayments(params?: {
-  page?: number;
-  limit?: number;
-  status?: string;
-}) {
+export const usePaymentDetail = (paymentId: string) => {
   return useQuery({
-    queryKey: ['finance', 'payments', 'provider', params],
-    queryFn: () => financeApi.getProviderPayments(params),
+    queryKey: ['payments', paymentId, 'detail'],
+    queryFn: () => financeApi.getPaymentDetail(paymentId),
+    select: (response) => response.data,
+    enabled: !!paymentId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
-}
+};
 
-export function usePaymentDetails(id: string) {
+export const usePaymentOverview = () => {
   return useQuery({
-    queryKey: ['finance', 'payments', 'detail', id],
-    queryFn: () => financeApi.getPaymentDetails(id),
-    enabled: !!id,
+    queryKey: ['payments', 'overview'],
+    queryFn: () => financeApi.getPaymentsOverview(),
+    select: (response) => response.data,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
-}
+};
 
-export function useProcessPayment() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: ProcessPaymentInput }) => 
-      financeApi.processPayment(id, data),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['finance', 'payments'] });
-      toast.success('Payment processed successfully');
-    },
-  });
-}
-
-export function useProviderEarnings() {
+export const usePaymentStats = () => {
   return useQuery({
-    queryKey: ['finance', 'earnings', 'provider'],
-    queryFn: () => financeApi.getProviderEarnings(),
+    queryKey: ['payments', 'stats'],
+    queryFn: () => financeApi.getPaymentStats(),
+    select: (response) => response.data,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
-}
+};

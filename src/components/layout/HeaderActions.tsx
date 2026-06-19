@@ -36,8 +36,8 @@ function AuthenticatedActions({ user }: { user: User }) {
   const markReadMutation = useMarkAsRead();
 
   const getDashboardPath = () => {
-    if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') return '/admin/dashboard' as const;
-    if (user?.role === 'PROVIDER') return '/technician/dashboard' as const;
+    if (user?.role === 'admin' || user?.role === 'SUPER_ADMIN') return '/admin/dashboard' as const;
+    if (user?.role === 'provider') return '/technician/dashboard' as const;
     return '/client/dashboard' as const;
   };
 

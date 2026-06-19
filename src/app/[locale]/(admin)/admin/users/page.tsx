@@ -55,7 +55,7 @@ export default function AdminUsersPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {users.map((user: any) => (
+                                    {users.map((user: Record<string, unknown>) => (
                                         <tr key={user.id} className="border-b hover:bg-muted/20">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">

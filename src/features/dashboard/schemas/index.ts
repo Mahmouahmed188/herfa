@@ -109,60 +109,60 @@ export const RevenueChartDataSchema = z.object({
   averageDailyRevenue: z.number(),
   revenueTrend: z.array(z.object({
     date: z.string(),
-    revenue: number,
+    revenue: z.number(),
   })),
   monthlyRevenue: z.array(z.object({
-    month: string,
-    revenue: number,
-    growth: number,
+    month: z.string(),
+    revenue: z.number(),
+    growth: z.number(),
   })),
   revenueByService: z.array(z.object({
-    service: string,
-    revenue: number,
-    percentage: number,
+    service: z.string(),
+    revenue: z.number(),
+    percentage: z.number(),
   })),
 });
 
 // User Chart Data Schema
 export const UserChartDataSchema = z.object({
   newUsers: z.array(z.object({
-    date: string,
-    count: number,
+    date: z.string(),
+    count: z.number(),
   })),
   activeUsers: z.array(z.object({
-    date: string,
-    count: number,
+    date: z.string(),
+    count: z.number(),
   })),
   userGrowth: z.object({
-    current: number,
-    previous: number,
-    growthRate: number,
-    growthPercentage: number,
+    current: z.number(),
+    previous: z.number(),
+    growthRate: z.number(),
+    growthPercentage: z.number(),
   }),
   userRetention: z.object({
-    day1: number,
-    day7: number,
-    day30: number,
-    day90: number,
+    day1: z.number(),
+    day7: z.number(),
+    day30: z.number(),
+    day90: z.number(),
   }),
 });
 
 // Booking Chart Data Schema
 export const BookingChartDataSchema = z.object({
-  totalBookings: number,
-  completedBookings: number,
-  cancelledBookings: number,
-  disputedBookings: number,
+  totalBookings: z.number(),
+  completedBookings: z.number(),
+  cancelledBookings: z.number(),
+  disputedBookings: z.number(),
   bookingTrend: z.array(z.object({
-    date: string,
-    total: number,
-    completed: number,
-    cancelled: number,
+    date: z.string(),
+    total: z.number(),
+    completed: z.number(),
+    cancelled: z.number(),
   })),
   bookingStatusDistribution: z.array(z.object({
     status: z.enum(['pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 'disputed']),
-    count: number,
-    percentage: number,
+    count: z.number(),
+    percentage: z.number(),
   })),
 });
 
@@ -179,9 +179,9 @@ export const AnalyticsChartConfigSchema = z.object({
     title: z.string().optional(),
   }),
   series: z.array(z.object({
-    name: string,
-    dataKey: string,
-    color: string,
+    name: z.string(),
+    dataKey: z.string(),
+    color: z.string(),
     type: z.enum(['line', 'bar', 'area']).optional(),
   })),
   legend: z.object({
