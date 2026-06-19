@@ -1,110 +1,289 @@
 import { api } from '@/lib/axios';
-import { PaginatedResponse, ApiResponse } from '@/types/api';
-import { 
-  PayoutRequest, 
-  ProcessPayoutInput 
-} from '../schemas/payouts';
-import { Payment, Refund, FinancialSummary } from '../types';
-import { ProcessPaymentInput } from '../schemas/payments';
-import { CreateRefundInput } from '../schemas/refunds';
+import { FinanceSchemas } from '../schemas';
+import type { 
+  Payment,
+  PaymentDetail,
+  PaymentQuery,
+  PaymentListResponse,
+  PaymentOverview,
+  Refund,
+  RefundQuery,
+  RefundListResponse,
+  RefundDetail,
+  RefundApproval,
+  RefundRejection,
+  FinancialReport
+} from '../types';
 
 export const financeApi = {
-  // Payouts (Admin/Provider)
-  getPayoutRequests: async (params?: {
-    page?: number;
-    limit?: number;
+  // Payment Management
+  /**
+   * Get payments dashboard overview
+   */
+  getPaymentsOverview: async () => {
+    const response = await api.get('/admin/payments/overview');
+    return FinanceSchemas.overview.parse(response.data);
+  },
+
+  /**
+   * Get paginated list of payments
+   */
+  getPayments: async (query: PaymentQuery) => {
+    const params = {
+      page: query.page,
+      limit: query.limit,
+      ...(query.status && { status: query.status }),
+      ...(query.method && { method: query.method }),
+      ...(query.startDate && { startDate: query.startDate }),
+      ...(query.endDate && { endDate: query.endDate }),
+    };
+
+    const response = await api.get('/admin/payments', { params });
+    return FinanceSchemas.listResponse.parse(response.data);
+  },
+
+  /**
+   * Get detailed payment information
+   */
+  getPaymentDetail: async (paymentId: string) => {
+    const response = await api.get(`/admin/payments/${paymentId}`);
+    return FinanceSchemas.detail.parse(response.data);
+  },
+
+  /**
+   * Get payment statistics
+   */
+  getPaymentStats: async () => {
+    const response = await api.get('/admin/payments/stats');
+    return response.data;
+  },
+
+  /**
+   * Get payment by method
+   */
+  getPaymentsByMethod: async (method: string) => {
+    const response = await api.get(`/admin/payments/method/${method}`);
+    return response.data;
+  },
+
+  /**
+   * Get payment trends
+   */
+  getPaymentTrends: async (period = '30d') => {
+    const params = { period };
+    const response = await api.get('/admin/payments/trends', { params });
+    return response.data;
+  },
+
+  /**
+   * Search payments
+   */
+  searchPayments: async (query: {
+    search?: string;
     status?: string;
-    query?: string;
+    method?: string;
+    dateRange?: string;
+    amount?: number;
   }) => {
-    const response = await api.get<PaginatedResponse<PayoutRequest>>(
-      '/finance/payouts',
-      { params }
-    );
+    const response = await api.get('/admin/payments/search', { params: query });
     return response.data;
   },
 
-  processPayouts: async (data: ProcessPayoutInput) => {
-    const response = await api.post<ApiResponse<any>>(
-      '/finance/payouts/process',
-      data
-    );
+  /**
+   * Export payments
+   */
+  exportPayments: async (format: 'csv' | 'excel' | 'json', filters?: any) => {
+    const params = { format, ...filters };
+    const response = await api.get('/admin/payments/export', { params });
     return response.data;
   },
 
-  // Payments (Customer)
-  getPayments: async (params?: {
-    page?: number;
-    limit?: number;
+  // Refund Management
+  /**
+   * Get paginated list of refund requests
+   */
+  getRefunds: async (query: RefundQuery) => {
+    const params = {
+      page: query.page,
+      limit: query.limit,
+      ...(query.status && { status: query.status }),
+      ...(query.startDate && { startDate: query.startDate }),
+      ...(query.endDate && { endDate: query.endDate }),
+    };
+
+    const response = await api.get('/admin/refunds', { params });
+    return FinanceSchemas.refundListResponse.parse(response.data);
+  },
+
+  /**
+   * Get detailed refund information
+   */
+  getRefundDetail: async (refundId: string) => {
+    const response = await api.get(`/admin/refunds/${refundId}`);
+    return FinanceSchemas.refundDetail.parse(response.data);
+  },
+
+  /**
+   * Approve a refund request
+   */
+  approveRefund: async (refundId: string, data: RefundApproval) => {
+    const response = await api.post(`/admin/refunds/${refundId}/approve`, data);
+    return response.data;
+  },
+
+  /**
+   * Reject a refund request
+   */
+  rejectRefund: async (refundId: string, data: RefundRejection) => {
+    const response = await api.post(`/admin/refunds/${refundId}/reject`, data);
+    return response.data;
+  },
+
+  /**
+   * Get refund statistics
+   */
+  getRefundStats: async () => {
+    const response = await api.get('/admin/refunds/stats');
+    return response.data;
+  },
+
+  /**
+   * Get refund by reason
+   */
+  getRefundsByReason: async (reason: string) => {
+    const response = await api.get(`/admin/refunds/reason/${reason}`);
+    return response.data;
+  },
+
+  /**
+   * Search refunds
+   */
+  searchRefunds: async (query: {
+    search?: string;
     status?: string;
-    dateFrom?: string;
-    dateTo?: string;
+    reason?: string;
+    dateRange?: string;
+    amount?: number;
   }) => {
-    const response = await api.get<PaginatedResponse<Payment>>(
-      '/payments',
-      { params }
-    );
+    const response = await api.get('/admin/refunds/search', { params: query });
     return response.data;
   },
 
-  // Payments (Provider)
-  getProviderPayments: async (params?: {
-    page?: number;
-    limit?: number;
-    status?: string;
+  /**
+   * Export refunds
+   */
+  exportRefunds: async (format: 'csv' | 'excel' | 'json', filters?: any) => {
+    const params = { format, ...filters };
+    const response = await api.get('/admin/refunds/export', { params });
+    return response.data;
+  },
+
+  // Financial Reports
+  /**
+   * Generate revenue report
+   */
+  generateRevenueReport: async (period = '30d', startDate?: string, endDate?: string) => {
+    const params = { period, ...(startDate && { startDate }), ...(endDate && { endDate }) };
+    const response = await api.get('/admin/reports/revenue', { params });
+    return FinanceSchemas.report.parse(response.data);
+  },
+
+  /**
+   * Generate financial report
+   */
+  generateFinancialReport: async (type: 'revenue' | 'users' | 'providers' | 'bookings' | 'support', period = '30d') => {
+    const params = { type, period };
+    const response = await api.get('/admin/reports/financial', { params });
+    return response.data;
+  },
+
+  /**
+   * Get report templates
+   */
+  getReportTemplates: async () => {
+    const response = await api.get('/admin/reports/templates');
+    return response.data;
+  },
+
+  /**
+   * Create custom report
+   */
+  createCustomReport: async (data: {
+    name: string;
+    type: string;
+    metrics: string[];
+    filters: any;
+    schedule?: {
+      frequency: 'daily' | 'weekly' | 'monthly';
+      time: string;
+    };
   }) => {
-    const response = await api.get<PaginatedResponse<Payment>>(
-      '/payments/provider',
-      { params }
-    );
+    const response = await api.post('/admin/reports/custom', data);
     return response.data;
   },
 
-  // Payment Details
-  getPaymentDetails: async (id: string) => {
-    const response = await api.get<ApiResponse<Payment>>(`/payments/${id}`);
+  // Financial Dashboard
+  /**
+   * Get financial dashboard data
+   */
+  getFinancialDashboard: async (period = '30d') => {
+    const params = { period };
+    const response = await api.get('/admin/finance/dashboard', { params });
     return response.data;
   },
 
-  getRefunds: async (params?: {
-    page?: number;
-    limit?: number;
-    status?: string;
-    paymentId?: string;
-  }) => {
-    const response = await api.get<PaginatedResponse<Refund>>('/refunds', { params });
+  /**
+   * Get revenue by service
+   */
+  getRevenueByService: async (period = '30d') => {
+    const params = { period };
+    const response = await api.get('/admin/finance/revenue-by-service', { params });
     return response.data;
   },
 
-  // Process Payment
-  processPayment: async (id: string, data: ProcessPaymentInput) => {
-    const response = await api.post<ApiResponse<{ status: string; transactionId: string }>>(
-      `/payments/${id}/process`,
-      data
-    );
+  /**
+   * Get revenue by provider
+   */
+  getRevenueByProvider: async (period = '30d') => {
+    const params = { period };
+    const response = await api.get('/admin/finance/revenue-by-provider', { params });
     return response.data;
   },
 
-  // Refunds (Admin)
-  issueRefund: async (id: string, data: CreateRefundInput) => {
-    const response = await api.post<ApiResponse<Refund>>(
-      `/payments/admin/${id}/refund`,
-      data
-    );
+  /**
+   * Get transaction history
+   */
+  getTransactionHistory: async (page = 1, limit = 20, filters?: any) => {
+    const params = { page, limit, ...filters };
+    const response = await api.get('/admin/finance/transactions', { params });
     return response.data;
   },
 
-  // Stats & Dashboards
-  getRevenueStats: async (params?: { range?: string }) => {
-    const response = await api.get<ApiResponse<any>>(
-      '/admin/dashboard/revenue',
-      { params }
-    );
+  // Analytics
+  /**
+   * Get financial analytics
+   */
+  getFinancialAnalytics: async (period = '30d') => {
+    const params = { period };
+    const response = await api.get('/admin/finance/analytics', { params });
     return response.data;
   },
 
-  getProviderEarnings: async () => {
-    // Assuming this endpoint exists or can be derived
-    const response = await api.get<ApiResponse<FinancialSummary>>('/finance/earnings');
+  /**
+   * Get cash flow analysis
+   */
+  getCashFlowAnalysis: async (period = '30d') => {
+    const params = { period };
+    const response = await api.get('/admin/finance/cash-flow', { params });
+    return response.data;
+  },
+
+  /**
+   * Get profit margins
+   */
+  getProfitMargins: async (period = '30d') => {
+    const params = { period };
+    const response = await api.get('/admin/finance/profit-margins', { params });
     return response.data;
   },
 };

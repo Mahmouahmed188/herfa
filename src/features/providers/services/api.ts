@@ -1,115 +1,201 @@
 import { api } from '@/lib/axios';
-import { PaginatedResponse, ApiResponse } from '@/types/api';
-import { 
-  ProviderVerification, 
-  VerificationHistoryEvent,
-  ApproveProviderInput, 
-  RejectProviderInput 
-} from '../schemas/verification';
+import { ProviderSchemas } from '../schemas';
+import type { 
+  Provider, 
+  ProviderDetail, 
+  ProviderListQuery, 
+  ProviderListResponse,
+  ProviderStatusUpdate,
+  PendingVerificationListResponse,
+  VerificationAction,
+  TopProvider 
+} from '../types';
 
-/**
- * Provider API service for verification workflows.
- * Aligns with the "Admin Dashboard Architecture" standards.
- */
-export const providerApi = {
-  // --- Provider-facing endpoints ---
+export const providersApi = {
+  /**
+   * Get paginated list of providers
+   */
+  getProviders: async (query: ProviderListQuery) => {
+    const params = {
+      page: query.page,
+      limit: query.limit,
+      ...(query.search && { search: query.search }),
+      ...(query.status && { status: query.status }),
+      ...(query.category && { category: query.category }),
+    };
 
-  submitVerification: async (data: {
-    frontIdImage: string;
-    backIdImage: string;
-    personalPhoto: string;
-    documents: string[];
-    portfolio: string[];
-  }) => {
-    const response = await api.post<ApiResponse<{
-      id: string;
-      status: string;
-      submittedAt: string;
-    }>>('/verification/submit', data);
+    const response = await api.get('/admin/providers', { params });
+    return ProviderSchemas.listResponse.parse(response.data);
+  },
+
+  /**
+   * Get detailed provider information
+   */
+  getProviderDetail: async (providerId: string) => {
+    const response = await api.get(`/admin/providers/${providerId}`);
+    return ProviderSchemas.detail.parse(response.data);
+  },
+
+  /**
+   * Approve a provider application
+   */
+  approveProvider: async (providerId: string, data: ProviderStatusUpdate) => {
+    const response = await api.post(`/admin/providers/${providerId}/approve`, data);
     return response.data;
   },
 
-  getVerificationStatus: async () => {
-    const response = await api.get<ApiResponse<ProviderVerification>>('/verification/status');
+  /**
+   * Suspend a provider account
+   */
+  suspendProvider: async (providerId: string, data: ProviderStatusUpdate) => {
+    const response = await api.post(`/admin/providers/${providerId}/suspend`, data);
     return response.data;
   },
 
-  getVerificationHistory: async () => {
-    const response = await api.get<ApiResponse<VerificationHistoryEvent[]>>('/verification/history');
+  /**
+   * Reactivate a suspended provider account
+   */
+  reactivateProvider: async (providerId: string, data: ProviderStatusUpdate) => {
+    const response = await api.post(`/admin/providers/${providerId}/reactivate`, data);
     return response.data;
   },
 
-  uploadFile: async (file: File, onProgress?: (percent: number) => void) => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await api.post<{ url: string }>('/uploads', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-      onUploadProgress: (progressEvent) => {
-        if (onProgress && progressEvent.total) {
-          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          onProgress(percent);
-        }
-      },
-    });
+  /**
+   * Get provider statistics
+   */
+  getProviderStats: async () => {
+    const response = await api.get('/admin/providers/stats');
     return response.data;
   },
 
-  // --- Admin endpoints ---
-
-  getVerificationQueue: async (params?: {
-    page?: number;
-    limit?: number;
-    query?: string;
-  }) => {
-    const response = await api.get<PaginatedResponse<ProviderVerification>>(
-      '/admin/provider-verifications',
-      { params }
-    );
+  /**
+   * Get top performing providers
+   */
+  getTopProviders: async (limit = 10) => {
+    const params = { limit };
+    const response = await api.get('/admin/providers/top', { params });
     return response.data;
   },
 
-  getVerificationDetails: async (id: string) => {
-    const response = await api.get<ApiResponse<ProviderVerification>>(
-      `/admin/provider-verifications/${id}`
-    );
+  /**
+   * Get provider services
+   */
+  getProviderServices: async (providerId: string) => {
+    const response = await api.get(`/admin/providers/${providerId}/services`);
     return response.data;
   },
 
-  approveProvider: async (data: ApproveProviderInput) => {
-    const response = await api.patch<ApiResponse<any>>(
-      `/admin/provider-verifications/${data.providerId}/approve`,
-      data
-    );
+  /**
+   * Get provider reviews
+   */
+  getProviderReviews: async (providerId: string, page = 1, limit = 20) => {
+    const params = { page, limit };
+    const response = await api.get(`/admin/providers/${providerId}/reviews`, { params });
     return response.data;
   },
 
-  rejectProvider: async (data: RejectProviderInput) => {
-    const response = await api.patch<ApiResponse<any>>(
-      `/admin/provider-verifications/${data.providerId}/reject`,
-      data
-    );
+  /**
+   * Get provider earnings
+   */
+  getProviderEarnings: async (providerId: string, period = '30d') => {
+    const params = { period };
+    const response = await api.get(`/admin/providers/${providerId}/earnings`, { params });
     return response.data;
   },
 
-  getProviders: async (params?: {
-    page?: number;
-    limit?: number;
-    query?: string;
+  /**
+   * Get provider availability
+   */
+  getProviderAvailability: async (providerId: string) => {
+    const response = await api.get(`/admin/providers/${providerId}/availability`);
+    return response.data;
+  },
+
+  /**
+   * Search providers with advanced filters
+   */
+  searchProviders: async (filters: {
+    search?: string;
     status?: string;
+    category?: string;
+    rating?: number;
+    registrationDate?: string;
   }) => {
-    const response = await api.get<PaginatedResponse<any>>(
-      '/providers',
-      { params }
-    );
+    const params = { ...filters };
+    const response = await api.get('/admin/providers/search', { params });
     return response.data;
   },
 
-  updateProviderStatus: async (id: string, status: string, reason: string) => {
-    const response = await api.post<ApiResponse<any>>(`/providers/${id}/status`, {
-      status,
-      reason,
-    });
+  /**
+   * Export provider data
+   */
+  exportProviders: async (format: 'csv' | 'excel' | 'json', filters?: any) => {
+    const params = { format, ...filters };
+    const response = await api.get('/admin/providers/export', { params });
+    return response.data;
+  },
+};
+
+// Verification API
+export const verificationApi = {
+  /**
+   * Get pending verification requests
+   */
+  getPendingVerifications: async (page = 1, limit = 20) => {
+    const params = { page, limit };
+    const response = await api.get('/admin/verification/pending', { params });
+    return ProviderSchemas.verificationListResponse.parse(response.data);
+  },
+
+  /**
+   * Get detailed verification information
+   */
+  getVerificationDetail: async (verificationId: string) => {
+    const response = await api.get(`/admin/verification/${verificationId}`);
+    return ProviderSchemas.verification.parse(response.data);
+  },
+
+  /**
+   * Approve a verification request
+   */
+  approveVerification: async (verificationId: string, data: VerificationAction) => {
+    const response = await api.post(`/admin/verification/${verificationId}/approve`, data);
+    return response.data;
+  },
+
+  /**
+   * Reject a verification request
+   */
+  rejectVerification: async (verificationId: string, data: VerificationAction) => {
+    const response = await api.post(`/admin/verification/${verificationId}/reject`, data);
+    return response.data;
+  },
+
+  /**
+   * Get verification statistics
+   */
+  getVerificationStats: async () => {
+    const response = await api.get('/admin/verification/stats');
+    return response.data;
+  },
+
+  /**
+   * Get document verification status
+   */
+  getDocumentVerification: async (documentId: string) => {
+    const response = await api.get(`/admin/verification/documents/${documentId}`);
+    return response.data;
+  },
+
+  /**
+   * Bulk verification operations
+   */
+  bulkVerify: async (verifications: Array<{
+    verificationId: string;
+    action: 'approve' | 'reject';
+    reason?: string;
+  }>) => {
+    const response = await api.post('/admin/verification/bulk', { verifications });
     return response.data;
   },
 };
